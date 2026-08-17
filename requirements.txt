@@ -1,0 +1,9 @@
+streamlit
+matplotlib
+pandas
+numpy
+openmeteo_requests
+requests_cache
+geopy.geocoders
+retry_requests
+Import_Weather_Data
