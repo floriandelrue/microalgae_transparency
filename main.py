@@ -4,7 +4,7 @@ from Import_Weather_Data import *
 from Culture_Temperature import *
 from Biomass_Production import *
 from Parameter_Values import *
-
+year = 2025
 # Function to calculate the hourly average
 def calculate_hourly_averages(data):
   if data is None:
@@ -20,48 +20,49 @@ st.title("Microalgae Transparency Model, v0.01")
 your_loc = st.text_input("Which city do you want the microalgae culture located? ")
 
 # Import the weather data
-jan_data_extended = import_weather_data_function(your_loc, "2023-12-15", "2025-01-31") 
-apr_data_extended = import_weather_data_function(your_loc, "2025-03-15", "2025-04-30") 
-jul_data_extended = import_weather_data_function(your_loc, "2025-06-15", "2025-07-31") 
-oct_data_extended = import_weather_data_function(your_loc, "2025-09-15", "2025-10-31") 
+# Define the start and end dates for the entire year
+start_date = f"{year}-01-01"
+end_date = f"{year}-12-31"
 
-jan_data = import_weather_data_function(your_loc, "2025-01-01", "2025-01-31") 
-apr_data = import_weather_data_function(your_loc, "2025-04-01", "2025-04-30") 
-jul_data = import_weather_data_function(your_loc, "2025-07-01", "2025-07-31") 
-oct_data = import_weather_data_function(your_loc, "2025-10-01", "2025-10-31") 
+# Use the mock function to import the weather data for the entire year
+weather_data = import_weather_data_function(your_loc, start_date, end_date)
+
+# Define the number of months and hours
+num_months = 12
+num_hours = 24  # 24 hours in a day
+
+# Initialize NumPy arrays to store the hourly averages
+temperature_avg = np.zeros((num_months, num_hours))
+humidity_avg = np.zeros((num_months, num_hours))
+dew_point_avg = np.zeros((num_months, num_hours))
+wind_speed_avg = np.zeros((num_months, num_hours))
+diffuse_rad_avg = np.zeros((num_months, num_hours))
+direct_rad_avg = np.zeros((num_months, num_hours))
+PAR_avg = np.zeros((num_months, num_hours))
+
 
 # Calculation of the hourly aevrage for each month
-jan_temperature_avg = calculate_hourly_averages(jan_data[0])
-jan_humidity_avg = calculate_hourly_averages(jan_data[1])
-jan_dew_point_avg = calculate_hourly_averages(jan_data[2])
-jan_wind_speed_avg = calculate_hourly_averages(jan_data[3])
-jan_diffuse_rad_avg = calculate_hourly_averages(jan_data[4])
-jan_direct_rad_avg = calculate_hourly_averages(jan_data[5])
-jan_PAR_avg = calculate_hourly_averages(2.15*(jan_data[4] + jan_data[5]))
+# Loop over each month
+for month in range(1, num_months + 1):
+    # Get the number of days in the month
+    num_days_in_month = calendar.monthrange(year, month)[1]
 
-apr_temperature_avg = calculate_hourly_averages(apr_data[0])
-apr_humidity_avg = calculate_hourly_averages(apr_data[1])
-apr_dew_point_avg = calculate_hourly_averages(apr_data[2])
-apr_wind_speed_avg = calculate_hourly_averages(apr_data[3])
-apr_diffuse_rad_avg = calculate_hourly_averages(apr_data[4])
-apr_direct_rad_avg = calculate_hourly_averages(apr_data[5])
-apr_PAR_avg = calculate_hourly_averages(2.15*(apr_data[4] + apr_data[5]))
+    # Calculate the start and end indices for the current month
+    start_index = sum(calendar.monthrange(year, m)[1] for m in range(1, month)) * 24
+    end_index = start_index + num_days_in_month * 24
 
-jul_temperature_avg = calculate_hourly_averages(jul_data[0])
-jul_humidity_avg = calculate_hourly_averages(jul_data[1])
-jul_dew_point_avg = calculate_hourly_averages(jul_data[2])
-jul_wind_speed_avg = calculate_hourly_averages(jul_data[3])
-jul_diffuse_rad_avg = calculate_hourly_averages(jul_data[4])
-jul_direct_rad_avg = calculate_hourly_averages(jul_data[5])
-jul_PAR_avg = calculate_hourly_averages(2.15*(jul_data[4] + jul_data[5]))
+    # Extract the data for the current month
+    monthly_data = [d[start_index:end_index] for d in weather_data]
 
-oct_temperature_avg = calculate_hourly_averages(oct_data[0])
-oct_humidity_avg = calculate_hourly_averages(oct_data[1])
-oct_dew_point_avg = calculate_hourly_averages(oct_data[2])
-oct_wind_speed_avg = calculate_hourly_averages(oct_data[3])
-oct_diffuse_rad_avg = calculate_hourly_averages(oct_data[4])
-oct_direct_rad_avg = calculate_hourly_averages(oct_data[5])
-oct_PAR_avg = calculate_hourly_averages(2.15*(oct_data[4] + oct_data[5]))
+    # Calculate the hourly averages and store them in the NumPy arrays
+    temperature_avg[month - 1, :] = calculate_hourly_averages(monthly_data[0])
+    humidity_avg[month - 1, :] = calculate_hourly_averages(monthly_data[1])
+    dew_point_avg[month - 1, :] = calculate_hourly_averages(monthly_data[2])
+    wind_speed_avg[month - 1, :] = calculate_hourly_averages(monthly_data[3])
+    diffuse_rad_avg[month - 1, :] = calculate_hourly_averages(monthly_data[4])
+    direct_rad_avg[month - 1, :] = calculate_hourly_averages(monthly_data[5])
+    PAR_avg[month - 1, :] = calculate_hourly_averages(2.15 * (monthly_data[4] + monthly_data[5]))
+
 
 #data is the data for the graph, test
 graph_data = pd.DataFrame({"Average Hourly temperature for January": jan_temperature_avg})
