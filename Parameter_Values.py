@@ -1,3 +1,5 @@
+import numpy as np
+
 #Parameter values for the biomass production
 
 Ea, depth, X_initial = 170.4, 0.1, 0.1
