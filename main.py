@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 from Import_Weather_Data import *
 from Culture_Temperature import *
-from Biomass_production import *
+from Biomass_Production import *
 from Parameter_Values import *
 
 # Function to calculate the hourly average
