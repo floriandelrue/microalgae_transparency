@@ -6,41 +6,6 @@
 
 import numpy as np
 
-#Culture absorptivity
-culture_absorptivity = 0.7#-
-
-#Culture depth
-culture_depth = 0.1 #m
-#Depth step
-culture_dz = 0.01 #m
-nb_layer=int(culture_depth/culture_dz)
-
-#specific heat capacity of the culture
-C_p = 4.184 #J·kg−1·°C−1
-#density of the culture
-rho = 1000.0 #kg·m−3
-
-#sigma is the Stefan-Boltzmann constant in W·m−2·K−4
-sigma = 5.6697e-08 #W·m−2·K−4
-#e_w is the water emissivity -
-e_w = 0.9 #1
-
-#evaporation exchange coefficient in m·s−1·Pa−1
-#A_evap and B_evap are evaporation experimental coefficients that must be calibrated
-A_evap = 1.2e-11
-B_evap=4.67e-12
-
-#convection transfer coefficient obtained experimentally
-A_conv =4.78
-B_conv =6.83
-
-
-#T under which the culture is heated when the heating is ON
-T_limit = 30.0#°C
-Temperature_Control = False
-
-
-
 def Culture_Temperature_function(dt, nb_hours, Temperature_Control, T_limit, raceway_area, culture_depth, hourly_global_radiation, hourly_relative_humidity_2m, hourly_temperature_2m, hourly_dew_point_2m, hourly_wind_speed_10m):
     #Q_accumulated is the accumulated heat flow
     def Q_accumulated(d,raceway_area, C_p, rho, dT_culture):
