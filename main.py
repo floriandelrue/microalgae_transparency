@@ -65,7 +65,7 @@ for month in range(1, num_months + 1):
 
 
 #data is the data for the graph, test
-graph_data = pd.DataFrame({"Average Hourly temperature for January": jan_temperature_avg})
+graph_data = pd.DataFrame({"Average Hourly temperature for January": temperature_avg[0,:]})
 table_data = pd.DataFrame({"Optimal Transparency for January": [1], "Optimal Transparency for April": [7], "Optimal Transparency for July": [10], "Optimal Transparency for October": [15]})
 
 
