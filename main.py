@@ -62,9 +62,9 @@ oct_direct_rad_avg = calculate_hourly_averages(oct_data[5])
 oct_PAR_avg = calculate_hourly_averages(2.15*(oct_data[4] + oct_data[5]))
 
 #data is the data for the graph, test
-graph_data = pd.DataFrame({"Hourly temperature": data[0]})
+graph_data = pd.DataFrame({"Average Hourly temperature for January": jan_temperature_avg})
 table_data = pd.DataFrame({"Optimal Transparency for January": [1], "Optimal Transparency for April": [7], "Optimal Transparency for July": [10], "Optimal Transparency for October": [15]})
-graph_data2 = pd.DataFrame({"Average Hourly temperature": calculate_hourly_averages(data2[0])})
+
 
 # Graph display
 st.line_chart(graph_data)
@@ -72,4 +72,3 @@ st.line_chart(graph_data)
 # Table display
 st.write(table_data)
 
-st.line_chart(graph_data2)
