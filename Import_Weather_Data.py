@@ -1,3 +1,7 @@
+#Function that recovers the hourly weather data (air temperature, relative humidity,  dew point, wind speed, diffuse and direct sunlight) 
+#for a location (a city, your_loc) between one day (start_date) to the other (end_date)
+
+
 import openmeteo_requests
 import pandas as pd
 import numpy as np
@@ -8,7 +12,6 @@ from retry_requests import retry
 
 from geopy.geocoders import Nominatim
 
-#Function that recovers the hourly weather data (air temperature, relative humidity,  dew point, wind speed, diffuse and direct sunlight) for a location (a city, your_loc) between one day (start_date) to the other (end_date)
 
 def import_weather_data_function(your_loc, start_date, end_date):
     # Instantiate a new Nominatim client
