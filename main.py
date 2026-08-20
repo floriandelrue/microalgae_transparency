@@ -26,7 +26,8 @@ start_date = f"{year}-01-01"
 end_date = f"{year}-12-31"
 
 # Use the mock function to import the weather data for the entire year
-weather_data = import_weather_data_function(your_loc, start_date, end_date)
+latitude, longitude = import_location_data(your_loc)
+weather_data = import_weather_data_function(latitude, longitude, start_date, end_date)
 
 # Define the number of months and hours
 num_months = 12
