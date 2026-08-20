@@ -42,6 +42,14 @@ diffuse_rad_avg = np.zeros((num_months, num_hours))
 direct_rad_avg = np.zeros((num_months, num_hours))
 PAR_avg = np.zeros((num_months, num_hours))
 
+option = st.selectbox(
+    "How would you like to be contacted?",
+    ("Email", "Home phone", "Mobile phone"),
+    index=None,
+    placeholder="Select contact method...",
+)
+
+st.write("You selected:", index.option)
 
 # Calculation of the hourly aevrage for each month
 # Loop over each month
