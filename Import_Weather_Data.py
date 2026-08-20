@@ -23,14 +23,14 @@ def import_location_data(your_loc):
     
         latitude = location.get('lat')
         longitude = location.get('lon')
+
+    return latitude, longitude
+
+def import_weather_data_function(latitude, longitude, start_date, end_date):
         # Setup the Open-Meteo API client with cache and retry on error
         cache_session = requests_cache.CachedSession('.cache', expire_after = -1)
         retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
         openmeteo = openmeteo_requests.Client(session = retry_session)
-    return latitude, longitude
-
-def import_weather_data_function(latitude, longitude, start_date, end_date):
-    
 
         url = "https://archive-api.open-meteo.com/v1/archive"
         params = {
