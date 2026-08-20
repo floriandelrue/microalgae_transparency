@@ -1,10 +1,12 @@
 import streamlit as st
 
-option = st.selectbox(
+options = [("Email", "Home phone", "Mobile phone")]
+    
+contact = st.selectbox(
     "How would you like to be contacted?",
-    ("Email", "Home phone", "Mobile phone"),
+    options,
     index=None,
     placeholder="Select contact method...",
 )
 
-st.write("You selected:", option.index)
+st.write("You selected:", options.index(contact))
