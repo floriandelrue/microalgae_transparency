@@ -7,4 +7,4 @@ option = st.selectbox(
     placeholder="Select contact method...",
 )
 
-st.write("You selected:", option)
+st.write("You selected:", option.index)
