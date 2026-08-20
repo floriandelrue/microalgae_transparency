@@ -12,13 +12,12 @@ from retry_requests import retry
 
 from geopy.geocoders import Nominatim
 
-
-def import_weather_data_function(your_loc, start_date, end_date):
+def import_location_data(your_loc):
     # Instantiate a new Nominatim client
     app = Nominatim(user_agent="tutorial")
 
     if app.geocode(your_loc) is None:
-        return None, None, None, None, None, None
+        return None, None
     else:
         location = app.geocode(your_loc).raw
     
@@ -28,6 +27,9 @@ def import_weather_data_function(your_loc, start_date, end_date):
         cache_session = requests_cache.CachedSession('.cache', expire_after = -1)
         retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
         openmeteo = openmeteo_requests.Client(session = retry_session)
+    return latitude, longitude
+
+def import_weather_data_function(latitude, longitude, start_date, end_date):
     
 
         url = "https://archive-api.open-meteo.com/v1/archive"
