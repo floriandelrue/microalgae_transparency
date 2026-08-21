@@ -5,6 +5,8 @@ from Import_Weather_Data import *
 from Culture_Temperature import *
 from Biomass_Production import *
 from Parameter_Values import *
+import matplotlib.pyplot as plt
+
 year = 2025
 # Function to calculate the hourly average
 def calculate_hourly_averages(data):
@@ -120,12 +122,19 @@ else:
 
 
 #data is the data for the graph, test
-graph_data = pd.DataFrame({f"Average Hourly temperature for {month_select}": temperature_avg[:]})
+graph_data = pd.DataFrame({f"Average Hourly temperature for {month_select}": temperature_avg})
 table_data = pd.DataFrame({"Optimal Transparency for January": [1], "Optimal Transparency for April": [7], "Optimal Transparency for July": [10], "Optimal Transparency for October": [15]})
 
+#Matplotlib figure
+fig, ax = plt.subplots()
+ax.plot(range(24), temperature_avg)
+ax.set_ylabel("Average Hourly Temperature (°C)")
+ax.set_xlabel("Hour of the day")
+ax.set_title(f"Average Hourly temperature for {month_select}")
 
 # Graph display
-st.line_chart(graph_data)
+st.line_chart(graph_data, y_label="Monthly Average Temperature (°C)")
+st.pyplot(fig)
 
 # Table display
 st.write(table_data)
