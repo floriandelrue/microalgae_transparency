@@ -20,7 +20,7 @@ st.title("Microalgae Transparency Model, v0.01")
 # Enter the location, city
 your_loc = st.text_input("Which city do you want the microalgae culture located? ")
 
-options = ["All months", "January", February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+options = ["All months", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 month = st.selectbox(
     "For which month do you want to optimize the trasnparency of the semi-transparent PV panel?",
     options,
