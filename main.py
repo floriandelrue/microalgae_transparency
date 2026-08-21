@@ -83,7 +83,7 @@ if options.index(month_select) == 0:
     #Plot the hourly average for the month
   
   
-    ax.plot(range(24), temperature_avg[month - 1, :], label= "Average Fourly Temperatures for " + str(calendar.month_name(month)))
+    ax.plot(range(24), temperature_avg[month - 1, :], label= "Average Fourly Temperatures for " + str(calendar.month_name[month]))
 
   # Graph display
   ax.set_ylabel("Average Hourly Temperature (°C)")
