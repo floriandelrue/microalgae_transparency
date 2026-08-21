@@ -84,8 +84,8 @@ else:
   # Import the weather data for the selected month and year
   num_days_in_month = calendar.monthrange(year, month)[1]
   # Define the start and end dates for the selected month
-  start_date = f"{year}-{month}-01"
-  end_date = f"{year}-{month}-{num_days_in_month}"
+  start_date = f"{year}-{str(month).zfill(2)}-01"
+  end_date = f"{year}-str({month).zfill(2)}-{num_days_in_month}"
 
   # Import the weather data for the entire year
   latitude, longitude = import_location_data(your_loc)
