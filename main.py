@@ -21,49 +21,43 @@ st.title("Microalgae Transparency Model, v0.01")
 your_loc = st.text_input("Which city do you want the microalgae culture located? ")
 
 options = ["All months", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-month = st.selectbox(
-    "For which month do you want to optimize the trasnparency of the semi-transparent PV panel?",
+month_select = st.selectbox(
+    "For which month do you want to optimize the transparency of the semi-transparent PV panel?",
     options,
     index=None,
     placeholder="Select all months or a specific month...",
 )
 
-st.write("You selected:", options.index(month))
+st.write("You selected:", options.index(month_select))
 
-# Import the weather data
-# Define the start and end dates for the entire year
-start_date = f"{year}-01-01"
-end_date = f"{year}-12-31"
 
-# Use the mock function to import the weather data for the entire year
-latitude, longitude = import_location_data(your_loc)
-weather_data = import_weather_data_function(latitude, longitude, start_date, end_date)
+if options.index(month_select) == 0:
+  # Import the weather data
+  # Define the start and end dates for the entire year
+  start_date = f"{year}-01-01"
+  end_date = f"{year}-12-31"
 
-# Define the number of months and hours
-num_months = 12
-num_hours = 24  # 24 hours in a day
+  # Import the weather data for the entire year
+  latitude, longitude = import_location_data(your_loc)
+  weather_data = import_weather_data_function(latitude, longitude, start_date, end_date)
 
-# Initialize NumPy arrays to store the hourly averages
-temperature_avg = np.zeros((num_months, num_hours))
-humidity_avg = np.zeros((num_months, num_hours))
-dew_point_avg = np.zeros((num_months, num_hours))
-wind_speed_avg = np.zeros((num_months, num_hours))
-diffuse_rad_avg = np.zeros((num_months, num_hours))
-direct_rad_avg = np.zeros((num_months, num_hours))
-PAR_avg = np.zeros((num_months, num_hours))
+  # Define the number of months and hours
+  num_months = 12
+  num_hours = 24  # 24 hours in a day
 
-option = st.selectbox(
-    "How would you like to be contacted?",
-    ("Email", "Home phone", "Mobile phone"),
-    index=None,
-    placeholder="Select contact method...",
-)
+  # Initialize NumPy arrays to store the hourly averages
+  temperature_avg = np.zeros((num_months, num_hours))
+  humidity_avg = np.zeros((num_months, num_hours))
+  dew_point_avg = np.zeros((num_months, num_hours))
+  wind_speed_avg = np.zeros((num_months, num_hours))
+  diffuse_rad_avg = np.zeros((num_months, num_hours))
+  direct_rad_avg = np.zeros((num_months, num_hours))
+  PAR_avg = np.zeros((num_months, num_hours))
 
-st.write("You selected:", index.option)
 
-# Calculation of the hourly aevrage for each month
-# Loop over each month
-for month in range(1, num_months + 1):
+  # Calculation of the hourly aevrage for each month
+  # Loop over each month
+  for month in range(1, num_months + 1):
     # Get the number of days in the month
     num_days_in_month = calendar.monthrange(year, month)[1]
 
@@ -83,9 +77,50 @@ for month in range(1, num_months + 1):
     direct_rad_avg[month - 1, :] = calculate_hourly_averages(monthly_data[5])
     PAR_avg[month - 1, :] = calculate_hourly_averages(2.15 * (monthly_data[4] + monthly_data[5]))
 
+else:
+  month = options.index(month_select)
+  # Import the weather data for the selected month and year
+  num_days_in_month = calendar.monthrange(year, month)[1]
+  # Define the start and end dates for the selected month
+  start_date = f"{year}-{month}-01"
+  end_date = f"{year}-{month}-{num_days_in_month}"
+
+  # Import the weather data for the entire year
+  latitude, longitude = import_location_data(your_loc)
+  weather_data = import_weather_data_function(latitude, longitude, start_date, end_date)
+
+
+
+  # Initialize NumPy arrays to store the hourly averages
+  temperature_avg = np.zeros(24)
+  humidity_avg = np.zeros(24)
+  dew_point_avg = np.zeros(24)
+  wind_speed_avg = np.zeros(24)
+  diffuse_rad_avg = np.zeros(24)
+  direct_rad_avg = np.zeros(24)
+  PAR_avg = np.zeros(24)
+
+
+  # Calculation of the hourly average for the selected month
+  start_index = 1
+  end_index = num_days_in_month * 24
+
+
+
+  # Calculate the hourly averages and store them in the NumPy arrays
+  temperature_avg = calculate_hourly_averages(weather_data[0])
+  humidity_avg = calculate_hourly_averages(weather_data[1])
+  dew_point_avg = calculate_hourly_averages(weather_data[2])
+  wind_speed_avg = calculate_hourly_averages(weather_data[3])
+  diffuse_rad_avg = calculate_hourly_averages(weather_data[4])
+  direct_rad_avg = calculate_hourly_averages(weather_data[5])
+  PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
+
+
+
 
 #data is the data for the graph, test
-graph_data = pd.DataFrame({"Average Hourly temperature for January": temperature_avg[0,:]})
+graph_data = pd.DataFrame({f"Average Hourly temperature for {month_select}": temperature_avg[:]})
 table_data = pd.DataFrame({"Optimal Transparency for January": [1], "Optimal Transparency for April": [7], "Optimal Transparency for July": [10], "Optimal Transparency for October": [15]})
 
 
