@@ -155,8 +155,12 @@ with st.sidebar.form("parameter_form"):
     new_nb_layer = st.number_input("Nb Layer for the Temperature model", value=st.session_state.nb_layer)
     st.header("Beer-Lambert light absorption model")
     st.latex(r'''I_{z} = I_{0}\cdot \text{exp}\left( -E_{a}\cdot X\cdot z \right)''')
-    
-    new_Ea = st.number_input("Ea", value=st.session_state.Ea)
+    st.latex(r''' \small I_{z} \text{: The local light intensity at depth z, in } \mu mol/m^{2}/s''')
+    st.latex(r''' \small I_{0} \text{: The incident light intensity, in } \mu mol/m^{2}/s''')
+    st.latex(r''' \small E_{a} \text{: The light absorption coefficient of the culture, in } m^{2}/kg''')
+    st.latex(r''' \small X \text{: The biomass concentration of the culture, in } kg/m^{3}''')
+    st.latex(r''' \small z \text{: The depth in the reactor}''')
+    st.latex(r''' \small new_Ea = st.number_input("Ea", value=st.session_state.Ea)''')
     
     new_X_initial = st.number_input("X_initial", value=st.session_state.X_initial)
     new_T_min = st.number_input("T_min", value=st.session_state.T_min)
