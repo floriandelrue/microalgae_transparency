@@ -170,7 +170,15 @@ with st.sidebar.form("parameter_form"):
     st.link_button("https://doi.org/10.1006/jtbi.1993.1099",  "https://doi.org/10.1006/jtbi.1993.1099")
     st.text("First applied to microalgae by Bernard and Rémond, 2012")
     st.link_button("https://doi.org/10.1016/j.biortech.2012.07.022", "https://doi.org/10.1016/j.biortech.2012.07.022")
-    st.latex(r'''f(T) =0 \text{ for } T\lt T_{min}''')
+    st.latex(r'''\begin{equation}
+\left\{
+\begin{aligned}
+f(T) &= 0 \text{ for } T < T_{min} \\
+f(T) &= \frac{\left( T-T_{max} \right)\left( T-T_{min} \right)^2}{\left(T_{opt}-T_{min}\right)\left[ \left(T_{opt}-T_{min}\right)\left( T-T_{opt}\right)-\left( T_{opt}-T_{max} \right)\left( T_{opt}+T_{min}-2T \right) \right]} \\
+f(T) &= 0 \text{ for } T > T_{max}
+\end{aligned}
+\right.
+\end{equation}''')
     st.latex(r'''f(T)=\frac{\left( T-T_{max} \right)\left( T-T_{min} \right)^2}{\left(T_{opt}-T_{min}\right)\left[ \left(T_{opt}-T_{min}\right)\left( T-T_{opt}\right)-\left( T_{opt}-T_{max} \right)\left( T_{opt}+T_{min}-2T \right) \right]}''')
     st.latex(r'''f(T) =0 \text{ for } T\gt T_{max}''')
     st.latex(r''' \scriptsize T \text{: The temperature of the culture, in °C } ''')
