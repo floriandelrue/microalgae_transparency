@@ -22,16 +22,8 @@ st.title("Microalgae Transparency Model, v0.01")
 
 #Sidebar for model parameters values
 
-import streamlit as st
-import numpy as np
 
-# Import parameters from the .py file
-from Parameter_Values import (
-    Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
-    biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst, z,
-    culture_absorptivity, culture_depth, culture_dz, nb_layer, C_p, rho, sigma,
-    e_w, A_evap, B_evap, A_conv, B_conv
-)
+
 
 # Function to update parameters
 def update_params(
@@ -41,12 +33,10 @@ def update_params(
     new_culture_depth, new_culture_dz, new_nb_layer, new_C_p, new_rho, new_sigma,
     new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv
 ):
-    global (
-        Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
+    global(Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
         biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst,
         culture_absorptivity, culture_depth, culture_dz, nb_layer, C_p, rho, sigma,
-        e_w, A_evap, B_evap, A_conv, B_conv
-    )
+        e_w, A_evap, B_evap, A_conv, B_conv)
     Ea = new_Ea
     depth = new_depth
     X_initial = new_X_initial
@@ -81,12 +71,10 @@ def update_params(
 
 # Function to reset parameters to default values
 def reset_params():
-    global (
-        Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
+    global (Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
         biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst,
         culture_absorptivity, culture_depth, culture_dz, nb_layer, C_p, rho, sigma,
-        e_w, A_evap, B_evap, A_conv, B_conv
-    )
+        e_w, A_evap, B_evap, A_conv, B_conv)
     from Parameter_Values import (
         Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
         biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst, z,
@@ -193,13 +181,11 @@ with st.sidebar.form("parameter_form"):
     submitted = st.form_submit_button("Update Parameters")
 
     if submitted:
-        update_params(
-            new_Ea, new_depth, new_X_initial, new_T_min, new_T_opt, new_T_max, new_P_max,
+        update_params(new_Ea, new_depth, new_X_initial, new_T_min, new_T_opt, new_T_max, new_P_max,
             new_alpha, new_I_opt, new_kT, new_kI, new_K, new_C, new_biomass_loss_night_temp2,
             new_biomass_loss_night_temp, new_biomass_loss_night_cst, new_culture_absorptivity,
             new_culture_depth, new_culture_dz, new_nb_layer, new_C_p, new_rho, new_sigma,
-            new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv
-        )
+            new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv)
         st.session_state.Ea = Ea
         st.session_state.depth = depth
         st.session_state.X_initial = X_initial
