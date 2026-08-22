@@ -19,6 +19,268 @@ def calculate_hourly_averages(data):
 # Title
 st.title("Microalgae Transparency Model, v0.01")
 
+
+#Sidebar for model parameters values
+
+import streamlit as st
+import numpy as np
+
+# Import parameters from the .py file
+from Parameter_Values import (
+    Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
+    biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst, z,
+    culture_absorptivity, culture_depth, culture_dz, nb_layer, C_p, rho, sigma,
+    e_w, A_evap, B_evap, A_conv, B_conv
+)
+
+# Function to update parameters
+def update_params(
+    new_Ea, new_depth, new_X_initial, new_T_min, new_T_opt, new_T_max, new_P_max,
+    new_alpha, new_I_opt, new_kT, new_kI, new_K, new_C, new_biomass_loss_night_temp2,
+    new_biomass_loss_night_temp, new_biomass_loss_night_cst, new_culture_absorptivity,
+    new_culture_depth, new_culture_dz, new_nb_layer, new_C_p, new_rho, new_sigma,
+    new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv
+):
+    global (
+        Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
+        biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst,
+        culture_absorptivity, culture_depth, culture_dz, nb_layer, C_p, rho, sigma,
+        e_w, A_evap, B_evap, A_conv, B_conv
+    )
+    Ea = new_Ea
+    depth = new_depth
+    X_initial = new_X_initial
+    T_min = new_T_min
+    T_opt = new_T_opt
+    T_max = new_T_max
+    P_max = new_P_max
+    alpha = new_alpha
+    I_opt = new_I_opt
+    kT = new_kT
+    kI = new_kI
+    K = new_K
+    C = new_C
+    biomass_loss_night_temp2 = new_biomass_loss_night_temp2
+    biomass_loss_night_temp = new_biomass_loss_night_temp
+    biomass_loss_night_cst = new_biomass_loss_night_cst
+    culture_absorptivity = new_culture_absorptivity
+    culture_depth = new_culture_depth
+    culture_dz = new_culture_dz
+    nb_layer = new_nb_layer
+    C_p = new_C_p
+    rho = new_rho
+    sigma = new_sigma
+    e_w = new_e_w
+    A_evap = new_A_evap
+    B_evap = new_B_evap
+    A_conv = new_A_conv
+    B_conv = new_B_conv
+    global z
+    z = np.linspace(0, depth, num=100)
+    z = z.reshape(-1, 1)
+
+# Function to reset parameters to default values
+def reset_params():
+    global (
+        Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
+        biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst,
+        culture_absorptivity, culture_depth, culture_dz, nb_layer, C_p, rho, sigma,
+        e_w, A_evap, B_evap, A_conv, B_conv
+    )
+    from Parameter_Values import (
+        Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
+        biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst, z,
+        culture_absorptivity, culture_depth, culture_dz, nb_layer, C_p, rho, sigma,
+        e_w, A_evap, B_evap, A_conv, B_conv
+    )
+    global z
+    z = np.linspace(0, depth, num=100)
+    z = z.reshape(-1, 1)
+
+# Initialize session state
+if 'Ea' not in st.session_state:
+    st.session_state.Ea = Ea
+if 'depth' not in st.session_state:
+    st.session_state.depth = depth
+if 'X_initial' not in st.session_state:
+    st.session_state.X_initial = X_initial
+if 'T_min' not in st.session_state:
+    st.session_state.T_min = T_min
+if 'T_opt' not in st.session_state:
+    st.session_state.T_opt = T_opt
+if 'T_max' not in st.session_state:
+    st.session_state.T_max = T_max
+if 'P_max' not in st.session_state:
+    st.session_state.P_max = P_max
+if 'alpha' not in st.session_state:
+    st.session_state.alpha = alpha
+if 'I_opt' not in st.session_state:
+    st.session_state.I_opt = I_opt
+if 'kT' not in st.session_state:
+    st.session_state.kT = kT
+if 'kI' not in st.session_state:
+    st.session_state.kI = kI
+if 'K' not in st.session_state:
+    st.session_state.K = K
+if 'C' not in st.session_state:
+    st.session_state.C = C
+if 'biomass_loss_night_temp2' not in st.session_state:
+    st.session_state.biomass_loss_night_temp2 = biomass_loss_night_temp2
+if 'biomass_loss_night_temp' not in st.session_state:
+    st.session_state.biomass_loss_night_temp = biomass_loss_night_temp
+if 'biomass_loss_night_cst' not in st.session_state:
+    st.session_state.biomass_loss_night_cst = biomass_loss_night_cst
+if 'culture_absorptivity' not in st.session_state:
+    st.session_state.culture_absorptivity = culture_absorptivity
+if 'culture_depth' not in st.session_state:
+    st.session_state.culture_depth = culture_depth
+if 'culture_dz' not in st.session_state:
+    st.session_state.culture_dz = culture_dz
+if 'nb_layer' not in st.session_state:
+    st.session_state.nb_layer = nb_layer
+if 'C_p' not in st.session_state:
+    st.session_state.C_p = C_p
+if 'rho' not in st.session_state:
+    st.session_state.rho = rho
+if 'sigma' not in st.session_state:
+    st.session_state.sigma = sigma
+if 'e_w' not in st.session_state:
+    st.session_state.e_w = e_w
+if 'A_evap' not in st.session_state:
+    st.session_state.A_evap = A_evap
+if 'B_evap' not in st.session_state:
+    st.session_state.B_evap = B_evap
+if 'A_conv' not in st.session_state:
+    st.session_state.A_conv = A_conv
+if 'B_conv' not in st.session_state:
+    st.session_state.B_conv = B_conv
+
+# Sidebar for changing parameters
+with st.sidebar.form("parameter_form"):
+    st.header("Model Parameters")
+
+    # Input fields for parameters
+    new_Ea = st.number_input("Ea", value=st.session_state.Ea)
+    new_depth = st.number_input("Depth", value=st.session_state.depth)
+    new_X_initial = st.number_input("X_initial", value=st.session_state.X_initial)
+    new_T_min = st.number_input("T_min", value=st.session_state.T_min)
+    new_T_opt = st.number_input("T_opt", value=st.session_state.T_opt)
+    new_T_max = st.number_input("T_max", value=st.session_state.T_max)
+    new_P_max = st.number_input("P_max", value=st.session_state.P_max)
+    new_alpha = st.number_input("Alpha", value=st.session_state.alpha)
+    new_I_opt = st.number_input("I_opt", value=st.session_state.I_opt)
+    new_kT = st.number_input("kT", value=st.session_state.kT)
+    new_kI = st.number_input("kI", value=st.session_state.kI)
+    new_K = st.number_input("K", value=st.session_state.K)
+    new_C = st.number_input("C", value=st.session_state.C)
+    new_biomass_loss_night_temp2 = st.number_input("Biomass Loss Night Temp2", value=st.session_state.biomass_loss_night_temp2)
+    new_biomass_loss_night_temp = st.number_input("Biomass Loss Night Temp", value=st.session_state.biomass_loss_night_temp)
+    new_biomass_loss_night_cst = st.number_input("Biomass Loss Night Cst", value=st.session_state.biomass_loss_night_cst)
+    new_culture_absorptivity = st.number_input("Culture Absorptivity", value=st.session_state.culture_absorptivity)
+    new_culture_depth = st.number_input("Culture Depth", value=st.session_state.culture_depth)
+    new_culture_dz = st.number_input("Culture Dz", value=st.session_state.culture_dz)
+    new_nb_layer = st.number_input("Nb Layer", value=st.session_state.nb_layer)
+    new_C_p = st.number_input("C_p", value=st.session_state.C_p)
+    new_rho = st.number_input("Rho", value=st.session_state.rho)
+    new_sigma = st.number_input("Sigma", value=st.session_state.sigma)
+    new_e_w = st.number_input("E_w", value=st.session_state.e_w)
+    new_A_evap = st.number_input("A_evap", value=st.session_state.A_evap)
+    new_B_evap = st.number_input("B_evap", value=st.session_state.B_evap)
+    new_A_conv = st.number_input("A_conv", value=st.session_state.A_conv)
+    new_B_conv = st.number_input("B_conv", value=st.session_state.B_conv)
+
+    # Submit button
+    submitted = st.form_submit_button("Update Parameters")
+
+    if submitted:
+        update_params(
+            new_Ea, new_depth, new_X_initial, new_T_min, new_T_opt, new_T_max, new_P_max,
+            new_alpha, new_I_opt, new_kT, new_kI, new_K, new_C, new_biomass_loss_night_temp2,
+            new_biomass_loss_night_temp, new_biomass_loss_night_cst, new_culture_absorptivity,
+            new_culture_depth, new_culture_dz, new_nb_layer, new_C_p, new_rho, new_sigma,
+            new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv
+        )
+        st.session_state.Ea = Ea
+        st.session_state.depth = depth
+        st.session_state.X_initial = X_initial
+        st.session_state.T_min = T_min
+        st.session_state.T_opt = T_opt
+        st.session_state.T_max = T_max
+        st.session_state.P_max = P_max
+        st.session_state.alpha = alpha
+        st.session_state.I_opt = I_opt
+        st.session_state.kT = kT
+        st.session_state.kI = kI
+        st.session_state.K = K
+        st.session_state.C = C
+        st.session_state.biomass_loss_night_temp2 = biomass_loss_night_temp2
+        st.session_state.biomass_loss_night_temp = biomass_loss_night_temp
+        st.session_state.biomass_loss_night_cst = biomass_loss_night_cst
+        st.session_state.culture_absorptivity = culture_absorptivity
+        st.session_state.culture_depth = culture_depth
+        st.session_state.culture_dz = culture_dz
+        st.session_state.nb_layer = nb_layer
+        st.session_state.C_p = C_p
+        st.session_state.rho = rho
+        st.session_state.sigma = sigma
+        st.session_state.e_w = e_w
+        st.session_state.A_evap = A_evap
+        st.session_state.B_evap = B_evap
+        st.session_state.A_conv = A_conv
+        st.session_state.B_conv = B_conv
+        st.success("Parameters updated!")
+
+    # Reset button
+    if st.button("Reset to Default"):
+        reset_params()
+        st.session_state.Ea = Ea
+        st.session_state.depth = depth
+        st.session_state.X_initial = X_initial
+        st.session_state.T_min = T_min
+        st.session_state.T_opt = T_opt
+        st.session_state.T_max = T_max
+        st.session_state.P_max = P_max
+        st.session_state.alpha = alpha
+        st.session_state.I_opt = I_opt
+        st.session_state.kT = kT
+        st.session_state.kI = kI
+        st.session_state.K = K
+        st.session_state.C = C
+        st.session_state.biomass_loss_night_temp2 = biomass_loss_night_temp2
+        st.session_state.biomass_loss_night_temp = biomass_loss_night_temp
+        st.session_state.biomass_loss_night_cst = biomass_loss_night_cst
+        st.session_state.culture_absorptivity = culture_absorptivity
+        st.session_state.culture_depth = culture_depth
+        st.session_state.culture_dz = culture_dz
+        st.session_state.nb_layer = nb_layer
+        st.session_state.C_p = C_p
+        st.session_state.rho = rho
+        st.session_state.sigma = sigma
+        st.session_state.e_w = e_w
+        st.session_state.A_evap = A_evap
+        st.session_state.B_evap = B_evap
+        st.session_state.A_conv = A_conv
+        st.session_state.B_conv = B_conv
+        st.success("Parameters reset to default!")
+
+
+st.write("Current Parameters:", {
+    "Ea": st.session_state.Ea, "depth": st.session_state.depth, "X_initial": st.session_state.X_initial,
+    "T_min": st.session_state.T_min, "T_opt": st.session_state.T_opt, "T_max": st.session_state.T_max,
+    "P_max": st.session_state.P_max, "alpha": st.session_state.alpha, "I_opt": st.session_state.I_opt,
+    "kT": st.session_state.kT, "kI": st.session_state.kI, "K": st.session_state.K, "C": st.session_state.C,
+    "biomass_loss_night_temp2": st.session_state.biomass_loss_night_temp2,
+    "biomass_loss_night_temp": st.session_state.biomass_loss_night_temp,
+    "biomass_loss_night_cst": st.session_state.biomass_loss_night_cst,
+    "culture_absorptivity": st.session_state.culture_absorptivity,
+    "culture_depth": st.session_state.culture_depth, "culture_dz": st.session_state.culture_dz,
+    "nb_layer": st.session_state.nb_layer, "C_p": st.session_state.C_p, "rho": st.session_state.rho,
+    "sigma": st.session_state.sigma, "e_w": st.session_state.e_w, "A_evap": st.session_state.A_evap,
+    "B_evap": st.session_state.B_evap, "A_conv": st.session_state.A_conv, "B_conv": st.session_state.B_conv
+})
+
+
+
 # Enter the location, city
 your_loc = st.text_input("Which city do you want the microalgae culture located? ")
 
