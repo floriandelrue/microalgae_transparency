@@ -146,10 +146,18 @@ if 'B_conv' not in st.session_state:
 # Sidebar for changing parameters
 with st.sidebar.form("parameter_form"):
     st.header("Model Parameters")
-
+    st.text("In this sidebar, you can modify the model parameters value, or leave the default one")
     # Input fields for parameters
+    st.header("Initialization")
+    new_depth = st.number_input("Culture depth in m", value=st.session_state.depth)
+    new_culture_depth = st.number_input("Culture Depth for the Temperature model, in m", value=st.session_state.culture_depth)
+    new_culture_dz = st.number_input("Culture Dz for the Temperature model, in m", value=st.session_state.culture_dz)
+    new_nb_layer = st.number_input("Nb Layer for the Temperature model", value=st.session_state.nb_layer)
+    st.header("Beer-Lambert light absorption model")
+    st.latex(r'''I_{z} = I_{0}\cdot \text{exp}\left( -E_{a}\cdot X\cdot z \right)''')
+    
     new_Ea = st.number_input("Ea", value=st.session_state.Ea)
-    new_depth = st.number_input("Depth", value=st.session_state.depth)
+    
     new_X_initial = st.number_input("X_initial", value=st.session_state.X_initial)
     new_T_min = st.number_input("T_min", value=st.session_state.T_min)
     new_T_opt = st.number_input("T_opt", value=st.session_state.T_opt)
@@ -165,9 +173,7 @@ with st.sidebar.form("parameter_form"):
     new_biomass_loss_night_temp = st.number_input("Biomass Loss Night Temp", value=st.session_state.biomass_loss_night_temp)
     new_biomass_loss_night_cst = st.number_input("Biomass Loss Night Cst", value=st.session_state.biomass_loss_night_cst)
     new_culture_absorptivity = st.number_input("Culture Absorptivity", value=st.session_state.culture_absorptivity)
-    new_culture_depth = st.number_input("Culture Depth", value=st.session_state.culture_depth)
-    new_culture_dz = st.number_input("Culture Dz", value=st.session_state.culture_dz)
-    new_nb_layer = st.number_input("Nb Layer", value=st.session_state.nb_layer)
+
     new_C_p = st.number_input("C_p", value=st.session_state.C_p)
     new_rho = st.number_input("Rho", value=st.session_state.rho)
     new_sigma = st.number_input("Sigma", value=st.session_state.sigma)
