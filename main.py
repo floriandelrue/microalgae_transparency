@@ -185,8 +185,8 @@ with st.sidebar.form("parameter_form"):
       st.latex(r''' \scriptsize z \text{: The depth in the reactor}''')
       
     with col2:
-      st.write(" ")
-      st.write(" ")
+      st.write("--")
+      st.write("--")
       new_Ea = st.number_input("", value=st.session_state.Ea)
       st.write(" ")
       st.write(" ")
