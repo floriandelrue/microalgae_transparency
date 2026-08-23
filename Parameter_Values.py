@@ -3,6 +3,7 @@ import numpy as np
 #Parameter values for the biomass production
 
 Ea, depth, X_initial = 170.4, 0.1, 0.1
+nb_layer = 100
 T_min, T_opt, T_max = 0, 29.6, 45.3
 P_max, alpha, I_opt = 0.1003, 0.00043819, 278.7
 kT, kI, K, C = 0.0074977, 0.0000768, 0.00010051, -0.09666
@@ -11,19 +12,12 @@ biomass_loss_night_temp2 = 4.679e-05 / (24)
 biomass_loss_night_temp = -2.623e-03 /(24) 
 biomass_loss_night_cst = 3.912e-05 /(24) 
 
-z = np.linspace(0,depth, num = 100)
-z = z.reshape(-1, 1)
-
 #Parameter values for the culture temperature model
 
 #Culture absorptivity
 culture_absorptivity = 0.7#-
 
-#Culture depth
-culture_depth = 0.1 #m
-#Depth step
-culture_dz = 0.01 #m
-nb_layer=int(culture_depth/culture_dz)
+
 
 #specific heat capacity of the culture
 C_p = 4.184 #J·kg−1·°C−1
