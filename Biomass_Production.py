@@ -1,5 +1,8 @@
 from Parameter_Values import *
 
+global Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C, nb_layer
+        
+
 def Phi_temp(T_min, T_opt, T_max, Temp):
     num = (Temp - T_max) * ((Temp - T_min) ** 2)
     den = (T_opt - T_min) * (
