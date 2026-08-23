@@ -244,10 +244,11 @@ f(T) &= 0 \text{ for } T > T_{max}
       st.latex(r''' \small R_{P,I}''')
       st.latex(r''' \small R_{0}''')
     with col2:
-      new_kT = st.number_input("kT", value=st.session_state.kT)
-      new_kI = st.number_input("kI", value=st.session_state.kI)
-      new_K = st.number_input("K", value=st.session_state.K)
-      new_C = st.number_input("C", value=st.session_state.C)
+      new_C = st.number_input("", value=st.session_state.C)
+      new_kT = st.number_input("", value=st.session_state.kT)
+      new_kI = st.number_input("", value=st.session_state.kI)
+      new_K = st.number_input("", value=st.session_state.K)
+      
     #new_biomass_loss_night_temp2 = st.number_input("Biomass Loss Night Temp2", value=st.session_state.biomass_loss_night_temp2)
     #new_biomass_loss_night_temp = st.number_input("Biomass Loss Night Temp", value=st.session_state.biomass_loss_night_temp)
     #new_biomass_loss_night_cst = st.number_input("Biomass Loss Night Cst", value=st.session_state.biomass_loss_night_cst)
