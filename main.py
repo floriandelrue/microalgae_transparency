@@ -136,10 +136,6 @@ if 'C' not in st.session_state:
 #    st.session_state.biomass_loss_night_cst = biomass_loss_night_cst
 if 'culture_absorptivity' not in st.session_state:
     st.session_state.culture_absorptivity = culture_absorptivity
-if 'culture_depth' not in st.session_state:
-    st.session_state.culture_depth = culture_depth
-if 'culture_dz' not in st.session_state:
-    st.session_state.culture_dz = culture_dz
 if 'nb_layer' not in st.session_state:
     st.session_state.nb_layer = nb_layer
 if 'C_p' not in st.session_state:
