@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 import calendar
+from datetime import datetime, timedelta
 from Import_Weather_Data import *
 from Culture_Temperature import *
 from Biomass_Production import *
@@ -446,7 +447,7 @@ if options.index(month_select) == 0:
   # Graph display
   ax.set_ylabel("Average Hourly Temperature (°C)")
   ax.set_xlabel("Hour of the day")
-  ax.set_title(f"Average Hourly Temperatures for all months of {year}")
+  ax.set_title(f"Average Hourly Temperatures for all months of {year} for {your_loc}")
   ax.legend()
   st.pyplot(fig)
 
@@ -457,11 +458,20 @@ else:
   # Define the start and end dates for the selected month
   start_date = f"{year}-{str(month).zfill(2)}-01"
   end_date = f"{year}-{str(month).zfill(2)}-{num_days_in_month}"
+  # Parse the date string into a datetime object
+  start_date_object = datetime.strptime(start_date, '%Y-%m-%d')
 
-  # Import the weather data for the entire year
+  # Subtract 15 days from the datetime object
+  start_date_extended_object = start_date_object - timedelta(days=15)
+
+  # Format the new datetime object back into a string
+  start_date_extended = start_date_extended_object.strftime('%Y-%m-%d')
+  
+# Import the weather data for the selected month
   latitude, longitude = import_location_data(your_loc)
   weather_data = import_weather_data_function(latitude, longitude, start_date, end_date)
-
+# Import the extended weather data (start - 15 days) in order to initialize the temperature model
+  weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
 
 
   # Initialize NumPy arrays to store the hourly averages
@@ -472,12 +482,6 @@ else:
   diffuse_rad_avg = np.zeros(24)
   direct_rad_avg = np.zeros(24)
   PAR_avg = np.zeros(24)
-
-
-  # Calculation of the hourly average for the selected month
-  start_index = 1
-  end_index = num_days_in_month * 24
-
 
 
   # Calculate the hourly averages and store them in the NumPy arrays
@@ -494,12 +498,25 @@ else:
   ax.plot(range(24), temperature_avg)
   ax.set_ylabel("Average Hourly Temperature (°C)")
   ax.set_xlabel("Hour of the day")
-  ax.set_title(f"Average Hourly Temperatures for {month_select} of {year}")
+  ax.set_title(f"Average Hourly Temperatures for {month_select} of {year} for {your_loc}")
   # Graph display
   st.pyplot(fig)
 
+  #Evaluate the biomass concentration at the end of a typical day for different transparencies
+  X_end = np.zeros(21)
+  for transparency in np.linspace(0,1,num = 21):
+    T_culture_jan, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth, 2.15*(weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1], weather_data_extended[0], weather_data_extended[2], weather_data_extended[3])
+    T_culture_avg = calculate_hourly_averages(T_culture[360:])
+    X_end[i] = calculate_biomass_production(P_max, alpha, I_opt, I, T_min, T_opt, T_max, Temp, kT, kI, C, K, depth, transparency, nb_layer)
 
+  fig2, ax2 = plt.subplots()
+  ax2.plot(np.linspace(0,1,num = 21), X_end)
 
+  plt.title(f"Biomass concentration at the end of a typical day (g/l), starting at {X_initial} g/L")
+  plt.xlabel("PV panel transparency (-)")
+  plt.show()
+  # Graph display
+  st.pyplot(fig2)
 
 # Table display
 table_data = pd.DataFrame({"Optimal Transparency for January": [1], "Optimal Transparency for April": [7], "Optimal Transparency for July": [10], "Optimal Transparency for October": [15]})
