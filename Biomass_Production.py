@@ -62,6 +62,6 @@ def calculate_biomass_production(P_max, alpha, I_opt, I, T_min, T_opt, T_max, Te
         
         X[i] = X_prev * (1 + net)
 
-    return X
+    return X[-1]
 
 
