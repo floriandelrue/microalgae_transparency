@@ -460,7 +460,7 @@ else:
   end_date = f"{year}-{str(month).zfill(2)}-{num_days_in_month}"
   # Parse the date string into a datetime object
   start_date_object = datetime.strptime(start_date, '%Y-%m-%d')
-
+  end_date_object = datetime.strptime(end_date, '%Y-%m-%d')
   # Subtract 15 days from the datetime object
   start_date_extended_object = start_date_object - timedelta(days=15)
 
@@ -504,6 +504,10 @@ else:
 
   #Evaluate the biomass concentration at the end of a typical day for different transparencies
   X_end = np.zeros(21)
+  diff_object = end_date_object - start_date_object
+
+
+  nb_hours = diff_object.total_seconds() / 3600
   for transparency in np.linspace(0,1,num = 21):
     T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth, 2.15*(weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1], weather_data_extended[0], weather_data_extended[2], weather_data_extended[3])
     T_culture_avg = calculate_hourly_averages(T_culture[360:])
