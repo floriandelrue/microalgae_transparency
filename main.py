@@ -196,8 +196,7 @@ f(T) &= 0 \text{ for } T > T_{max}
 \end{aligned}
 \right.
 \end{equation}''')
-    st.latex(r'''f(T)=\frac{\left( T-T_{max} \right)\left( T-T_{min} \right)^2}{\left(T_{opt}-T_{min}\right)\left[ \left(T_{opt}-T_{min}\right)\left( T-T_{opt}\right)-\left( T_{opt}-T_{max} \right)\left( T_{opt}+T_{min}-2T \right) \right]}''')
-    st.latex(r'''f(T) =0 \text{ for } T\gt T_{max}''')
+
     st.latex(r''' \scriptsize T \text{: The temperature of the culture, in °C } ''')
     st.latex(r''' \scriptsize T_{min} \text{: The minimal temperature for growth, in °C } ''')
     st.latex(r''' \scriptsize T_{opt} \text{: The optimal temperature for growth, in °C } ''')
@@ -210,7 +209,7 @@ f(T) &= 0 \text{ for } T > T_{max}
       st.latex(r'\small T_{max}')
     with col2:
       new_T_min = st.number_input('', value=st.session_state.T_min)
-      new_T_opt = st.number_input("T", value=st.session_state.T_opt)
+      new_T_opt = st.number_input("", value=st.session_state.T_opt)
       new_T_max = st.number_input("", value=st.session_state.T_max)
     
     st.header("Model for light intensity effect on biomass productivity (PI curve)")
@@ -219,15 +218,15 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.text("Modified by Beranrd and Rémond, 2012 (see above for reference)")
     st.text("For better parameter identification")
     st.latex(r'''g(I) = \frac{I}{I+\frac{P_{max}}{\alpha}\left( \frac{I}{I_{opt}}-1 \right)^{2}}''')
-    st.latex(r''' \scriptsize {alpha} \text{: The initial slope of biomass productivity towards light intensity, in} \frac{kg/m^{3}/h}{\mu mol/m^{2}/s} ''')
+    st.latex(r''' \scriptsize {\alpha} \text{: The initial slope of biomass productivity towards light intensity, in} \frac{kg/m^{3}/h}{\mu mol/m^{2}/s} ''')
     st.latex(r''' \scriptsize I_{opt} \text{: The optimal light intensity for growth, in} \mu mol/m^{2}/s ''')
     col1,col2 = st.columns([1,2])
     with col1:
-      st.latex(r'\small {alpha}')
+      st.latex(r'\small {\alpha}')
       st.latex(r'\small I_{opt}')
     with col2:
-      new_alpha = st.number_input("Alpha", value=st.session_state.alpha)
-      new_I_opt = st.number_input("I_opt", value=st.session_state.I_opt)
+      new_alpha = st.number_input("", value=st.session_state.alpha)
+      new_I_opt = st.number_input("", value=st.session_state.I_opt)
     
     new_kT = st.number_input("kT", value=st.session_state.kT)
     new_kI = st.number_input("kI", value=st.session_state.kI)
