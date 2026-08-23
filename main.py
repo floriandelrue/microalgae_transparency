@@ -167,12 +167,12 @@ with st.sidebar.form("parameter_form"):
     st.text("The biomass production model decorrelates")
     st.text("the effect of temperature an light:")
     st.latex(r'P(T,I)= P_{max} \cdot f(T) \cdot g(I) \cdot X')
-    st.latex(r''' \scriptsize P(T,I) \text{: The biomass productivity for a temperature T and a light intensity I, in } g/L/h''')
+    st.latex(r''' \scriptsize P(T,I) \text{: The biomass productivity for a temperature T and a light intensity I, in } kg/m^{3}/h''')
     st.latex(r''' \scriptsize P_{max} \text{: The maximum specific biomass productivity, in } /h''')
-    st.latex(r''' \scriptsize f(T) \text{: The function that represents the temperature effect on biomass productivity''')
-    st.latex(r''' \scriptsize f(T) \text{: The function that represents the light intensity effect on biomass productivity''')
-    st.latex(r''' \scriptsize X \text{: The biomass concentration, in g/L''')
-    col1, col2 = st.beta_columns([1,1])
+    st.latex(r''' \scriptsize f(T) \text{: The function that represents the temperature effect on biomass productivity}''')
+    st.latex(r''' \scriptsize g(I) \text{: The function that represents the light intensity effect on biomass productivity}''')
+    st.latex(r''' \scriptsize X \text{: The biomass concentration, in } kg/m^{3}''')
+    col1, col2 = st.columns([1,1])
     with col1:
       st.latex(r'P_{max}')
     with col2:
@@ -199,7 +199,7 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.latex(r''' \scriptsize T_{opt} \text{: The optimal temperature for growth, in °C } ''')
     st.latex(r''' \scriptsize T_{max} \text{: The maximal temperature for growth, in °C } ''')
     #Table for inputs
-    col1, col2 = st.beta_columns([1, 3])
+    col1, col2 = st.columns([1, 3])
     with col1:
       st.latex(r'\small T_{min}')
       st.latex(r'\small T_{opt}')
