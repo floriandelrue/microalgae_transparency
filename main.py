@@ -162,7 +162,11 @@ with st.sidebar.form("parameter_form"):
     st.latex(r''' \scriptsize E_{a} \text{: The light absorption coefficient of the culture, in } m^{2}/kg''')
     st.latex(r''' \scriptsize X \text{: The biomass concentration of the culture, in } kg/m^{3}''')
     st.latex(r''' \scriptsize z \text{: The depth in the reactor}''')
-    new_Ea = st.number_input("Ea", value=st.session_state.Ea)
+    col1, col2 = st.columns([1,1])
+    with col1:
+      st.latex(r''' \small E_{a}''')
+    with col2:
+      new_Ea = st.number_input("", value=st.session_state.Ea)
     st.header("Biomass production model")
     st.text("The biomass production model decorrelates")
     st.text("the effect of temperature an light:")
@@ -174,10 +178,10 @@ with st.sidebar.form("parameter_form"):
     st.latex(r''' \scriptsize X \text{: The biomass concentration, in } kg/m^{3}''')
     col1, col2 = st.columns([1,1])
     with col1:
-      st.latex(r'P_{max}')
+      st.latex(r'\small P_{max}')
     with col2:
       new_P_max = st.number_input("", value=st.session_state.P_max)
-    st.header("Model for temperature effect on biomass gproductivity")
+    st.header("Model for temperature effect on biomass productivity")
     st.text("Cardinal Temperature Model with Inflection (CTMI)")
     st.text("Developped by Rosso et al., 1993")
     st.link_button("https://doi.org/10.1006/jtbi.1993.1099",  "https://doi.org/10.1006/jtbi.1993.1099")
@@ -206,12 +210,25 @@ f(T) &= 0 \text{ for } T > T_{max}
       st.latex(r'\small T_{max}')
     with col2:
       new_T_min = st.number_input('', value=st.session_state.T_min)
-      new_T_opt = st.number_input("T_opt", value=st.session_state.T_opt)
-      new_T_max = st.number_input("T_max", value=st.session_state.T_max)
+      new_T_opt = st.number_input("T", value=st.session_state.T_opt)
+      new_T_max = st.number_input("", value=st.session_state.T_max)
     
+    st.header("Model for light intensity effect on biomass productivity (PI curve)")
+    st.text("Developped by Eilers and Peeters, 1988")
+    st.link_button("https://doi.org/10.1016/0304-3800(88)90057-9",  "https://doi.org/10.1016/0304-3800(88)90057-9")
+    st.text("Modified by Beranrd and Rémond, 2012 (see above for reference)")
+    st.text("For better parameter identification")
+    st.latex(r'''g(I) = \frac{I}{I+\frac{P_{max}}{\alpha}\left( \frac{I}{I_{opt}}-1 \right)^{2}}''')
+    st.latex(r''' \scriptsize {alpha} \text{: The initial slope of biomass productivity towards light intensity, in} \frac{kg/m^{3}/h}{\mu mol/m^{2}/s} ''')
+    st.latex(r''' \scriptsize I_{opt} \text{: The optimal light intensity for growth, in} \mu mol/m^{2}/s ''')
+    col1,col2 = st.columns([1,2])
+    with col1:
+      st.latex(r'\small {alpha}')
+      st.latex(r'\small I_{opt}')
+    with col2
+      new_alpha = st.number_input("Alpha", value=st.session_state.alpha)
+      new_I_opt = st.number_input("I_opt", value=st.session_state.I_opt)
     
-    new_alpha = st.number_input("Alpha", value=st.session_state.alpha)
-    new_I_opt = st.number_input("I_opt", value=st.session_state.I_opt)
     new_kT = st.number_input("kT", value=st.session_state.kT)
     new_kI = st.number_input("kI", value=st.session_state.kI)
     new_K = st.number_input("K", value=st.session_state.K)
