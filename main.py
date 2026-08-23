@@ -225,7 +225,7 @@ f(T) &= 0 \text{ for } T > T_{max}
     with col1:
       st.latex(r'\small {alpha}')
       st.latex(r'\small I_{opt}')
-    with col2
+    with col2:
       new_alpha = st.number_input("Alpha", value=st.session_state.alpha)
       new_I_opt = st.number_input("I_opt", value=st.session_state.I_opt)
     
