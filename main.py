@@ -510,7 +510,7 @@ else:
                             2.15*(weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1], weather_data_extended[0], weather_data_extended[2], \
                             weather_data_extended[3], culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv)
     T_culture_avg = calculate_hourly_averages(T_culture[360:])
-    X_end[i] = calculate_biomass_production(P_max, alpha, I_opt, I, T_min, T_opt, T_max, Temp, kT, kI, C, K, depth, transparency, nb_layer)
+    X_end[i] = calculate_biomass_production(P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency, nb_layer)
 
   fig2, ax2 = plt.subplots()
   ax2.plot(np.linspace(0,1,num = 21), X_end)
