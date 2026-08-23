@@ -508,7 +508,7 @@ else:
   for transparency in np.linspace(0,1,num = 21):
     T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth, \
                             2.15*(weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1], weather_data_extended[0], weather_data_extended[2], \
-                            weather_data_extended[3], depth, culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv)
+                            weather_data_extended[3], culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv)
     T_culture_avg = calculate_hourly_averages(T_culture[360:])
     X_end[i] = calculate_biomass_production(P_max, alpha, I_opt, I, T_min, T_opt, T_max, Temp, kT, kI, C, K, depth, transparency, nb_layer)
 
