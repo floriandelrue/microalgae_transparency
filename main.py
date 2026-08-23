@@ -237,14 +237,23 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.latex(r''' \scriptsize R_{P,I} \text{: Respiration Sensitivity to Productivity-Light Intensity Interaction, in } \left( \mu mol/m^{2}/s \right)^{-1} ''')
     st.latex(r''' \scriptsize R_{0} \text{: Maintenance respiration, in } kg/m^{3}/h ''')
   
-    
-    new_kT = st.number_input("kT", value=st.session_state.kT)
-    new_kI = st.number_input("kI", value=st.session_state.kI)
-    new_K = st.number_input("K", value=st.session_state.K)
-    new_C = st.number_input("C", value=st.session_state.C)
-    new_biomass_loss_night_temp2 = st.number_input("Biomass Loss Night Temp2", value=st.session_state.biomass_loss_night_temp2)
-    new_biomass_loss_night_temp = st.number_input("Biomass Loss Night Temp", value=st.session_state.biomass_loss_night_temp)
-    new_biomass_loss_night_cst = st.number_input("Biomass Loss Night Cst", value=st.session_state.biomass_loss_night_cst)
+    col1,col2 = st.columns([1,4])
+    with col1:
+      st.latex(r''' \small R_{P} ''')
+      st.latex(r''' \small R_{P,T}''')
+      st.latex(r''' \small R_{P,I}''')
+      st.latex(r''' \small R_{0}''')
+    with col2:
+      new_kT = st.number_input("kT", value=st.session_state.kT)
+      new_kI = st.number_input("kI", value=st.session_state.kI)
+      new_K = st.number_input("K", value=st.session_state.K)
+      new_C = st.number_input("C", value=st.session_state.C)
+    #new_biomass_loss_night_temp2 = st.number_input("Biomass Loss Night Temp2", value=st.session_state.biomass_loss_night_temp2)
+    #new_biomass_loss_night_temp = st.number_input("Biomass Loss Night Temp", value=st.session_state.biomass_loss_night_temp)
+    #new_biomass_loss_night_cst = st.number_input("Biomass Loss Night Cst", value=st.session_state.biomass_loss_night_cst)
+    st.header("Model for estimating the temperature of the microalgae culture")
+    st.text("Developped by Rodríguez-Miranda et al., 2020")
+    st.link_button("https://doi.org/10.1002/bit.27617",  "https://doi.org/10.1002/bit.27617")
     new_culture_absorptivity = st.number_input("Culture Absorptivity", value=st.session_state.culture_absorptivity)
 
     new_C_p = st.number_input("C_p", value=st.session_state.C_p)
