@@ -185,11 +185,11 @@ with st.sidebar.form("parameter_form"):
       st.latex(r''' \scriptsize z \text{: The depth in the reactor}''')
       
     with col2:
-      st.text("")
-      st.text("")
+      st.text(" ")
+      st.text(" ")
       new_Ea = st.number_input("", value=st.session_state.Ea)
-      st.text("")
-      st.text("")
+      st.text(" ")
+      st.text(" ")
     st.header("Biomass production model")
     st.text("The biomass production model decorrelates")
     st.text("the effect of temperature an light:")
