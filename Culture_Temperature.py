@@ -6,7 +6,7 @@
 
 import numpy as np
 
-def Culture_Temperature_function(dt, nb_hours, Temperature_Control, T_limit, raceway_area, culture_depth, hourly_global_radiation, hourly_relative_humidity_2m, hourly_temperature_2m, hourly_dew_point_2m, hourly_wind_speed_10m):
+def Culture_Temperature_function(dt, nb_hours, Temperature_Control, T_limit, raceway_area, depth, hourly_global_radiation, hourly_relative_humidity_2m, hourly_temperature_2m, hourly_dew_point_2m, hourly_wind_speed_10m):
     #Q_accumulated is the accumulated heat flow
     def Q_accumulated(d,raceway_area, C_p, rho, dT_culture):
         return d*raceway_area*C_p*rho*dT_culture
@@ -84,7 +84,7 @@ def Culture_Temperature_function(dt, nb_hours, Temperature_Control, T_limit, rac
     Cumulative_Minimal_Energy_Consumption = np.zeros(int(3600/dt*nb_hours))
     if Temperature_Control == True:
         T_culture[0] = T_limit
-        Cumulative_Minimal_Energy_Consumption[0] = (T_limit-hourly_temperature_2m[0])/(3600/dt*24)*(culture_depth*raceway_area*C_p*rho)*(1/3.6e06)
+        Cumulative_Minimal_Energy_Consumption[0] = (T_limit-hourly_temperature_2m[0])/(3600/dt*24)*(depth*raceway_area*C_p*rho)*(1/3.6e06)
     else: 
         T_culture[0] = hourly_temperature_2m[0]
         Cumulative_Minimal_Energy_Consumption[0] = 0
@@ -92,11 +92,11 @@ def Culture_Temperature_function(dt, nb_hours, Temperature_Control, T_limit, rac
     
     for i in range(int(3600/dt*nb_hours)):
         dT_culture[i] = dT_culture_func(T_culture[i],hourly_global_radiation[int(i*dt/3600)], hourly_relative_humidity_2m[int(i*dt/3600)], 
-                                        culture_absorptivity, raceway_area, culture_depth, C_p, rho,hourly_temperature_2m[int(i*dt/3600)], hourly_dew_point_2m[int(i*dt/3600)], int(i%(24*3600/dt))/3600, A_conv, B_conv, hourly_wind_speed_10m[int(i*dt/3600)])
+                                        culture_absorptivity, raceway_area, depth, C_p, rho,hourly_temperature_2m[int(i*dt/3600)], hourly_dew_point_2m[int(i*dt/3600)], int(i%(24*3600/dt))/3600, A_conv, B_conv, hourly_wind_speed_10m[int(i*dt/3600)])
         if Temperature_Control == True:
             if T_culture[i] + dT_culture[i]/(3600/dt*24) < T_limit:
                 T_culture[i+1] = T_limit
-                Minimal_Energy_Consumption -= dT_culture[i]/(3600/dt*24)*(culture_depth*raceway_area*C_p*rho)*(1/3.6e06)
+                Minimal_Energy_Consumption -= dT_culture[i]/(3600/dt*24)*(depth*raceway_area*C_p*rho)*(1/3.6e06)
                 Cumulative_Minimal_Energy_Consumption[i] = Minimal_Energy_Consumption + Cumulative_Minimal_Energy_Consumption[i-1] 
             else:
                 T_culture[i+1] = T_culture[i] + dT_culture[i]/(3600/dt*24)
