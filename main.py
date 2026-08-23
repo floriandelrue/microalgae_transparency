@@ -168,11 +168,11 @@ with st.sidebar.form("parameter_form"):
       st.latex(r''' \scriptsize z \text{: The depth in the reactor}''')
       
     with col2:
-      st.empty()
-      st.empty()
+      st.text("")
+      st.text("")
       new_Ea = st.number_input("", value=st.session_state.Ea)
-      st.empty()
-      st.empty()
+      st.text("")
+      st.text("")
     st.header("Biomass production model")
     st.text("The biomass production model decorrelates")
     st.text("the effect of temperature an light:")
@@ -311,38 +311,38 @@ f(T) &= 0 \text{ for } T > T_{max}
         st.session_state.B_conv = B_conv
         st.success("Parameters updated!")
 
-# Reset button
-if st.button("Reset to Default"):
-    reset_params()
-    st.session_state.Ea = Ea
-    st.session_state.depth = depth
-    st.session_state.X_initial = X_initial
-    st.session_state.T_min = T_min
-    st.session_state.T_opt = T_opt
-    st.session_state.T_max = T_max
-    st.session_state.P_max = P_max
-    st.session_state.alpha = alpha
-    st.session_state.I_opt = I_opt
-    st.session_state.kT = kT
-    st.session_state.kI = kI
-    st.session_state.K = K
-    st.session_state.C = C
-    st.session_state.biomass_loss_night_temp2 = biomass_loss_night_temp2
-    st.session_state.biomass_loss_night_temp = biomass_loss_night_temp
-    st.session_state.biomass_loss_night_cst = biomass_loss_night_cst
-    st.session_state.culture_absorptivity = culture_absorptivity
-    st.session_state.culture_depth = culture_depth
-    st.session_state.culture_dz = culture_dz
-    st.session_state.nb_layer = nb_layer
-    st.session_state.C_p = C_p
-    st.session_state.rho = rho
-    st.session_state.sigma = sigma
-    st.session_state.e_w = e_w
-    st.session_state.A_evap = A_evap
-    st.session_state.B_evap = B_evap
-    st.session_state.A_conv = A_conv
-    st.session_state.B_conv = B_conv
-    st.success("Parameters reset to default!")
+  # Reset button
+  if st.button("Reset to Default"):
+      reset_params()
+      st.session_state.Ea = Ea
+      st.session_state.depth = depth
+      st.session_state.X_initial = X_initial
+      st.session_state.T_min = T_min
+      st.session_state.T_opt = T_opt
+      st.session_state.T_max = T_max
+      st.session_state.P_max = P_max
+      st.session_state.alpha = alpha
+      st.session_state.I_opt = I_opt
+      st.session_state.kT = kT
+      st.session_state.kI = kI
+      st.session_state.K = K
+      st.session_state.C = C
+      st.session_state.biomass_loss_night_temp2 = biomass_loss_night_temp2
+      st.session_state.biomass_loss_night_temp = biomass_loss_night_temp
+      st.session_state.biomass_loss_night_cst = biomass_loss_night_cst
+      st.session_state.culture_absorptivity = culture_absorptivity
+      st.session_state.culture_depth = culture_depth
+      st.session_state.culture_dz = culture_dz
+      st.session_state.nb_layer = nb_layer
+      st.session_state.C_p = C_p
+      st.session_state.rho = rho
+      st.session_state.sigma = sigma
+      st.session_state.e_w = e_w
+      st.session_state.A_evap = A_evap
+      st.session_state.B_evap = B_evap
+      st.session_state.A_conv = A_conv
+      st.session_state.B_conv = B_conv
+      st.success("Parameters reset to default!")
 
 
 st.write("Current Parameters:", {
