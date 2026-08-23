@@ -385,6 +385,10 @@ month_select = st.selectbox(
     placeholder="Select all months or a specific month...",
 )
 
+if month_select is None:
+    st.info("Please select a month (or 'All months') to continue.")
+    st.stop()   # halts execution here on this rerun, rest of the script won't run
+
 st.write("You selected:", options.index(month_select))
 
 
@@ -505,7 +509,7 @@ else:
 
   nb_hours = diff_object.total_seconds() / 3600
   raceway_area = 1 #m2
-  for transparency in np.linspace(0,1,num = 21):
+  for i, transparency in zip(range(21), np.linspace(0,1,num = 21)):
     T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth, \
                             2.15*(weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1], weather_data_extended[0], weather_data_extended[2], \
                             weather_data_extended[3], culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv)
