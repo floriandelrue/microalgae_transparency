@@ -219,7 +219,7 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.text("For better parameter identification")
     st.latex(r'''g(I) = \frac{I}{I+\frac{P_{max}}{\alpha}\left( \frac{I}{I_{opt}}-1 \right)^{2}}''')
     st.latex(r''' \scriptsize {\alpha} \text{: The initial slope of biomass productivity towards light intensity, in} \frac{kg/m^{3}/h}{\mu mol/m^{2}/s} ''')
-    st.latex(r''' \scriptsize I_{opt} \text{: The optimal light intensity for growth, in} \mu mol/m^{2}/s ''')
+    st.latex(r''' \scriptsize I_{opt} \text{: The optimal light intensity for growth, in } \mu mol/m^{2}/s ''')
     col1,col2 = st.columns([1,2])
     with col1:
       st.latex(r'\small {\alpha}')
@@ -227,6 +227,16 @@ f(T) &= 0 \text{ for } T > T_{max}
     with col2:
       new_alpha = st.number_input("", value=st.session_state.alpha)
       new_I_opt = st.number_input("", value=st.session_state.I_opt)
+    st.header("Model for biomass respiration on light")
+    st.text("Adapted from Laws and Chalup, 1990")
+    st.link_button("https://doi.org/10.4319/lo.1990.35.3.0597",  "https://doi.org/10.4319/lo.1990.35.3.0597")
+    st.latex(r'''R(T,I)=\left(R_{P} + R_{P,T}\cdot T+R_{P,I}\cdot I  \right)\cdot P_{max}+R_{0}''')
+    st.latex(r''' \scriptsize R(T,I) \text{: Biomass respiration for a temperature T and a light intensity I, in } kg/m^{3}/h ''')
+    st.latex(r''' \scriptsize R_{P} \text{: Respiration Sensitivity to Productivity}  ''')
+    st.latex(r''' \scriptsize R_{P,T} \text{: Respiration Sensitivity to Productivity-Temperature Interaction, in } /°C ''')
+    st.latex(r''' \scriptsize R_{P,I} \text{: Respiration Sensitivity to Productivity-Light Intensity Interaction, in } \left( \mu mol/m^{2}/s \right)^{-1} ''')
+    st.latex(r''' \scriptsize R_{0} \text{: Maintenance respiration, in } kg/m^{3}/h ''')
+  
     
     new_kT = st.number_input("kT", value=st.session_state.kT)
     new_kI = st.number_input("kI", value=st.session_state.kI)
