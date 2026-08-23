@@ -163,8 +163,21 @@ with st.sidebar.form("parameter_form"):
     st.latex(r''' \scriptsize X \text{: The biomass concentration of the culture, in } kg/m^{3}''')
     st.latex(r''' \scriptsize z \text{: The depth in the reactor}''')
     new_Ea = st.number_input("Ea", value=st.session_state.Ea)
-    
-    st.header("Model for temperature effect on biomass growth")
+    st.header("Biomass production model")
+    st.text("The biomass production model decorrelates")
+    st.text("the effect of temperature an light:")
+    st.latex(r'P(T,I)= P_{max} \cdot f(T) \cdot g(I) \cdot X')
+    st.latex(r''' \scriptsize P(T,I) \text{: The biomass productivity for a temperature T and a light intensity I, in } g/L/h''')
+    st.latex(r''' \scriptsize P_{max} \text{: The maximum specific biomass productivity, in } /h''')
+    st.latex(r''' \scriptsize f(T) \text{: The function that represents the temperature effect on biomass productivity''')
+    st.latex(r''' \scriptsize f(T) \text{: The function that represents the light intensity effect on biomass productivity''')
+    st.latex(r''' \scriptsize X \text{: The biomass concentration, in g/L''')
+    col1, col2 = st.beta_columns([1,1])
+    with col1:
+      st.latex(r'P_{max}')
+    with col2:
+      new_P_max = st.number_input("", value=st.session_state.P_max)
+    st.header("Model for temperature effect on biomass gproductivity")
     st.text("Cardinal Temperature Model with Inflection (CTMI)")
     st.text("Developped by Rosso et al., 1993")
     st.link_button("https://doi.org/10.1006/jtbi.1993.1099",  "https://doi.org/10.1006/jtbi.1993.1099")
@@ -185,11 +198,18 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.latex(r''' \scriptsize T_{min} \text{: The minimal temperature for growth, in °C } ''')
     st.latex(r''' \scriptsize T_{opt} \text{: The optimal temperature for growth, in °C } ''')
     st.latex(r''' \scriptsize T_{max} \text{: The maximal temperature for growth, in °C } ''')
-    st.latex(r'T_{min}')
-    new_T_min = st.number_input('', value=st.session_state.T_min)
-    new_T_opt = st.number_input("T_opt", value=st.session_state.T_opt)
-    new_T_max = st.number_input("T_max", value=st.session_state.T_max)
-    new_P_max = st.number_input("P_max", value=st.session_state.P_max)
+    #Table for inputs
+    col1, col2 = st.beta_columns([1, 3])
+    with col1:
+      st.latex(r'\small T_{min}')
+      st.latex(r'\small T_{opt}')
+      st.latex(r'\small T_{max}')
+    with col2:
+      new_T_min = st.number_input('', value=st.session_state.T_min)
+      new_T_opt = st.number_input("T_opt", value=st.session_state.T_opt)
+      new_T_max = st.number_input("T_max", value=st.session_state.T_max)
+    
+    
     new_alpha = st.number_input("Alpha", value=st.session_state.alpha)
     new_I_opt = st.number_input("I_opt", value=st.session_state.I_opt)
     new_kT = st.number_input("kT", value=st.session_state.kT)
