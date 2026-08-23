@@ -6,8 +6,7 @@
 
 import numpy as np
 
-global depth, culture_absorptivity, nb_layer, C_p, rho, sigma, \
-        e_w, A_evap, B_evap, A_conv, B_conv
+
 
 def Culture_Temperature_function(dt, nb_hours, Temperature_Control, T_limit, raceway_area, depth, hourly_global_radiation, hourly_relative_humidity_2m, hourly_temperature_2m, hourly_dew_point_2m, hourly_wind_speed_10m):
     global depth, culture_absorptivity, nb_layer, C_p, rho, sigma, \
