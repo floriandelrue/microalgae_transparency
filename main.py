@@ -508,6 +508,7 @@ else:
 
 
   nb_hours = diff_object.total_seconds() / 3600
+  raceway_area = 1 #m2
   for transparency in np.linspace(0,1,num = 21):
     T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth, 2.15*(weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1], weather_data_extended[0], weather_data_extended[2], weather_data_extended[3])
     T_culture_avg = calculate_hourly_averages(T_culture[360:])
