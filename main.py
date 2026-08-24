@@ -542,7 +542,7 @@ else:
   ax2.plot(np.linspace(0,1,num = 21), X_end)
   #ax2.vlines(best_transparency, np.min(ax2.get_xlim()), best_X, colors='r')
   ax2.text(0.6*best_transparency, 0.85*best_X, 'Best transparency')
-  ax2.text(0.7*best_transparency, 0.79*best_X, f'{best_transparency:.3f}', style='bold', fontsize = 15)
+  ax2.text(0.7*best_transparency, 0.79*best_X, f'{best_transparency:.3f}', fontweight='bold', fontsize = 15)
   
   plt.title(f"Biomass concentration at the end of a typical day (g/l), starting at {X_initial} g/L")
   plt.xlabel("PV panel transparency (-)")
