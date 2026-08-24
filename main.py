@@ -389,9 +389,6 @@ if month_select is None:
     st.info("Please select a month (or 'All months') to continue.")
     st.stop()   # halts execution here on this rerun, rest of the script won't run
 
-st.write("You selected:", options.index(month_select))
-
-
 if options.index(month_select) == 0:
   # Import the weather data
   # Define the start and end dates for the entire year
@@ -540,12 +537,9 @@ else:
         X_optim[1] = max(X)
   fig2, ax2 = plt.subplots()
   ax2.plot(np.linspace(0,1,num = 21), X_end)
-  min_ax = np.min(ax2.get_xlim())
-  #ax2.vlines(best_transparency, np.min(ax2.get_xlim()), best_X, colors='r')
+  ax2.vlines(best_transparency, np.min(ax2.get_ylim()), best_X, colors='r')
   ax2.text(0.6*best_transparency, 0.85*best_X, 'Best transparency')
   ax2.text(0.7*best_transparency, 0.8*best_X, f'{best_transparency:.3f}', fontweight='bold', fontsize = 15)
-  ax2.text(0.6*best_transparency, 0.7*best_X, f'{min_ax}')
-  
   plt.title(f"Biomass concentration at the end of a typical day (g/l), starting at {X_initial} g/L")
   plt.xlabel("PV panel transparency (-)")
   plt.show()
