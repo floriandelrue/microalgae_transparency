@@ -27,7 +27,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
   PAR_extended = 2.15 * (weather_data_extended[4] + weather_data_extended[5])
   diff_object = end_date_object - start_date_object
   nb_hours = diff_object.total_seconds() / 3600
-  raceway_area = 10000  # m2 No impact on the temperature of the culture, but on the energy consumed, for further improvements
+  
   for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
     T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
             3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
@@ -534,7 +534,7 @@ else:
   temperature_avg = calculate_hourly_averages(weather_data[0])
   PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   #Matplotlib figure
-  fig, (ax, ax1) = plt.subplots(1,2)
+  fig, (ax, ax1) = plt.subplots(1,2, figsize=(5,15))
   ax.plot(range(24), temperature_avg)
   ax.set_ylabel("Average Hourly Temperature (°C)")
   ax.set_xlabel("Hour of the day")
@@ -545,7 +545,7 @@ else:
   
   # Graph display
   st.pyplot(fig)
-
+  raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
   best_X, best_transparency = calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
 
   
