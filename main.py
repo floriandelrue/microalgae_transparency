@@ -534,7 +534,7 @@ else:
         X_optim[0] = best_transparency
         X_optim[1] = best_X
         
-    else:
+  else:
         X_optim[0] = 1.0
         X_optim[1] = max(X)
   fig2, ax2 = plt.subplots()
