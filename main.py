@@ -17,6 +17,66 @@ def calculate_hourly_averages(data):
   for i in range(24):
     hourly_averages[i] = np.mean(data[i::24])
   return hourly_averages
+
+#Function to calculate the optimum PV panel transparency
+
+
+def calculate_optimum_transparency(start_date_object, end_date_object, month, year, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer):
+  X_end = np.zeros(21)
+  PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
+  PAR_extended = 2.15 * (weather_data_extended[4] + weather_data_extended[5])
+    diff_object = end_date_object - start_date_object
+    nb_hours = diff_object.total_seconds() / 3600
+    raceway_area = 10000  # m2 No impact on the temperature of the culture, but on the energy consumed, for further improvements
+    for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
+        T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
+            3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
+            PAR_extended, weather_data_extended[1],
+            weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],
+            culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
+        )
+        T_culture_avg = calculate_hourly_averages(T_culture[360:])
+        X_end[i] = calculate_biomass_production(
+            X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency, nb_layer
+        )
+
+    X_new = np.zeros(20)
+
+    if np.argmax(X_end) != 20:
+        X_end_new = np.zeros(20)
+        transparency = np.zeros(20)
+        best_transparency, best_X = 0.0, 0.0
+
+        for i in range(20):
+            transparency[i] = np.argmax(X_end) / 20 - 0.09 + i * 0.01
+            T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
+                3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
+                2.15 * (weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1],
+                weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],
+                culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
+            )
+            T_culture_avg = calculate_hourly_averages(T_culture[360:])
+            X_new[i] = calculate_biomass_production(
+                X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency[i], nb_layer
+            )
+            if X_new[i] > best_X:
+                best_transparency = transparency[i]
+                best_X = X_new[i]
+
+    else:
+        best_transparency = 1.0
+        best_X = max(X_end)
+
+    fig2, ax2 = plt.subplots()
+    ax2.plot(np.linspace(0, 1, num=21), X_end)
+    ax2.vlines(best_transparency, np.min(ax2.get_ylim()), best_X, colors='r')
+    ax2.text(0.6 * best_transparency, 0.85 * best_X, 'Best transparency')
+    ax2.text(0.7 * best_transparency, 0.8 * best_X, f'{best_transparency:.3f}', fontweight='bold', fontsize=15)
+    plt.title(f"Biomass concentration at the end of a typical day (g/l) of {month} of {year}, starting at {X_initial} g/L")
+    plt.xlabel("PV panel transparency (-)")
+    plt.show()
+    st.pyplot(fig2)
+    return best_X, best_transparency
 # Title
 st.title("Microalgae Transparency Model, v0.01")
 
@@ -471,24 +531,6 @@ else:
   weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
 
 
-  # Initialize NumPy arrays to store the hourly averages
-  temperature_avg = np.zeros(24)
-  humidity_avg = np.zeros(24)
-  dew_point_avg = np.zeros(24)
-  wind_speed_avg = np.zeros(24)
-  diffuse_rad_avg = np.zeros(24)
-  direct_rad_avg = np.zeros(24)
-  PAR_avg = np.zeros(24)
-
-
-  # Calculate the hourly averages and store them in the NumPy arrays
-  temperature_avg = calculate_hourly_averages(weather_data[0])
-  humidity_avg = calculate_hourly_averages(weather_data[1])
-  dew_point_avg = calculate_hourly_averages(weather_data[2])
-  wind_speed_avg = calculate_hourly_averages(weather_data[3])
-  diffuse_rad_avg = calculate_hourly_averages(weather_data[4])
-  direct_rad_avg = calculate_hourly_averages(weather_data[5])
-  PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
 
   #Matplotlib figure
   fig, ax = plt.subplots()
@@ -499,52 +541,9 @@ else:
   # Graph display
   st.pyplot(fig)
 
-  #Evaluate the biomass concentration at the end of a typical day for different transparencies
-  X_end = np.zeros(21)
-  diff_object = end_date_object - start_date_object
+  best_X, best_transparency = calculate_optimum_transparency(start_date_object, end_date_object, month, year, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer):
 
-
-  nb_hours = diff_object.total_seconds() / 3600
-  raceway_area = 10000 #m2 No impact on the temperature model, just on the energy needed to heat the culture (if selected // for further improvements)
-  for i, transparency in zip(range(22), np.linspace(0,1,num = 21)):
-    T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth, \
-                            2.15*(weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1], weather_data_extended[0], weather_data_extended[2], \
-                            weather_data_extended[3], culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv)
-    T_culture_avg = calculate_hourly_averages(T_culture[360:])
-    X_end[i] = calculate_biomass_production(P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency, nb_layer)
-  X_optim = np.zeros(2)
-  X_new = np.zeros(20)
-  if  np.argmax(X_end) != 20:
-        X_end_new = np.zeros(20)
-        transparency = np.zeros(20)
-        best_transparency, best_X = 0.0, 0.0
-        
-        for i in range(20):
-            transparency[i] = np.argmax(X_end) / 20 - 0.09 + i * 0.01
-            T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth, \
-                            2.15*(weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1], weather_data_extended[0], weather_data_extended[2], \
-                            weather_data_extended[3], culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv)
-            T_culture_avg = calculate_hourly_averages(T_culture[360:])
-            X_new[i] = calculate_biomass_production(P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency[i], nb_layer)
-            if X_new[i] > best_X:
-                best_transparency = transparency[i]
-                best_X = X_new[i]
-        X_optim[0] = best_transparency
-        X_optim[1] = best_X
-        
-  else:
-        X_optim[0] = 1.0
-        X_optim[1] = max(X)
-  fig2, ax2 = plt.subplots()
-  ax2.plot(np.linspace(0,1,num = 21), X_end)
-  ax2.vlines(best_transparency, np.min(ax2.get_ylim()), best_X, colors='r')
-  ax2.text(0.6*best_transparency, 0.85*best_X, 'Best transparency')
-  ax2.text(0.7*best_transparency, 0.8*best_X, f'{best_transparency:.3f}', fontweight='bold', fontsize = 15)
-  plt.title(f"Biomass concentration at the end of a typical day (g/l), starting at {X_initial} g/L")
-  plt.xlabel("PV panel transparency (-)")
-  plt.show()
-  # Graph display
-  st.pyplot(fig2)
+  
 
 # Table display
 table_data = pd.DataFrame({"Optimal Transparency for January": [1], "Optimal Transparency for April": [7], "Optimal Transparency for July": [10], "Optimal Transparency for October": [15]})
