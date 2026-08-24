@@ -541,7 +541,7 @@ else:
   fig2, ax2 = plt.subplots()
   ax2.plot(np.linspace(0,1,num = 21), X_end)
   ax2.text(0.0, 0.9*best_X, f'Best transparency: {best_transparency}')
-  ax2.vlines(best_transparency, 0.0, best_X, c='r')
+  ax2.vlines(best_transparency, 0.0, best_X, colors='r')
   plt.title(f"Biomass concentration at the end of a typical day (g/l), starting at {X_initial} g/L")
   plt.xlabel("PV panel transparency (-)")
   plt.show()
