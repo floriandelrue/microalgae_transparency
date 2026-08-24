@@ -541,7 +541,7 @@ else:
   # Graph display
   st.pyplot(fig)
 
-  best_X, best_transparency = calculate_optimum_transparency(start_date_object, end_date_object, month, year, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer):
+  best_X, best_transparency = calculate_optimum_transparency(start_date_object, end_date_object, month, year, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
 
   
 
