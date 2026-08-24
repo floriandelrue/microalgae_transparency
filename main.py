@@ -515,10 +515,32 @@ else:
                             weather_data_extended[3], culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv)
     T_culture_avg = calculate_hourly_averages(T_culture[360:])
     X_end[i] = calculate_biomass_production(P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency, nb_layer)
-
+  X_optim = np.zeros(2)
+  if  np.argmax(X_end) != 20:
+        X_end_new = np.zeros(20)
+        transparency = np.zeros(20)
+        best_transparency, best_X = 0.0, 0.0
+        
+        for i in range(20):
+            transparency[i] = np.argmax(X) / 20 - 0.09 + i * 0.01
+            T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth, \
+                            2.15*(weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1], weather_data_extended[0], weather_data_extended[2], \
+                            weather_data_extended[3], culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv)
+            T_culture_avg = calculate_hourly_averages(T_culture[360:])
+            X_new[i] = calculate_biomass_production(P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency, nb_layer)
+            if X_new[i] > best_X:
+                best_transparency = transparency[i]
+                best_X = X_new[i]
+        X_optim[0] = best_transparency
+        X_optim[1] = best_X
+        
+    else:
+        X_optim[0] = 1.0
+        X_optim[1] = max(X)
   fig2, ax2 = plt.subplots()
   ax2.plot(np.linspace(0,1,num = 21), X_end)
-
+  ax2.text(0.0, 0.9*best_X, f'Best transparency: {best_transparency}')
+  ax2.vlines(best_transparency, 0.0, best_X, c='r')
   plt.title(f"Biomass concentration at the end of a typical day (g/l), starting at {X_initial} g/L")
   plt.xlabel("PV panel transparency (-)")
   plt.show()
