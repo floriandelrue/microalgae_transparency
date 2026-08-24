@@ -69,7 +69,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
 
     fig2, ax2 = plt.subplots()
     ax2.plot(np.linspace(0, 1, num=21), X_end)
-    ax2.vlines(best_transparency, np.min(ax2.get_ylim()), best_X, colors='r')
+    ax2.vlines(best_transparency, np.min(ax2.get_ylim()), best_X, colors='r', linestyles = 'loosely dashed')
     ax2.text(0.6 * best_transparency, 0.85 * best_X, 'Best transparency')
     ax2.text(0.7 * best_transparency, 0.8 * best_X, f'{best_transparency:.3f}', fontweight='bold', fontsize=15)
     plt.title(f"Biomass concentration at the end of a typical day (g/l) of {month} of {year} for {your_loc}, starting at {X_initial} g/L")
@@ -534,7 +534,7 @@ else:
   temperature_avg = calculate_hourly_averages(weather_data[0])
   PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   #Matplotlib figure
-  fig, (ax, ax1) = plt.subplots(1,2, figsize=(5,15))
+  fig, (ax, ax1) = plt.subplots(1,2, figsize=(15,5))
   ax.plot(range(24), temperature_avg)
   ax.set_ylabel("Average Hourly Temperature (°C)")
   ax.set_xlabel("Hour of the day")
