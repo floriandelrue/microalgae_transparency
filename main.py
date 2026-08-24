@@ -25,47 +25,47 @@ def calculate_optimum_transparency(start_date_object, end_date_object, month, ye
   X_end = np.zeros(21)
   PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   PAR_extended = 2.15 * (weather_data_extended[4] + weather_data_extended[5])
-    diff_object = end_date_object - start_date_object
-    nb_hours = diff_object.total_seconds() / 3600
-    raceway_area = 10000  # m2 No impact on the temperature of the culture, but on the energy consumed, for further improvements
-    for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
-        T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
+  diff_object = end_date_object - start_date_object
+  nb_hours = diff_object.total_seconds() / 3600
+  raceway_area = 10000  # m2 No impact on the temperature of the culture, but on the energy consumed, for further improvements
+  for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
+    T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
             3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
             PAR_extended, weather_data_extended[1],
             weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],
             culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
         )
-        T_culture_avg = calculate_hourly_averages(T_culture[360:])
-        X_end[i] = calculate_biomass_production(
-            X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency, nb_layer
+    T_culture_avg = calculate_hourly_averages(T_culture[360:])
+    X_end[i] = calculate_biomass_production(
+         X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency, nb_layer
         )
 
-    X_new = np.zeros(20)
+  X_new = np.zeros(20)
 
-    if np.argmax(X_end) != 20:
-        X_end_new = np.zeros(20)
-        transparency = np.zeros(20)
-        best_transparency, best_X = 0.0, 0.0
+  if np.argmax(X_end) != 20:
+    X_end_new = np.zeros(20)
+    transparency = np.zeros(20)
+    best_transparency, best_X = 0.0, 0.0
 
-        for i in range(20):
-            transparency[i] = np.argmax(X_end) / 20 - 0.09 + i * 0.01
-            T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
+    for i in range(20):
+      transparency[i] = np.argmax(X_end) / 20 - 0.09 + i * 0.01
+      T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
                 3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
                 2.15 * (weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1],
                 weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],
                 culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
             )
-            T_culture_avg = calculate_hourly_averages(T_culture[360:])
-            X_new[i] = calculate_biomass_production(
-                X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency[i], nb_layer
+      T_culture_avg = calculate_hourly_averages(T_culture[360:])
+      X_new[i] = calculate_biomass_production(
+          X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency[i], nb_layer
             )
-            if X_new[i] > best_X:
-                best_transparency = transparency[i]
-                best_X = X_new[i]
+      if X_new[i] > best_X:
+        best_transparency = transparency[i]
+        best_X = X_new[i]
 
     else:
-        best_transparency = 1.0
-        best_X = max(X_end)
+      best_transparency = 1.0
+      best_X = max(X_end)
 
     fig2, ax2 = plt.subplots()
     ax2.plot(np.linspace(0, 1, num=21), X_end)
