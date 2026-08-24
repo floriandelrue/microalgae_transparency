@@ -516,6 +516,7 @@ else:
     T_culture_avg = calculate_hourly_averages(T_culture[360:])
     X_end[i] = calculate_biomass_production(P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency, nb_layer)
   X_optim = np.zeros(2)
+  X_new = np.zeros(20)
   if  np.argmax(X_end) != 20:
         X_end_new = np.zeros(20)
         transparency = np.zeros(20)
