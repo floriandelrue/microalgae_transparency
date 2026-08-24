@@ -534,7 +534,7 @@ else:
   temperature_avg = calculate_hourly_averages(weather_data[0])
   PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   #Matplotlib figure
-  fig, (ax, ax1) = plt.subplots((1,2))
+  fig, (ax, ax1) = plt.subplots(1,2)
   ax.plot(range(24), temperature_avg)
   ax.set_ylabel("Average Hourly Temperature (°C)")
   ax.set_xlabel("Hour of the day")
