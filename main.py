@@ -508,7 +508,7 @@ else:
 
 
   nb_hours = diff_object.total_seconds() / 3600
-  raceway_area = 1 #m2
+  raceway_area = 10000 #m2
   for i, transparency in zip(range(22), np.linspace(0,1,num = 21)):
     T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth, \
                             2.15*(weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1], weather_data_extended[0], weather_data_extended[2], \
@@ -540,9 +540,10 @@ else:
         X_optim[1] = max(X)
   fig2, ax2 = plt.subplots()
   ax2.plot(np.linspace(0,1,num = 21), X_end)
-  ax2.text(0.8*best_transparency, 0.85*best_X, 'Best transparency:')
-  ax2.text(0.8*best_transparency, 0.5*best_X, f'{best_transparency:.2f}')
   ax2.vlines(best_transparency, np.min(ax2.get_xlim()), best_X, colors='r')
+  ax2.text(0.6*best_transparency, 0.85*best_X, 'Best transparency:')
+  ax2.text(0.7*best_transparency, 0.8*best_X, f'{best_transparency:.3f}')
+  
   plt.title(f"Biomass concentration at the end of a typical day (g/l), starting at {X_initial} g/L")
   plt.xlabel("PV panel transparency (-)")
   plt.show()
