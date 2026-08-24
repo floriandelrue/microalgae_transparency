@@ -527,7 +527,7 @@ else:
                             2.15*(weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1], weather_data_extended[0], weather_data_extended[2], \
                             weather_data_extended[3], culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv)
             T_culture_avg = calculate_hourly_averages(T_culture[360:])
-            X_new[i] = calculate_biomass_production(P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency, nb_layer)
+            X_new[i] = calculate_biomass_production(P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency[i], nb_layer)
             if X_new[i] > best_X:
                 best_transparency = transparency[i]
                 best_X = X_new[i]
