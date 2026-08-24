@@ -541,7 +541,7 @@ else:
   ax1.plot(range(24), PAR_avg)
   ax1.set_ylabel("Average Hourly Light Intensity PAR ($µmol/m^2/s$)")
   ax1.set_xlabel("Hour of the day")
-  fig.suptitle(f"Average Hourly Temperatures for {month_select} of {year} for {your_loc}")
+  fig.suptitle(f"Average Hourly Temperatures (left) and light intensity (right) for {month_select} of {year} for {your_loc}")
   
   # Graph display
   st.pyplot(fig)
