@@ -26,7 +26,7 @@ def biomass_loss_night(biomass_loss_night_temp2, biomass_loss_night_temp, biomas
 
 
 
-def calculate_biomass_production(P_max, alpha, I_opt, I, T_min, T_opt, T_max, Temp, kT, kI, C, K, depth, transparency, nb_layer):
+def calculate_biomass_production(X_initial, P_max, alpha, I_opt, I, T_min, T_opt, T_max, Temp, kT, kI, C, K, depth, transparency, nb_layer):
     z = np.linspace(0, depth, num=nb_layer)
     n_hours = len(I)
     X = np.zeros(n_hours)
