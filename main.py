@@ -21,9 +21,9 @@ def calculate_hourly_averages(data):
 #Function to calculate the optimum PV panel transparency
 
 
-def calculate_optimum_transparency(start_date_object, end_date_object, month, year, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer):
+def calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer):
   X_end = np.zeros(21)
-  PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
+  
   PAR_extended = 2.15 * (weather_data_extended[4] + weather_data_extended[5])
   diff_object = end_date_object - start_date_object
   nb_hours = diff_object.total_seconds() / 3600
@@ -72,7 +72,7 @@ def calculate_optimum_transparency(start_date_object, end_date_object, month, ye
     ax2.vlines(best_transparency, np.min(ax2.get_ylim()), best_X, colors='r')
     ax2.text(0.6 * best_transparency, 0.85 * best_X, 'Best transparency')
     ax2.text(0.7 * best_transparency, 0.8 * best_X, f'{best_transparency:.3f}', fontweight='bold', fontsize=15)
-    plt.title(f"Biomass concentration at the end of a typical day (g/l) of {month} of {year}, starting at {X_initial} g/L")
+    plt.title(f"Biomass concentration at the end of a typical day (g/l) of {month} of {year} for {your_loc}, starting at {X_initial} g/L")
     plt.xlabel("PV panel transparency (-)")
     plt.show()
     st.pyplot(fig2)
@@ -531,17 +531,22 @@ else:
   weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
 
 
-
+  temperature_avg = calculate_hourly_averages(weather_data[0])
+  PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   #Matplotlib figure
-  fig, ax = plt.subplots()
+  fig, (ax, ax1) = plt.subplots((1,2))
   ax.plot(range(24), temperature_avg)
   ax.set_ylabel("Average Hourly Temperature (°C)")
   ax.set_xlabel("Hour of the day")
-  ax.set_title(f"Average Hourly Temperatures for {month_select} of {year} for {your_loc}")
+  ax1.plot(range(24), PAR_avg)
+  ax1.set_ylabel("Average Hourly Light Intensity PAR ($µmol/m^2/s$)")
+  ax1.set_xlabel("Hour of the day")
+  fig.suptitle(f"Average Hourly Temperatures for {month_select} of {year} for {your_loc}")
+  
   # Graph display
   st.pyplot(fig)
 
-  best_X, best_transparency = calculate_optimum_transparency(start_date_object, end_date_object, month, year, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
+  best_X, best_transparency = calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
 
   
 
