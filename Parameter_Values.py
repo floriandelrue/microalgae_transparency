@@ -4,7 +4,7 @@ import numpy as np
 
 Ea, depth, X_initial = 170.4, 0.1, 0.1
 nb_layer = 100
-T_min, T_opt, T_max = 0, 29.6, 45.3
+T_min, T_opt, T_max = 0.0, 29.6, 45.3
 P_max, alpha, I_opt = 0.1003, 0.00043819, 278.7
 kT, kI, K, C = 0.0074977, 0.0000768, 0.00010051, -0.09666
 
