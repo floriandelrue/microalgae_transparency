@@ -215,6 +215,14 @@ if 'A_conv' not in st.session_state:
 if 'B_conv' not in st.session_state:
     st.session_state.B_conv = B_conv
 
+st.markdown("""
+    <style>
+    [data-testid=column]:nth-of-type(1) [data-testid=stVerticalBlock]{
+        gap: 0rem;
+    }
+    </style>
+    """,unsafe_allow_html=True)
+
 # Sidebar for changing parameters
 with st.sidebar.form("parameter_form"):
     st.header("For Informed Users")
