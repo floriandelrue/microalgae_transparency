@@ -220,13 +220,12 @@ if 'B_conv' not in st.session_state:
 # Sidebar for changing parameters
 with st.sidebar.form("parameter_form"):
     st.markdown("""
-    <style>
-    .stForm > div {
-        margin-bottom: 0rem;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
+      <style>
+      section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
+        gap: 0.25rem;
+      }
+      </style>
+      """, unsafe_allow_html=True)
     st.header("For Informed Users")
     st.header("Model Parameters")
     st.text("In this sidebar, you can modify the model parameters value, or leave the default one")
