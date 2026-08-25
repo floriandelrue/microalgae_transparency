@@ -278,20 +278,13 @@ f(T) &= 0 \text{ for } T > T_{max}
 \end{aligned}
 \right.
 \end{equation}''')
-    col1, col2 = st.columns([1, 4])
-    with col1:
-      st.latex(r''' \scriptsize T \text{: The temperature of the culture, in °C } ''')
-      st.latex(r''' \scriptsize T_{min} \text{: The minimal temperature for growth, in °C } ''')
-      st.latex(r''' \scriptsize T_{opt} \text{: The optimal temperature for growth, in °C } ''')
-      st.latex(r''' \scriptsize T_{max} \text{: The maximal temperature for growth, in °C } ''')
-
-    with col2:
-      st.write(" ")
-      st.write(" ")
-      st.write(" ")
-      new_T_min = st.number_input('', value=st.session_state.T_min)
-      new_T_opt = st.number_input("", value=st.session_state.T_opt)
-      new_T_max = st.number_input("", value=st.session_state.T_max)
+    st.latex(r''' \scriptsize T \text{: The temperature of the culture, in °C } ''')
+    st.latex(r''' \scriptsize T_{min} \text{: The minimal temperature for growth, in °C } ''')
+    new_T_min = st.number_input('', value=st.session_state.T_min)
+    st.latex(r''' \scriptsize T_{opt} \text{: The optimal temperature for growth, in °C } ''')
+    new_T_opt = st.number_input("", value=st.session_state.T_opt)
+    st.latex(r''' \scriptsize T_{max} \text{: The maximal temperature for growth, in °C } ''')
+    new_T_max = st.number_input("", value=st.session_state.T_max)
     
     st.header("Model for light intensity effect on biomass productivity (PI curve)")
     st.text("Developped by Eilers and Peeters, 1988")
@@ -300,14 +293,16 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.text("For better parameter identification")
     st.latex(r'''g(I) = \frac{I}{I+\frac{P_{max}}{\alpha}\left( \frac{I}{I_{opt}}-1 \right)^{2}}''')
     st.latex(r''' \scriptsize {\alpha} \text{: The initial slope of biomass productivity towards light intensity, in} \frac{kg/m^{3}/h}{\mu mol/m^{2}/s} ''')
+    new_alpha = st.number_input("", value=st.session_state.alpha)
     st.latex(r''' \scriptsize I_{opt} \text{: The optimal light intensity for growth, in } \mu mol/m^{2}/s ''')
-    col1,col2 = st.columns([1,2])
-    with col1:
-      st.latex(r'\small {\alpha}')
-      st.latex(r'\small I_{opt}')
-    with col2:
-      new_alpha = st.number_input("", value=st.session_state.alpha)
-      new_I_opt = st.number_input("", value=st.session_state.I_opt)
+    new_I_opt = st.number_input("", value=st.session_state.I_opt)
+    #col1,col2 = st.columns([1,2])
+    #with col1:
+    #  st.latex(r'\small {\alpha}')
+    #  st.latex(r'\small I_{opt}')
+    #with col2:
+      
+      
     st.header("Model for biomass respiration on light")
     st.text("Adapted from Laws and Chalup, 1990")
     st.link_button("https://doi.org/10.4319/lo.1990.35.3.0597",  "https://doi.org/10.4319/lo.1990.35.3.0597")
