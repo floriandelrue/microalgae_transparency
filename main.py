@@ -221,9 +221,8 @@ if 'B_conv' not in st.session_state:
 with st.sidebar.form("parameter_form"):
     st.markdown("""
     <style>
-    .block-container {
-        padding-top: 0rem;
-        padding-bottom: 0rem;
+    .stForm > div {
+        margin-bottom: 0rem;
     }
     </style>
     """, unsafe_allow_html=True)
