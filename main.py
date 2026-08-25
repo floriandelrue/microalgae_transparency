@@ -221,11 +221,12 @@ if 'B_conv' not in st.session_state:
 with st.sidebar.form("parameter_form"):
     st.markdown("""
     <style>
-    [data-testid=column]:nth-of-type(1) [data-testid=stVerticalBlock]{
-        gap: 0rem;
+    .block-container {
+        padding-top: 0rem;
+        padding-bottom: 0rem;
     }
     </style>
-    """,unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
     
     st.header("For Informed Users")
     st.header("Model Parameters")
@@ -303,7 +304,7 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.text("For better parameter identification")
     st.latex(r'''g(I) = \frac{I}{I+\frac{P_{max}}{\alpha}\left( \frac{I}{I_{opt}}-1 \right)^{2}}''')
     st.latex(r''' \scriptsize {\alpha} \text{: The initial slope of biomass productivity towards light intensity, in} \frac{kg/m^{3}/h}{\mu mol/m^{2}/s} ''')
-    new_alpha = st.number_input("", value=st.session_state.alpha, format="%0.4f")
+    new_alpha = st.number_input("", value=st.session_state.alpha, format="%0.2e")
     st.latex(r''' \scriptsize I_{opt} \text{: The optimal light intensity for growth, in } \mu mol/m^{2}/s ''')
     new_I_opt = st.number_input("", value=st.session_state.I_opt, format="%0.1f")
     #col1,col2 = st.columns([1,2])
@@ -320,13 +321,13 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.latex(r''' \scriptsize R(T,I) \text{: Biomass respiration for a temperature T and a light intensity I, in } kg/m^{3}/h ''')
     
     st.latex(r''' \scriptsize R_{P} \text{: Respiration Sensitivity to Productivity}  ''')
-    new_C = st.number_input("", value=st.session_state.C, format="%0.3f")  
+    new_C = st.number_input("", value=st.session_state.C, format="%0.2e")  
     st.latex(r''' \scriptsize R_{P,T} \text{: Respiration Sensitivity to Productivity-Temperature Interaction, in } /°C ''')
-    new_kT = st.number_input("", value=st.session_state.kT, format="%0.4f")
+    new_kT = st.number_input("", value=st.session_state.kT, format="%0.2e")
     st.latex(r''' \scriptsize R_{P,I} \text{: Respiration Sensitivity to Productivity-Light Intensity Interaction, in } \left( \mu mol/m^{2}/s \right)^{-1} ''')
-    new_kI = st.number_input("", value=st.session_state.kI, format="%0.5f")
+    new_kI = st.number_input("", value=st.session_state.kI, format="%0.2e")
     st.latex(r''' \scriptsize R_{0} \text{: Maintenance respiration, in } kg/m^{3}/h ''')
-    new_K = st.number_input("", value=st.session_state.K, format="%0.5f")
+    new_K = st.number_input("", value=st.session_state.K, format="%0.2e")
    
       
       
