@@ -215,16 +215,18 @@ if 'A_conv' not in st.session_state:
 if 'B_conv' not in st.session_state:
     st.session_state.B_conv = B_conv
 
-st.markdown("""
+
+
+# Sidebar for changing parameters
+with st.sidebar.form("parameter_form"):
+    st.markdown("""
     <style>
     [data-testid=column]:nth-of-type(1) [data-testid=stVerticalBlock]{
         gap: 0rem;
     }
     </style>
     """,unsafe_allow_html=True)
-
-# Sidebar for changing parameters
-with st.sidebar.form("parameter_form"):
+    
     st.header("For Informed Users")
     st.header("Model Parameters")
     st.text("In this sidebar, you can modify the model parameters value, or leave the default one")
@@ -252,7 +254,7 @@ with st.sidebar.form("parameter_form"):
       st.write(" ")
       st.write(" ")
       st.write(" ")
-      new_Ea = st.number_input("", value=st.session_state.Ea)
+      new_Ea = st.number_input("", value=st.session_state.Ea, format="%0.1f")
     st.header("Biomass Production Model")
     st.text("The biomass production model decorrelates the effect of temperature an light:")
     st.text("")
@@ -268,7 +270,7 @@ with st.sidebar.form("parameter_form"):
       st.write(" ")
       st.write(" ")
       st.write(" ")
-      new_P_max = st.number_input("", value=st.session_state.P_max)
+      new_P_max = st.number_input("", value=st.session_state.P_max, format="%0.3f")
   
     #  new_P_max = st.number_input("", value=st.session_state.P_max)
     st.header("Model for Temperature Effect on Biomass Productivity")
@@ -288,11 +290,11 @@ f(T) &= 0 \text{ for } T > T_{max}
 \end{equation}''')
     st.latex(r''' \scriptsize T \text{: The temperature of the culture, in °C } ''')
     st.latex(r''' \scriptsize T_{min} \text{: The minimal temperature for growth, in °C } ''')
-    new_T_min = st.number_input('', value=st.session_state.T_min)
+    new_T_min = st.number_input('', value=st.session_state.T_min, format="%0.1f")
     st.latex(r''' \scriptsize T_{opt} \text{: The optimal temperature for growth, in °C } ''')
-    new_T_opt = st.number_input("", value=st.session_state.T_opt)
+    new_T_opt = st.number_input("", value=st.session_state.T_opt, format="%0.1f")
     st.latex(r''' \scriptsize T_{max} \text{: The maximal temperature for growth, in °C } ''')
-    new_T_max = st.number_input("", value=st.session_state.T_max)
+    new_T_max = st.number_input("", value=st.session_state.T_max, format="%0.1f")
     
     st.header("Model for light intensity effect on biomass productivity (PI curve)")
     st.text("Developped by Eilers and Peeters, 1988")
@@ -301,9 +303,9 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.text("For better parameter identification")
     st.latex(r'''g(I) = \frac{I}{I+\frac{P_{max}}{\alpha}\left( \frac{I}{I_{opt}}-1 \right)^{2}}''')
     st.latex(r''' \scriptsize {\alpha} \text{: The initial slope of biomass productivity towards light intensity, in} \frac{kg/m^{3}/h}{\mu mol/m^{2}/s} ''')
-    new_alpha = st.number_input("", value=st.session_state.alpha)
+    new_alpha = st.number_input("", value=st.session_state.alpha, format="%0.4f")
     st.latex(r''' \scriptsize I_{opt} \text{: The optimal light intensity for growth, in } \mu mol/m^{2}/s ''')
-    new_I_opt = st.number_input("", value=st.session_state.I_opt)
+    new_I_opt = st.number_input("", value=st.session_state.I_opt, format="%0.1f")
     #col1,col2 = st.columns([1,2])
     #with col1:
     #  st.latex(r'\small {\alpha}')
@@ -316,22 +318,17 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.link_button("https://doi.org/10.4319/lo.1990.35.3.0597",  "https://doi.org/10.4319/lo.1990.35.3.0597")
     st.latex(r'''R(T,I)=\left(R_{P} + R_{P,T}\cdot T+R_{P,I}\cdot I  \right)\cdot P_{max}+R_{0}''')
     st.latex(r''' \scriptsize R(T,I) \text{: Biomass respiration for a temperature T and a light intensity I, in } kg/m^{3}/h ''')
+    
     st.latex(r''' \scriptsize R_{P} \text{: Respiration Sensitivity to Productivity}  ''')
+    new_C = st.number_input("", value=st.session_state.C, format="%0.3f")  
     st.latex(r''' \scriptsize R_{P,T} \text{: Respiration Sensitivity to Productivity-Temperature Interaction, in } /°C ''')
+    new_kT = st.number_input("", value=st.session_state.kT, format="%0.4f")
     st.latex(r''' \scriptsize R_{P,I} \text{: Respiration Sensitivity to Productivity-Light Intensity Interaction, in } \left( \mu mol/m^{2}/s \right)^{-1} ''')
+    new_kI = st.number_input("", value=st.session_state.kI, format="%0.5f")
     st.latex(r''' \scriptsize R_{0} \text{: Maintenance respiration, in } kg/m^{3}/h ''')
-  
-    col1,col2 = st.columns([1,4])
-    with col1:
-      st.latex(r''' \small R_{P} ''')
-      st.latex(r''' \small R_{P,T}''')
-      st.latex(r''' \small R_{P,I}''')
-      st.latex(r''' \small R_{0}''')
-    with col2:
-      new_C = st.number_input("", value=st.session_state.C)
-      new_kT = st.number_input("", value=st.session_state.kT)
-      new_kI = st.number_input("", value=st.session_state.kI)
-      new_K = st.number_input("", value=st.session_state.K)
+    new_K = st.number_input("", value=st.session_state.K, format="%0.5f")
+   
+      
       
     #new_biomass_loss_night_temp2 = st.number_input("Biomass Loss Night Temp2", value=st.session_state.biomass_loss_night_temp2)
     #new_biomass_loss_night_temp = st.number_input("Biomass Loss Night Temp", value=st.session_state.biomass_loss_night_temp)
