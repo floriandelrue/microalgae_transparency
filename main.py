@@ -221,9 +221,17 @@ if 'B_conv' not in st.session_state:
 with st.sidebar.form("parameter_form"):
     st.markdown("""
       <style>
+      section[data-testid="stSidebar"] {
+        width: 40vw !important;
+        min-width: 40vw !important;
+        max-width: 40vw !important;
+        }
       section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
-        gap: 0.25rem;
+      gap: 0.05rem;
       }
+    section[data-testid="stSidebar"] .katex-display {
+        margin: 0 !important;
+    }
       </style>
       """, unsafe_allow_html=True)
     st.header("For Informed Users")
