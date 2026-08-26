@@ -256,7 +256,7 @@ with st.sidebar.form("parameter_form"):
       
     with col2:
       # Generate two empty lines
-      st.markdown("<br>" * 2, unsafe_allow_html=True)
+      st.markdown("<br>" * 2.5, unsafe_allow_html=True)
       # Generate 3 other empty lines (but for some reason much thinner...)
       st.text(""" """)
       st.text(""" """)
@@ -276,7 +276,7 @@ with st.sidebar.form("parameter_form"):
       st.latex(r''' \scriptsize X \text{: Biomass Concentration, in } kg/m^{3}''')
     with col2:
       # Generate 2 empty lines
-      st.markdown("<br>" * 2, unsafe_allow_html=True)
+      st.markdown("<br>" * 1.5, unsafe_allow_html=True)
       
       new_P_max = st.number_input("", value=st.session_state.P_max, format="%0.3f")
   
