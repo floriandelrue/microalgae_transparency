@@ -257,7 +257,8 @@ with st.sidebar.form("parameter_form"):
     with col2:
       # Generate two empty lines
       st.markdown("<br>" * 2, unsafe_allow_html=True)
-      # Generate 3 other empty lines (but for some reason much thinner...)
+      # Generate 4 other empty lines (but for some reason much thinner...)
+      st.text(""" """)
       st.text(""" """)
       st.text(""" """)
       st.text(""" """)
