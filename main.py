@@ -230,7 +230,7 @@ with st.sidebar.form("parameter_form"):
       gap: 0.05rem;
       }
     section[data-testid="stSidebar"] .katex-display {
-        margin: 0 !important;
+        margin: 0.1 !important;
     }
       </style>
       """, unsafe_allow_html=True)
