@@ -255,7 +255,7 @@ with st.sidebar.form("parameter_form"):
       st.latex(r''' \scriptsize z \text{: Depth in the Reactor, in } m''')
       
     with col2:
-      st.write(" n n n n n n ")
+      st.write(""" n n n n n n """)
       st.write(" ")
       st.write(" ")
       st.write(" ")
