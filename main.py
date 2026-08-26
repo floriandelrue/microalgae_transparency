@@ -257,7 +257,8 @@ with st.sidebar.form("parameter_form"):
     with col2:
       # Generate two empty lines
       st.markdown("<br>" * 2, unsafe_allow_html=True)
-      # Generate another empty lines (but for some reason thinner...)
+      # Generate 2 other empty lines (but for some reason thinner...)
+      st.text(""" """)
       st.text(""" """)
       new_Ea = st.number_input("", value=st.session_state.Ea, format="%0.1f")
     st.header("Biomass Production Model")
@@ -274,7 +275,8 @@ with st.sidebar.form("parameter_form"):
     with col2:
       # Generate 1 empty lines
       st.markdown("<br>" * 1, unsafe_allow_html=True)
-      # Generate another empty lines (but for some reason thinner...)
+      # Generate 2 other empty lines (but for some reason thinner...)
+      st.text(""" """)
       st.text(""" """)
       new_P_max = st.number_input("", value=st.session_state.P_max, format="%0.3f")
   
