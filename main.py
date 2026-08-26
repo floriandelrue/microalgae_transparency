@@ -281,6 +281,7 @@ with st.sidebar.form("parameter_form"):
       st.text(""" """)
       st.text(""" """)
       st.text(""" """)
+      st.text(""" """)
       new_P_max = st.number_input("", value=st.session_state.P_max, format="%0.3f")
   
     #  new_P_max = st.number_input("", value=st.session_state.P_max)
