@@ -256,7 +256,12 @@ with st.sidebar.form("parameter_form"):
       
     with col2:
       # Generate two empty lines
-      st.markdown("<br>" * 3, unsafe_allow_html=True)
+      st.markdown("<br>" * 2, unsafe_allow_html=True)
+      # Generate 3 other empty lines (but for some reason much thinner...)
+      st.text(""" """)
+      st.text(""" """)
+      st.text(""" """)
+      st.text(""" """)
       new_Ea = st.number_input("", value=st.session_state.Ea, format="%0.1f")
     st.header("Biomass Production Model")
     st.text("The biomass production model decorrelates the effect of temperature an light:")
@@ -270,13 +275,9 @@ with st.sidebar.form("parameter_form"):
       st.latex(r''' \scriptsize g(I) \text{: Function Showing How Light Intensity Affects Biomass Productivity}''')
       st.latex(r''' \scriptsize X \text{: Biomass Concentration, in } kg/m^{3}''')
     with col2:
-      # Generate 1 empty lines
-      st.markdown("<br>" * 1, unsafe_allow_html=True)
-      # Generate 3 other empty lines (but for some reason much thinner...)
-      st.text(""" """)
-      st.text(""" """)
-      st.text(""" """)
-      st.text(""" """)
+      # Generate 2 empty lines
+      st.markdown("<br>" * 2, unsafe_allow_html=True)
+      
       new_P_max = st.number_input("", value=st.session_state.P_max, format="%0.3f")
   
     #  new_P_max = st.number_input("", value=st.session_state.P_max)
