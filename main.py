@@ -230,7 +230,7 @@ with st.sidebar.form("parameter_form"):
       gap: 0.05rem;
       }
     section[data-testid="stSidebar"] .katex-display {
-        margin: 0.1 !important;
+        margin: 0.05 !important;
     }
       </style>
       """, unsafe_allow_html=True)
@@ -247,7 +247,7 @@ with st.sidebar.form("parameter_form"):
     
     st.latex(r''' \scriptsize I_{z} \text{: Local Light Intensity at Depth z, in } \mu mol/m^{2}/s''')
     st.latex(r''' \scriptsize I_{0} \text{: Incident Light Intensity, in } \mu mol/m^{2}/s''')
-    col1, col2 = st.columns([3,1])
+    col1, col2 = st.columns([4,1])
     with col1:
       st.latex(r''' \scriptsize E_{a} \text{: Light Absorption Coefficient of the Microalgae Culture, in } m^{2}/kg''')
           
