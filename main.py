@@ -247,7 +247,7 @@ with st.sidebar.form("parameter_form"):
     
     st.latex(r''' \scriptsize I_{z} \text{: Local Light Intensity at Depth z, in } \mu mol/m^{2}/s''')
     st.latex(r''' \scriptsize I_{0} \text{: Incident Light Intensity, in } \mu mol/m^{2}/s''')
-    col1, col2 = st.columns([1,1])
+    col1, col2 = st.columns([3,1])
     with col1:
       st.latex(r''' \scriptsize E_{a} \text{: Light Absorption Coefficient of the Microalgae Culture, in } m^{2}/kg''')
           
@@ -259,20 +259,15 @@ with st.sidebar.form("parameter_form"):
     st.text("The biomass production model decorrelates the effect of temperature an light:")
     st.text("")
     st.latex(r'P(T,I)= P_{max} \cdot f(T) \cdot g(I) \cdot X')
-    col1, col2 = st.columns([5,1])
-    with col1:
-      st.latex(r''' \scriptsize P(T,I) \text{: Biomass Productivity for a Temperature T and a Light Intensity I, in } kg/m^{3}/h''')
-      st.latex(r''' \scriptsize P_{max} \text{: Maximum Specific Biomass Productivity, in } /h''')
-      st.latex(r''' \scriptsize f(T) \text{: Function Showing How Temperature Affects Biomass Productivity}''')
-      st.latex(r''' \scriptsize g(I) \text{: Function Showing How Light Intensity Affects Biomass Productivity}''')
-      st.latex(r''' \scriptsize X \text{: Biomass Concentration, in } kg/m^{3}''')
+    st.latex(r''' \scriptsize P(T,I) \text{: Biomass Productivity for a Temperature T and a Light Intensity I, in } kg/m^{3}/h''')  
+    col1, col2 = st.columns([3,1])
+    with col1:      
+      st.latex(r''' \scriptsize P_{max} \text{: Maximum Specific Biomass Productivity, in } /h''')      
     with col2:
-      # Generate 2 empty lines
-      st.markdown("<br>" * 1.5, unsafe_allow_html=True)
-      
       new_P_max = st.number_input("", value=st.session_state.P_max, format="%0.3f")
-  
-    #  new_P_max = st.number_input("", value=st.session_state.P_max)
+    st.latex(r''' \scriptsize f(T) \text{: Function Showing How Temperature Affects Biomass Productivity}''')
+    st.latex(r''' \scriptsize g(I) \text{: Function Showing How Light Intensity Affects Biomass Productivity}''')
+    st.latex(r''' \scriptsize X \text{: Biomass Concentration, in } kg/m^{3}''')  
     st.header("Model for Temperature Effect on Biomass Productivity")
     st.text("Cardinal Temperature Model with Inflection (CTMI)")
     st.text("Developped by Rosso et al., 1993")
