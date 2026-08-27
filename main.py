@@ -245,24 +245,16 @@ with st.sidebar.form("parameter_form"):
     st.header("Beer-Lambert Light Absorption Model")
     st.latex(r'''I_{z} = I_{0}\cdot \text{exp}\left( -E_{a}\cdot X\cdot z \right)''')
     
-    st.latex(r''' \small E_{a}''')
-    col1, col2 = st.columns([5,1])
+    st.latex(r''' \scriptsize I_{z} \text{: Local Light Intensity at Depth z, in } \mu mol/m^{2}/s''')
+    st.latex(r''' \scriptsize I_{0} \text{: Incident Light Intensity, in } \mu mol/m^{2}/s''')
+    col1, col2 = st.columns([1,1])
     with col1:
-      st.latex(r''' \scriptsize I_{z} \text{: Local Light Intensity at Depth z, in } \mu mol/m^{2}/s''')
-      st.latex(r''' \scriptsize I_{0} \text{: Incident Light Intensity, in } \mu mol/m^{2}/s''')
       st.latex(r''' \scriptsize E_{a} \text{: Light Absorption Coefficient of the Microalgae Culture, in } m^{2}/kg''')
-      st.latex(r''' \scriptsize X \text{: Biomass Concentration of the Microalgae Culture, in } kg/m^{3}''')
-      st.latex(r''' \scriptsize z \text{: Depth in the Reactor, in } m''')
-      
+          
     with col2:
-      # Generate two empty lines
-      st.markdown("<br>" * 2.5, unsafe_allow_html=True)
-      # Generate 3 other empty lines (but for some reason much thinner...)
-      st.text(""" """)
-      st.text(""" """)
-      st.text(""" """)
-      st.text(""" """)
       new_Ea = st.number_input("", value=st.session_state.Ea, format="%0.1f")
+    st.latex(r''' \scriptsize X \text{: Biomass Concentration of the Microalgae Culture, in } kg/m^{3}''')
+    st.latex(r''' \scriptsize z \text{: Depth in the Reactor, in } m''')  
     st.header("Biomass Production Model")
     st.text("The biomass production model decorrelates the effect of temperature an light:")
     st.text("")
