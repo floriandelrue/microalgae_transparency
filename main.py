@@ -230,7 +230,10 @@ with st.sidebar.form("parameter_form"):
       gap: 0.0rem;
       }
     section[data-testid="stSidebar"] .katex-display {
-        margin: 0.05 !important;
+        margin: 0 !important;
+    }
+    div[data-testid="stSidebar"] {
+    margin-bottom: -15px;
     }
       </style>
       """, unsafe_allow_html=True)
@@ -247,12 +250,9 @@ with st.sidebar.form("parameter_form"):
     
     st.latex(r''' \scriptsize I_{z} \text{: Local Light Intensity at Depth z, in } \mu mol/m^{2}/s''')
     st.latex(r''' \scriptsize I_{0} \text{: Incident Light Intensity, in } \mu mol/m^{2}/s''')
-    col1, col2 = st.columns([4,1], vertical_alignment="bottom")
-    with col1:
-      st.latex(r''' \scriptsize E_{a} \text{: Light Absorption Coefficient of the Microalgae Culture, in } m^{2}/kg''')
+    st.latex(r''' \scriptsize E_{a} \text{: Light Absorption Coefficient of the Microalgae Culture, in } m^{2}/kg''')
           
-    with col2:
-      new_Ea = st.number_input("", value=st.session_state.Ea, format="%0.1f")
+    new_Ea = st.number_input("", value=st.session_state.Ea, format="%0.1f")
     st.latex(r''' \scriptsize X \text{: Biomass Concentration of the Microalgae Culture, in } kg/m^{3}''')
     st.latex(r''' \scriptsize z \text{: Depth in the Reactor, in } m''')  
     st.header("Biomass Production Model")
@@ -260,11 +260,9 @@ with st.sidebar.form("parameter_form"):
     st.text("")
     st.latex(r'P(T,I)= P_{max} \cdot f(T) \cdot g(I) \cdot X')
     st.latex(r''' \scriptsize P(T,I) \text{: Biomass Productivity for a Temperature T and a Light Intensity I, in } kg/m^{3}/h''')  
-    col1, col2 = st.columns([3,1], vertical_alignment="bottom")
-    with col1:      
-      st.latex(r''' \scriptsize P_{max} \text{: Maximum Specific Biomass Productivity, in } /h''')      
-    with col2:
-      new_P_max = st.number_input("", value=st.session_state.P_max, format="%0.3f")
+     
+    st.latex(r''' \scriptsize P_{max} \text{: Maximum Specific Biomass Productivity, in } /h''')      
+    new_P_max = st.number_input("", value=st.session_state.P_max, format="%0.3f")
     st.latex(r''' \scriptsize f(T) \text{: Function Showing How Temperature Affects Biomass Productivity}''')
     st.latex(r''' \scriptsize g(I) \text{: Function Showing How Light Intensity Affects Biomass Productivity}''')
     st.latex(r''' \scriptsize X \text{: Biomass Concentration, in } kg/m^{3}''')  
@@ -328,19 +326,23 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.text("Developped by Rodríguez-Miranda et al., 2020")
     st.link_button("https://doi.org/10.1002/bit.27617",  "https://doi.org/10.1002/bit.27617")
     st.text("The model is based on a heat balance around the microalgae culture:")
-    st.latex("Q_{accumulated} = Q_{irradiance} + Q_{radiation} + Q_{evaporation}+ Q_{convection}+Q_{conduction}")
+    st.latex(r'''Q_{accumulated} = Q_{irradiance} + Q_{radiation} + Q_{evaporation}+ Q_{convection}+Q_{conduction}''')
     st.text("With:")
-    st.latex("Q_{accumulated} = depth\cdot A\cdot C_{p} \cdot \rho \cdot \frac{dT}{dt}")
+    st.latex(r'''Q_{accumulated} = depth \cdot A\ cdot C_{p} \cdot \rho \cdot \frac{dT}{dt}''')
       
     st.latex(r''' \scriptsize depth \text{: Microalgae Culture Total Depth, in } m''')
     st.latex(r''' \scriptsize A \text{: surface area, in } m^{2}''')
+    st.text("No impact on the temperature model results")
     st.latex(r''' \scriptsize C_{p} \text{: Specific Heat Capacity of the Culture, in } J/kg/°C''')
+    new_C_p = st.number_input("C_p", value=st.session_state.C_p)
     st.latex(r''' \scriptsize \rho \text{: Density of the Culture, in } kg/m^{3}''')
+    new_rho = st.number_input("Rho", value=st.session_state.rho)
     st.latex(r'''  \scriptsize T \text{: Temperature of the Culture, in } J/kg/°C''')
+  
     new_culture_absorptivity = st.number_input("Culture Absorptivity", value=st.session_state.culture_absorptivity)
 
-    new_C_p = st.number_input("C_p", value=st.session_state.C_p)
-    new_rho = st.number_input("Rho", value=st.session_state.rho)
+    
+    
     new_sigma = st.number_input("Sigma", value=st.session_state.sigma)
     new_e_w = st.number_input("E_w", value=st.session_state.e_w)
     new_A_evap = st.number_input("A_evap", value=st.session_state.A_evap)
