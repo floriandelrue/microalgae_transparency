@@ -229,7 +229,7 @@ section[data-testid="stSidebar"] {
 
 /* Kill KaTeX's own margin */
 .katex-display {
-    margin: 0.1 !important;
+    margin: 0.01 !important;
 }
 
 /* Reduce the flex gap between elements inside the sidebar's vertical blocks */
@@ -239,7 +239,7 @@ section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
 
 /* Optional: pull the element right after a katex-display block closer */
 section[data-testid="stSidebar"] div[data-testid="stElementContainer"]:has(.katex-display) {
-    margin-bottom: -8px;
+    margin-bottom: -10px;
 }
 </style>
 """, unsafe_allow_html=True)
