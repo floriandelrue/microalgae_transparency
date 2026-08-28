@@ -233,7 +233,7 @@ with st.sidebar.form("parameter_form"):
         margin: 0 !important;
     }
     div[data-testid="stSidebar"] {
-    margin-bottom: -15px;
+    margin-bottom: -5px;
     }
       </style>
       """, unsafe_allow_html=True)
