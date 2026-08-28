@@ -227,10 +227,10 @@ with st.sidebar.form("parameter_form"):
         max-width: 40vw !important;
         }
         .katex-display {
-    margin: 0.02 !important;
+    margin: 0 !important;
       }
       div[data-testid="stSidebar"]:has(.katex-display) {
-    margin-bottom: -15px;   /* tune this value up/down until it looks right */
+    margin-bottom: -10px;   /* tune this value up/down until it looks right */
       }
       </style>
       """, unsafe_allow_html=True)
