@@ -234,7 +234,7 @@ section[data-testid="stSidebar"] {
 
 /* Reduce the flex gap between elements inside the sidebar's vertical blocks */
 section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
-    gap: 0.25rem !important;
+    gap: 0.15rem !important;
 }
 
 /* Optional: pull the element right after a katex-display block closer */
