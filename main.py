@@ -220,20 +220,29 @@ if 'B_conv' not in st.session_state:
 # Sidebar for changing parameters
 with st.sidebar.form("parameter_form"):
     st.markdown("""
-      <style>
-      section[data-testid="stSidebar"] {
-        width: 40vw !important;
-        min-width: 40vw !important;
-        max-width: 40vw !important;
-        }
-        .katex-display {
+<style>
+section[data-testid="stSidebar"] {
+    width: 40vw !important;
+    min-width: 40vw !important;
+    max-width: 40vw !important;
+}
+
+/* Kill KaTeX's own margin */
+.katex-display {
     margin: 0 !important;
-      }
-      div[data-testid="stSidebar"]:has(.katex-display) {
-    margin-bottom: -10px;   /* tune this value up/down until it looks right */
-      }
-      </style>
-      """, unsafe_allow_html=True)
+}
+
+/* Reduce the flex gap between elements inside the sidebar's vertical blocks */
+section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
+    gap: 0.25rem !important;
+}
+
+/* Optional: pull the element right after a katex-display block closer */
+section[data-testid="stSidebar"] div[data-testid="stElementContainer"]:has(.katex-display) {
+    margin-bottom: -10px;
+}
+</style>
+""", unsafe_allow_html=True)
     st.header("For Informed Users")
     st.header("Model Parameters")
     st.text("In this sidebar, you can modify the model parameters value, or leave the default one")
