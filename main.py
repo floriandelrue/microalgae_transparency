@@ -226,7 +226,9 @@ with st.sidebar.form("parameter_form"):
         min-width: 40vw !important;
         max-width: 40vw !important;
         }
-
+      div[data-testid="stSidebar"]:has(.katex-display) {
+    margin-bottom: -8px;   /* tune this value up/down until it looks right */
+      }
       </style>
       """, unsafe_allow_html=True)
     st.header("For Informed Users")
@@ -238,11 +240,11 @@ with st.sidebar.form("parameter_form"):
     new_nb_layer = st.number_input("Number of Layers of the Culture for both the Biomass Production and Temperature Models", value=st.session_state.nb_layer)
     new_X_initial = st.number_input("Initial Biomass Concentration at the beginning of each day, in kg/m3", value=st.session_state.X_initial)
     st.header("Beer-Lambert Light Absorption Model")
-    st.markdown(r"I_{z} = I_{0}\cdot \text{exp}\left( -E_{a}\cdot X\cdot z \right)")
+    st.latex(r'''I_{z} = I_{0}\cdot \text{exp}\left( -E_{a}\cdot X\cdot z \right)''')
     
-    st.markdown(r"$\scriptsize I_{z} \text{: Local Light Intensity at Depth z, in } \mu mol/m^{2}/s")
-    st.markdown(r"$\scriptsize I_{0} \text{: Incident Light Intensity, in } \mu mol/m^{2}/s")
-    st.markdown(r"$\scriptsize E_{a} \text{: Light Absorption Coefficient of the Microalgae Culture, in } m^{2}/kg")
+    st.latex(r''' \scriptsize I_{z} \text{: Local Light Intensity at Depth z, in } \mu mol/m^{2}/s''')
+    st.latex(r''' \scriptsize I_{0} \text{: Incident Light Intensity, in } \mu mol/m^{2}/s''')
+    st.latex(r''' \scriptsize E_{a} \text{: Light Absorption Coefficient of the Microalgae Culture, in } m^{2}/kg''')
           
     new_Ea = st.number_input("", value=st.session_state.Ea, format="%0.1f")
     st.latex(r''' \scriptsize X \text{: Biomass Concentration of the Microalgae Culture, in } kg/m^{3}''')
