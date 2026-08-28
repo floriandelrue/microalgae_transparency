@@ -227,7 +227,7 @@ with st.sidebar.form("parameter_form"):
         max-width: 40vw !important;
         }
       section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
-      gap: 0.05rem;
+      gap: 0.0rem;
       }
     section[data-testid="stSidebar"] .katex-display {
         margin: 0.05 !important;
@@ -295,7 +295,7 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.text("Developped by Eilers and Peeters, 1988")
     st.link_button("https://doi.org/10.1016/0304-3800(88)90057-9",  "https://doi.org/10.1016/0304-3800(88)90057-9")
     st.text("Modified by Beranrd and Rémond, 2012 (see above for reference)")
-    st.text("For better parameter identification")
+    st.text("For easier parameter identification")
     st.latex(r'''g(I) = \frac{I}{I+\frac{P_{max}}{\alpha}\left( \frac{I}{I_{opt}}-1 \right)^{2}}''')
     st.latex(r''' \scriptsize {\alpha} \text{: The initial slope of biomass productivity towards light intensity, in} \frac{kg/m^{3}/h}{\mu mol/m^{2}/s} ''')
     new_alpha = st.number_input("", value=st.session_state.alpha, format="%0.2e")
