@@ -24,14 +24,14 @@ def calculate_hourly_averages(data):
 def calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer):
   X_end = np.zeros(21)
   
-  PAR_extended = 2.15 * (weather_data_extended[4] + weather_data_extended[5])
+  I_W_extended = 2.15 * (weather_data_extended[4] + weather_data_extended[5])
   diff_object = end_date_object - start_date_object
   nb_hours = diff_object.total_seconds() / 3600
   
   for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
     T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
             3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
-            PAR_extended, weather_data_extended[1],
+            I_W_extended, weather_data_extended[1],
             weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],
             culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
         )
@@ -51,7 +51,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
       transparency[i] = np.argmax(X_end) / 20 - 0.09 + i * 0.01
       T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
                 3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
-                2.15 * (weather_data_extended[4] + weather_data_extended[5]), weather_data_extended[1],
+                I_W_extended, weather_data_extended[1],
                 weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],
                 culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
             )
@@ -353,12 +353,37 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.latex(r''' \scriptsize e \text{: Water Emissivity, no unit } ''') 
     new_e_w = st.number_input("", value=st.session_state.e_w)
     st.latex(r''' \scriptsize T_{sky} \text{: Equivalent Temperature of the Sky, in } K ''') 
-    st.latex(r''' T_{sky} = \left(273.15 + T_{amb} \right)\cdot \left(0.711 + 0.0056\cdot T_{dew} - 0.000073 \cdot T_{dew}^{2} + 0.13 \cdot cos \left(15 \cdot t_{solar} \right) \right)^{0.25}''')
-    new_A_evap = st.number_input("A_evap", value=st.session_state.A_evap)
-    new_B_evap = st.number_input("B_evap", value=st.session_state.B_evap)
-    new_A_conv = st.number_input("A_conv", value=st.session_state.A_conv)
+    st.latex(r''' T_{sky} = \left(273.15 + T_{air} \right)\cdot \left(0.711 + 0.0056\cdot T_{dew} - 0.000073 \cdot T_{dew}^{2} + 0.13 \cdot cos \left(15 \cdot t_{solar} \right) \right)^{0.25}''')
+    st.latex(r''' \scriptsize T_{air} \text{: Air Temperature, in } °C ''') 
+    st.latex(r''' \scriptsize T_{dex} \text{: Dew Point Temperature, in } °C ''') 
+    st.latex(r''' \scriptsize t_{solar} \text{: Number of Hours after Midnight, in } h ''')
+    st.latex(r'''Q_{evaporation} = A \cdot E_{p} \cdot \rho \cdot h_{fg}''')
+    st.latex(r''' \scriptsize E_{p} \text{: Evaporation Rate, in } m/s ''')
+    st.latex(r'''E_{p} = \left( \frac{RH \cdot p'_{a}}{100}-p'_{a} \right) \cdot h_{evap}''')
+    st.latex(r''' \scriptsize RH \text{: Relative Humidity, in } % ''')
+    st.latex(r''' \scriptsize p'_{a} \text{: Vapor Pression of the Air at Air Temperature, in } Pa ''')
+    st.latex(r'''p'_{a} = 610.78 \cdot exp\left( \frac{12.27 \cdot T_{air}}{T_{air}+237.3} \right)''')
+    st.latex(r''' \scriptsize h_{evap} \text{: Evaporation Exchange Coefficient, in } m/s/Pa ''')
+    st.latex(r''' h_{evap} = A_{evap} + B_{evap} \cdot W_{s}''')
+    st.latex(r''' \scriptsize A_{evap} \text{: Evaporation Coefficient estimated experimentally, in } m/s/Pa ''')
+    new_A_evap = st.number_input("", value=st.session_state.A_evap)
+    st.latex(r''' \scriptsize A_{evap} \text{: Evaporation Coefficient estimated experimentally, in } /Pa ''')
+    new_B_evap = st.number_input("", value=st.session_state.B_evap)
+    st.latex(r''' \scriptsize W_{s} \text{: Wind Speed, in } m/s ''')
+    st.latex(r''' Q_{convection} = h_{conv} \cdot A \cdot \left(T_{air} - T  \right)''')
+    st.latex(r''' \scriptsize h_{conv} \text{: Convection Transfer Coefficient estimated experimentally, in } W/m^{2}/°C ''')
+    st.latex(r''' h_{conv} = A_{conv} + B_{conv} \cdot W_{s}''')
+    st.latex(r''' \scriptsize A_{conv} \text{: Convection Coefficient estimated experimentally, in } W/m^{2}/°C ''')
+    new_A_conv = st.number_input("", value=st.session_state.A_conv)
+    st.latex(r''' \scriptsize B_{conv} \text{: Convection Coefficient estimated experimentally, in } W /cdot s/m/°C ''')
     new_B_conv = st.number_input("B_conv", value=st.session_state.B_conv)
-
+    st.latex(r'''Q_{conduction} = h_{soil} \cdot A_{soil} \cdot \left( T_{soil} - T \right)''')
+    st.latex(r''' \scriptsize h_{soil} \text{: Heat Transfert Coefficient of the Reactor Layer in contact with the ground, in } W/m^{2}/°C ''')
+    st.latex(r''' \scriptsize A_{soil} \text{: Surface of the Reactor Layer in contact with the ground, in } m^{2} ''')
+    st.latex(r''' \scriptsize T_{soil} \text{: Temperature of the Soil, in } °C ''')
+    st.latex(r''' Q_{conduction} \text{ was neglected}''')
+    st.text("Then, the Culture Temperature T was computed as follow:")
+    st.latex(r'''\frac{d T}{dt} = \frac{Q_{irradiance} + Q_{radiation} + Q_{evaporation} + Q_{convection}}{h \cdot A \cdot C_{p} \cdot \rho}''')
     # Submit button
     submitted = st.form_submit_button("Update Parameters")
 
