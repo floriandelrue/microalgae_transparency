@@ -250,6 +250,10 @@ section[data-testid="stSidebar"] div[data-testid="stElementContainer"]:has(.kate
     flex-direction: column;
     gap: 20px !important;
 }
+/* Adjust margins for KaTeX elements within the second part of the sidebar */
+.second-part .katex-display {
+    margin: 10px 0 !important;
+}
 </style>
 """, unsafe_allow_html=True)
     st.header("For Informed Users")
