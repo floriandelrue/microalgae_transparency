@@ -240,29 +240,9 @@ section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
 /* Optional: pull the element right after a katex-display block closer */
 section[data-testid="stSidebar"] div[data-testid="stElementContainer"]:has(.katex-display) {
     margin-bottom: -10px;
-with st.sidebar.form("parameter_form"):
-    st.markdown("""
-<style>
-section[data-testid="stSidebar"] {
-    width: 40vw !important;
-    min-width: 40vw !important;
-    max-width: 40vw !important;
+
 }
 
-/* Kill KaTeX's own margin */
-.katex-display {
-    margin: 0.01 !important;
-}
-
-/* Reduce the flex gap between elements inside the sidebar's vertical blocks */
-section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
-    gap: 0.05rem !important;
-}
-
-/* Optional: pull the element right after a katex-display block closer */
-section[data-testid="stSidebar"] div[data-testid="stElementContainer"]:has(.katex-display) {
-    margin-bottom: -10px;
-}
 /* Increase the space between the lines for the second part of the sidebar */
 
     .st-key-second_part div[data-testid="stElementContainer"] {
