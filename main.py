@@ -241,6 +241,10 @@ section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
 section[data-testid="stSidebar"] div[data-testid="stElementContainer"]:has(.katex-display) {
     margin-bottom: -10px;
 }
+/* Increase the space between the lines for the second part of the sidebar */
+.second-part {
+    line-height: 2 !important;
+}
 </style>
 """, unsafe_allow_html=True)
     st.header("For Informed Users")
@@ -381,11 +385,13 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.latex(r''' \scriptsize h_{soil} \text{: Heat Transfert Coefficient of the Reactor Layer in contact with the ground, in } W/m^{2}/°C ''')
     st.latex(r''' \scriptsize A_{soil} \text{: Surface of the Reactor Layer in contact with the ground, in } m^{2} ''')
     st.latex(r''' \scriptsize T_{soil} \text{: Temperature of the Soil, in } °C ''')
+    st.markdown('<div class="second-part">', unsafe_allow_html=True)
     st.latex(r''' Q_{conduction} \text{ was neglected}''')
     st.text("Then, the Culture Temperature T was computed as follow:")
     st.latex(r'''\frac{d T}{dt} = \frac{Q_{irradiance} + Q_{radiation} + Q_{evaporation} + Q_{convection}}{h \cdot A \cdot C_{p} \cdot \rho}''')
     # Submit button
     submitted = st.form_submit_button("Update Parameters")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     if submitted:
         #update_params(new_Ea, new_depth, new_X_initial, new_T_min, new_T_opt, new_T_max, new_P_max,
