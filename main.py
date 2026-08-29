@@ -240,22 +240,40 @@ section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
 /* Optional: pull the element right after a katex-display block closer */
 section[data-testid="stSidebar"] div[data-testid="stElementContainer"]:has(.katex-display) {
     margin-bottom: -10px;
+with st.sidebar.form("parameter_form"):
+    st.markdown("""
+<style>
+section[data-testid="stSidebar"] {
+    width: 40vw !important;
+    min-width: 40vw !important;
+    max-width: 40vw !important;
+}
+
+/* Kill KaTeX's own margin */
+.katex-display {
+    margin: 0.01 !important;
+}
+
+/* Reduce the flex gap between elements inside the sidebar's vertical blocks */
+section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
+    gap: 0.05rem !important;
+}
+
+/* Optional: pull the element right after a katex-display block closer */
+section[data-testid="stSidebar"] div[data-testid="stElementContainer"]:has(.katex-display) {
+    margin-bottom: -10px;
 }
 /* Increase the space between the lines for the second part of the sidebar */
-.second-part {
-    line-height: 2 !important;
-    margin-top: 20px !important;
-    margin-bottom: 20px !important;
-    display: flex;
-    flex-direction: column;
-    gap: 20px !important;
-}
-/* Adjust margins for KaTeX elements within the second part of the sidebar */
-.second-part .katex-display {
-    margin: 10px 0 !important;
-}
+
+    .st-key-second_part div[data-testid="stElementContainer"] {
+        margin-bottom: 20px !important;
+    }
+    .st-key-second_part .katex-display {
+        margin: 10px 0 !important;
+    }
 </style>
 """, unsafe_allow_html=True)
+
     st.header("For Informed Users")
     st.header("Model Parameters")
     st.text("In this sidebar, you can modify the model parameters value, or leave the default one")
@@ -394,13 +412,13 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.latex(r''' \scriptsize h_{soil} \text{: Heat Transfert Coefficient of the Reactor Layer in contact with the ground, in } W/m^{2}/°C ''')
     st.latex(r''' \scriptsize A_{soil} \text{: Surface of the Reactor Layer in contact with the ground, in } m^{2} ''')
     st.latex(r''' \scriptsize T_{soil} \text{: Temperature of the Soil, in } °C ''')
-    st.markdown('<div class="second-part">', unsafe_allow_html=True)
-    st.latex(r''' Q_{conduction} \text{ was neglected}''')
-    st.text("Then, the Culture Temperature T was computed as follow:")
-    st.latex(r'''\frac{d T}{dt} = \frac{Q_{irradiance} + Q_{radiation} + Q_{evaporation} + Q_{convection}}{h \cdot A \cdot C_{p} \cdot \rho}''')
-    # Submit button
-    submitted = st.form_submit_button("Update Parameters")
-    st.markdown('</div>', unsafe_allow_html=True)
+    with st.container(key="second_part"):
+      st.latex(r''' Q_{conduction} \text{ was neglected}''')
+      st.text("Then, the Culture Temperature T was computed as follow:")
+      st.latex(r'''\frac{d T}{dt} = \frac{Q_{irradiance} + Q_{radiation} + Q_{evaporation} + Q_{convection}}{h \cdot A \cdot C_{p} \cdot \rho}''')
+      # Submit button
+      submitted = st.form_submit_button("Update Parameters")
+    
 
     if submitted:
         #update_params(new_Ea, new_depth, new_X_initial, new_T_min, new_T_opt, new_T_max, new_P_max,
