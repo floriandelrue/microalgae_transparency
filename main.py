@@ -243,11 +243,9 @@ section[data-testid="stSidebar"] div[data-testid="stElementContainer"]:has(.kate
 }
 /* Increase the space between the lines for the second part of the sidebar */
 .second-part {
-    line-height: 2 !important;
-    margin-top: 20px !important;
-    margin-bottom: 20px !important;
-    margin-left: 20px !important;
-    margin-right: 20px !important;
+    line-height: 4 !important;
+    margin-top: 40px !important;
+    margin-bottom: 40px !important;
 }
 </style>
 """, unsafe_allow_html=True)
