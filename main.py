@@ -349,7 +349,7 @@ f(T) &= 0 \text{ for } T > T_{max}
     new_culture_absorptivity = st.number_input("", value=st.session_state.culture_absorptivity, format="%0.3f")
     st.latex(r'''Q_{radiation} = \sigma \cdot A \cdot e \cdot \left(T_{sky}^{4} - \left(T + 273.15 \right)^{4} \right)''')
     st.latex(r''' \scriptsize \sigma \text{: Stefan-Boltzmann Constant, in } W/m^{2}/K^{4}''') 
-    new_sigma = st.number_input("", value=st.session_state.sigm, format="%0.2e")
+    new_sigma = st.number_input("", value=st.session_state.sigma, format="%0.2e")
     st.latex(r''' \scriptsize e \text{: Water Emissivity, no unit } ''') 
     new_e_w = st.number_input("", value=st.session_state.e_w, format="%0.3f")
     st.latex(r''' \scriptsize T_{sky} \text{: Equivalent Temperature of the Sky, in } K ''') 
