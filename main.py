@@ -391,8 +391,9 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.latex(r'''Q_{conduction} = h_{soil} \cdot A_{soil} \cdot \left( T_{soil} - T \right)''')
     st.latex(r''' \scriptsize h_{soil} \text{: Heat Transfert Coefficient of the Reactor Layer in contact with the ground, in } W/m^{2}/°C ''')
     st.latex(r''' \scriptsize A_{soil} \text{: Surface of the Reactor Layer in contact with the ground, in } m^{2} ''')
-    st.latex(r''' \scriptsize T_{soil} \text{: Temperature of the Soil, in } °C ''')
+    
     with st.container(key="second_part"):
+      st.latex(r''' \scriptsize T_{soil} \text{: Temperature of the Soil, in } °C ''')
       st.latex(r''' Q_{conduction} \text{ was neglected}''')
       st.text("Then, the Culture Temperature T was computed as follow:")
       st.latex(r'''\frac{d T}{dt} = \frac{Q_{irradiance} + Q_{radiation} + Q_{evaporation} + Q_{convection}}{h \cdot A \cdot C_{p} \cdot \rho}''')
