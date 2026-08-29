@@ -28,7 +28,7 @@ def Culture_Temperature_function(dt, nb_hours, Temperature_Control, T_limit, rac
     #T_sky is the temperature of the sky in K
     #T_amb is the ambient temperature in °C
     def T_sky(T_amb,T_dew,time_solar):
-        return (273.15+T_amb)*(0.711+0.0056*T_dew*0.000073*T_dew**2 + 0.13*np.cos(15*time_solar))**0.25
+        return (273.15+T_amb)*(0.711+0.0056*T_dew-0.000073*T_dew**2 + 0.13*np.cos(15*time_solar))**0.25
     #Latent heat of evaporation
     def latent_heat_evaporation(T_culture):
         return (2494-2.2*T_culture)*1000
