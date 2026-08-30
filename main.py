@@ -578,7 +578,7 @@ if options.index(month_select) == 0:
   temperature_avg = calculate_hourly_averages(weather_data[0])
   PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
-  best_X[0], best_transparency[0] = calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg[0], Temperature_Control[0], T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
+  best_X[0], best_transparency[0] = calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg[0], Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
 
   hours = 0
   for month in range(1,13):
