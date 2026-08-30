@@ -598,7 +598,7 @@ if options.index(month_select) == 0:
     end_date_month_object = datetime.strptime(end_date, '%Y-%m-%d')
     
     PAR_avg[month,:]= calculate_hourly_averages(2.15 * (weather_data_month[4] + weather_data_month[5]))
-    best_X[month], best_transparency[month] = calculate_optimum_transparency(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month,:], Temperature_Control, T_limit, raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
+    best_X[month], best_transparency[month] = calculate_optimum_transparency_without_graph(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month,:], Temperature_Control, T_limit, raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
   table_data = [
     [""] + ["All Year", "January", "February", "March", "April", "May", "June",
              "July", "August", "September", "October", "November", "December"],
