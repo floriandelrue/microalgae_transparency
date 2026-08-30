@@ -573,12 +573,11 @@ if options.index(month_select) == 0:
   weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
   # Limit the weather data to the actual month (without the additionnal 15 days)
   weather_data = [sublist[360:] for sublist in weather_data_extended]
-  temperature_avg = np.zeros(13)
-  PAR_avg = np.zeros(13)
-  temperature_avg = calculate_hourly_averages(weather_data[0])
-  PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
+  
+  PAR_avg = np.zeros((13,24))
+  PAR_avg[0,:] = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
-  best_X[0], best_transparency[0] = calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg[0], Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
+  best_X[0], best_transparency[0] = calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg[0,:], Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
 
   hours = 0
   for month in range(1,13):
@@ -596,9 +595,9 @@ if options.index(month_select) == 0:
     end_date_month = f"{year}-{str(month).zfill(2)}-{num_days_in_month}"
     start_date_month_object = datetime.strptime(start_date, '%Y-%m-%d')
     end_date_month_object = datetime.strptime(end_date, '%Y-%m-%d')
-    temperature_avg[month] = calculate_hourly_averages(weather_data_month[0])
-    PAR_avg[month]= calculate_hourly_averages(2.15 * (weather_data_month[4] + weather_data_month[5]))
-    best_X[month], best_transparency[month] = calculate_optimum_transparency(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month], Temperature_Control, T_limit, raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
+    
+    PAR_avg[month,:]= calculate_hourly_averages(2.15 * (weather_data_month[4] + weather_data_month[5]))
+    best_X[month], best_transparency[month] = calculate_optimum_transparency(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month,:], Temperature_Control, T_limit, raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
   table_data = [
     [""] + ["All Year", "January", "February", "March", "April", "May", "June",
              "July", "August", "September", "October", "November", "December"],
