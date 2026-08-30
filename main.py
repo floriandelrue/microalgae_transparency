@@ -578,12 +578,13 @@ else:
   # Format the new datetime object back into a string
   start_date_extended = start_date_extended_object.strftime('%Y-%m-%d')
   
-# Import the weather data for the selected month
+# Import the latitude and longitude of the location
   latitude, longitude = import_location_data(your_loc)
-  weather_data = import_weather_data_function(latitude, longitude, start_date, end_date)
+  
 # Import the extended weather data (start - 15 days) in order to initialize the temperature model
   weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
-
+# Limit the weather data to the actual month (without the additionnal 15 days)
+  weather_data = weather_data_extended[360:]
 
   temperature_avg = calculate_hourly_averages(weather_data[0])
   PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
