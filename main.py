@@ -77,6 +77,58 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     plt.show()
     st.pyplot(fig2)
     return best_X, best_transparency
+
+def calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer):
+  X_end = np.zeros(21)
+  
+  I_W_extended = 2.15 * (weather_data_extended[4] + weather_data_extended[5])
+  diff_object = end_date_object - start_date_object
+  nb_hours = diff_object.total_seconds() / 3600
+  
+  for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
+    T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
+            3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
+            I_W_extended, weather_data_extended[1],
+            weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],
+            culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
+        )
+    T_culture_avg = calculate_hourly_averages(T_culture[360:])
+    X_end[i] = calculate_biomass_production(
+         X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency, nb_layer
+        )
+
+  X_new = np.zeros(20)
+
+  if np.argmax(X_end) != 20:
+    X_end_new = np.zeros(20)
+    transparency = np.zeros(20)
+    best_transparency, best_X = 0.0, 0.0
+
+    for i in range(20):
+      transparency[i] = np.argmax(X_end) / 20 - 0.09 + i * 0.01
+      T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
+                3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
+                I_W_extended, weather_data_extended[1],
+                weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],
+                culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
+            )
+      T_culture_avg = calculate_hourly_averages(T_culture[360:])
+      X_new[i] = calculate_biomass_production(
+          X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency[i], nb_layer
+            )
+      if X_new[i] > best_X:
+        best_transparency = transparency[i]
+        best_X = X_new[i]
+
+    else:
+      best_transparency = 1.0
+      best_X = max(X_end)
+
+    return best_X, best_transparency
+
+
+
+
 # Title
 st.title("Microalgae Transparency Model, v0.01")
 
@@ -504,67 +556,61 @@ if month_select is None:
     st.stop()   # halts execution here on this rerun, rest of the script won't run
 
 if options.index(month_select) == 0:
-  # Import the weather data
-  # Define the start and end dates for the entire year
-  start_date = f"{year}-01-01"
-  end_date = f"{year}-12-31"
+  #define start_date and end_date
+start_date=f"{year}-01-01"
+end_date=f"{year}-12-31"
+# Parse the date string into a datetime object
+start_date_object = datetime.strptime(start_date, '%Y-%m-%d')
+end_date_object = datetime.strptime(end_date, '%Y-%m-%d')
+# Subtract 15 days from the datetime object
+start_date_extended_object = start_date_object - timedelta(days=15)
+# Format the new datetime object back into a string
+start_date_extended = start_date_extended_object.strftime('%Y-%m-%d')
+# Import the latitude and longitude of the location
+latitude, longitude = import_location_data(your_loc)
+  
+# Import the extended weather data (start - 15 days) in order to initialize the temperature model
+weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
+# Limit the weather data to the actual month (without the additionnal 15 days)
+weather_data = weather_data_extended[360:]
+temperature_avg = np.zeros(13)
+PAR_avg = np.zeros(13)
+temperature_avg = calculate_hourly_averages(weather_data[0])
+PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
+raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
+best_X[0], best_transparency[0] = calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg[0], Temperature_Control[0], T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
 
-  # Import the weather data for the entire year
-  latitude, longitude = import_location_data(your_loc)
-  weather_data = import_weather_data_function(latitude, longitude, start_date, end_date)
-
-  # Define the number of months and hours
-  num_months = 12
-  num_hours = 24  # 24 hours in a day
-
-  # Initialize NumPy arrays to store the hourly averages
-  temperature_avg = np.zeros((num_months, num_hours))
-  humidity_avg = np.zeros((num_months, num_hours))
-  dew_point_avg = np.zeros((num_months, num_hours))
-  wind_speed_avg = np.zeros((num_months, num_hours))
-  diffuse_rad_avg = np.zeros((num_months, num_hours))
-  direct_rad_avg = np.zeros((num_months, num_hours))
-  PAR_avg = np.zeros((num_months, num_hours))
-
-
-  # Calculation of the hourly average for each month
-  #Initiate the Matplotlib figure
-  fig, ax = plt.subplots()
-  # Loop over each month
-  for month in range(1, num_months + 1):
-    # Get the number of days in the month
+hours = 0
+for month in range(1,13):
+    num_hours_month = calendar.monthrange(year, month)[1] * 24
+    weather_data_month = weather_data[hours:hours+num_hours_month]
+    if month == 0:
+        weather_data_month_extended = weather_data_extended[0:24*60+num_hours_month]
+    else:
+        weather_data_month_extended = weather_data[hours-24*60:hours+num_hours_month]
+    
+    # Calculate the number of days for the selected month and year
     num_days_in_month = calendar.monthrange(year, month)[1]
+    # Define the start and end dates for the selected month
+    start_date_month = f"{year}-{str(month).zfill(2)}-01"
+    end_date_month = f"{year}-{str(month).zfill(2)}-{num_days_in_month}"
+    start_date_month_object = datetime.strptime(start_date, '%Y-%m-%d')
+    end_date_month_object = datetime.strptime(end_date, '%Y-%m-%d')
+    temperature_avg[month] = calculate_hourly_averages(weather_data_month[0])
+    PAR_avg[month]= calculate_hourly_averages(2.15 * (weather_data_month[4] + weather_data_month[5]))
+    best_X[month], best_transparency[month] = calculate_optimum_transparency(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month], Temperature_Control, T_limit, raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
 
-    # Calculate the start and end indices for the current month
-    start_index = sum(calendar.monthrange(year, m)[1] for m in range(1, month)) * 24
-    end_index = start_index + num_days_in_month * 24
-
-    # Extract the data for the current month
-    monthly_data = [d[start_index:end_index] for d in weather_data]
-
-    # Calculate the hourly averages and store them in the NumPy arrays
-    temperature_avg[month - 1, :] = calculate_hourly_averages(monthly_data[0])
-    humidity_avg[month - 1, :] = calculate_hourly_averages(monthly_data[1])
-    dew_point_avg[month - 1, :] = calculate_hourly_averages(monthly_data[2])
-    wind_speed_avg[month - 1, :] = calculate_hourly_averages(monthly_data[3])
-    diffuse_rad_avg[month - 1, :] = calculate_hourly_averages(monthly_data[4])
-    direct_rad_avg[month - 1, :] = calculate_hourly_averages(monthly_data[5])
-    PAR_avg[month - 1, :] = calculate_hourly_averages(2.15 * (monthly_data[4] + monthly_data[5]))
-    #Plot the hourly average for the month
-  
-  
-    ax.plot(range(24), temperature_avg[month - 1, :], label= "Average Fourly Temperatures for " + str(calendar.month_name[month]))
-
-  # Graph display
-  ax.set_ylabel("Average Hourly Temperature (°C)")
-  ax.set_xlabel("Hour of the day")
-  ax.set_title(f"Average Hourly Temperatures for all months of {year} for {your_loc}")
-  ax.legend()
-  st.pyplot(fig)
+table_data = [
+    [""] + ["All Year", "January", "February", "March", "April", "May", "June",
+             "July", "August", "September", "October", "November", "December"],
+    ["Optimal Transparency"] + list(best_transparency),
+    ["Biomass Concentration at the end of the day"] + list(best_X)
+]
+st.table(table_data)
 
 else:
   month = options.index(month_select)
-  # Import the weather data for the selected month and year
+  # Calculate the number of days for the selected month and year
   num_days_in_month = calendar.monthrange(year, month)[1]
   # Define the start and end dates for the selected month
   start_date = f"{year}-{str(month).zfill(2)}-01"
@@ -603,9 +649,4 @@ else:
   raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
   best_X, best_transparency = calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
 
-  
-
-# Table display
-table_data = pd.DataFrame({"Optimal Transparency for January": [1], "Optimal Transparency for April": [7], "Optimal Transparency for July": [10], "Optimal Transparency for October": [15]})
-st.write(table_data)
 
