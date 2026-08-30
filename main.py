@@ -584,7 +584,7 @@ else:
 # Import the extended weather data (start - 15 days) in order to initialize the temperature model
   weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
 # Limit the weather data to the actual month (without the additionnal 15 days)
-  weather_data = weather_data_extended[360:]
+  weather_data = = [sublist[360:] for sublist in weather_data_extended]
 
   temperature_avg = calculate_hourly_averages(weather_data[0])
   PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
