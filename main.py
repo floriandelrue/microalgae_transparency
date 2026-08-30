@@ -597,8 +597,8 @@ if options.index(month_select) == 0:
   table_data = [
     [""] + ["All Year", "January", "February", "March", "April", "May", "June",
              "July", "August", "September", "October", "November", "December"],
-    ["Optimal Transparency"] + + [f"{val:.2f}" for val in best_transparency],
-    ["Biomass Concentration at the end of the day"] + + [f"{val:.3f}" for val in best_X]
+    ["Optimal Transparency"] + [f"{val:.2f}" for val in best_transparency],
+    ["Biomass Concentration at the end of the day"] + [f"{val:.3f}" for val in best_X]
   ]
   st.table(table_data)
 
