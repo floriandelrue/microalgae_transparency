@@ -591,8 +591,8 @@ if options.index(month_select) == 0:
     # Define the start and end dates for the selected month
     start_date_month = f"{year}-{str(month).zfill(2)}-01"
     end_date_month = f"{year}-{str(month).zfill(2)}-{num_days_in_month}"
-    start_date_month_object = datetime.strptime(start_date, '%Y-%m-%d')
-    end_date_month_object = datetime.strptime(end_date, '%Y-%m-%d')
+    start_date_month_object = datetime.strptime(start_date_month, '%Y-%m-%d')
+    end_date_month_object = datetime.strptime(end_date_month, '%Y-%m-%d')
     
     PAR_avg[month,:]= calculate_hourly_averages(2.15 * (weather_data_month[4] + weather_data_month[5]))
     best_X[month], best_transparency[month] = calculate_optimum_transparency_without_graph(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month,:], Temperature_Control, T_limit, raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
