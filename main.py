@@ -588,7 +588,7 @@ if options.index(month_select) == 0:
         weather_data_month_extended = weather_data_extended[0:24*60+num_hours_month]
     else:
         weather_data_month_extended = weather_data[hours-24*60:hours+num_hours_month]
-    
+    hours = hours + num_hours_month
     # Calculate the number of days for the selected month and year
     num_days_in_month = calendar.monthrange(year, month)[1]
     # Define the start and end dates for the selected month
