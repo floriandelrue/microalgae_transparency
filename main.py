@@ -72,7 +72,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     ax2.vlines(best_transparency, np.min(ax2.get_ylim()), best_X, colors='r', linestyle = 'dashed')
     ax2.text(0.6 * best_transparency, 0.85 * best_X, 'Best transparency')
     ax2.text(0.7 * best_transparency, 0.8 * best_X, f'{best_transparency:.3f}', fontweight='bold', fontsize=15)
-    plt.title(f"Biomass concentration at the end of a typical day (g/l) of {month} of {year} for {your_loc}, starting at {X_initial} g/L")
+    plt.title(f"Biomass concentration at the end of a typical day (g/l) of {calendar.month_name[month]} of {year} for {your_loc}, starting at {X_initial} g/L")
     plt.xlabel("PV panel transparency (-)")
     plt.show()
     st.pyplot(fig2)
