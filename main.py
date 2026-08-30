@@ -583,11 +583,11 @@ if options.index(month_select) == 0:
   hours = 0
   for month in range(1,13):
     num_hours_month = calendar.monthrange(year, month)[1] * 24
-    weather_data_month = weather_data[hours:hours+num_hours_month]
-    if month == 0:
-        weather_data_month_extended = weather_data_extended[0:24*60+num_hours_month]
+    weather_data_month = [var[hours:hours+num_hours_month] for var in weather_data]
+    if month == 1:
+        weather_data_month_extended = [var[0:24*60+num_hours_month] for var in weather_data]
     else:
-        weather_data_month_extended = weather_data[hours-24*60:hours+num_hours_month]
+        weather_data_month_extended = [var[hours-24*60:hours+num_hours_month] for var in weather_data]
     hours = hours + num_hours_month
     # Calculate the number of days for the selected month and year
     num_days_in_month = calendar.monthrange(year, month)[1]
