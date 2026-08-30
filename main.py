@@ -573,7 +573,8 @@ if options.index(month_select) == 0:
   weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
   # Limit the weather data to the actual month (without the additionnal 15 days)
   weather_data = [sublist[360:] for sublist in weather_data_extended]
-  
+  best_X = np.zeros(13)
+  best_transparency = np.zeros(13)
   PAR_avg = np.zeros((13,24))
   PAR_avg[0,:] = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
