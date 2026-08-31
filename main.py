@@ -130,21 +130,47 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
 st.title("Microalgae Transparency Model")
 #Description
 st.space("small")
-st.write("*This App has been built with Streamlit 1.62.0 and coded in Python 3.12.11 with Spyder*")
+st.write("*This App has been built with Streamlit 1.62.0 and coded in Python 3.12.11 with Spyder 6.1.3.*")
 st.space("small")
 st.write("Alexander Huynh¹ ², Florian Delrue¹")
 st.write("¹ MicroAlgae Processes Platform, CEA, CEA Tech Région Sud - Provence-Alpes Côte d’Azur, F-13108 Saint Paul lez Durance, France.")
 st.write("² Université de Toulouse, Toulouse INP, CNRS, Laboratoire de Génie Chimique (LGC), Toulouse, France.")
 st.space("small")
-st.write("This App estimates the optimal transparency of semi-transparent photovoltaic panels (STPV) covering microalgae culture for a given location and a given average day.")
-st.write("The average day is calculated for a given month or the whole year.")
-st.write("To do that, the App recovers the hourly weather data for the given location and average them.")
-url = "https://doi.org/10.1002/bit.27617"
-st.write("For a given STPV transparency, the temperature of the culture is estimated using the model from [Rodríguez-Miranda et al., 2020] (%s)." % url)
-st.write("A biomass production model calibrated for *Chlorella protothecoides* UTEX29 is then used to estimate the final biomass concentration for the average day.")
-st.write("This model includes a Beer-Lambert-based light absorption model and a growth model (including the influence of both light and temperature, the light respiration but no dark respiration, yet).")
-st.write("The biomass concentration at the beginning of the day, the microalgae culture depth and other parameters of the model can be changed in the sidebar on the left")
+st.write(
+    "This app estimates the **optimal transparency** of **semi-transparent photovoltaic (STPV) panels** "
+    "covering microalgae cultures for a given location and an average day."
+)
 
+st.write(
+    "The average day is calculated for a specific month or the entire year by recovering "
+    "hourly weather data for the location and averaging it."
+)
+
+url = "https://doi.org/10.1002/bit.27617"
+st.write(
+    f"For a given STPV transparency, the culture temperature is estimated using the model from "
+    f"[Rodríguez-Miranda et al., 2020]({url})."
+)
+
+st.write(
+    "A biomass production model, calibrated for **_Chlorella protothecoides_ UTEX29**, is then used "
+    "to estimate the final biomass concentration for the average day."
+)
+
+st.write(
+    "The model incorporates: "
+    "a **Beer-Lambert-based light absorption model** and a **growth model** (accounting for the influence of light and temperature, "
+    "including light respiration but excluding dark respiration for now)."
+)
+
+st.write(
+    "The simulation uses **finite elements**, dividing the culture depth into layers of constant light intensity."
+)
+
+st.write(
+    "You can adjust the following parameters in the sidebar: "
+    "initial biomass concentration, microalgae culture depth, number of layers, and other model settings."
+)
 
 
 #Sidebar for model parameters values
@@ -555,7 +581,7 @@ if st.button("Reset to Parameters Values to Default"):
 
 
 # Enter the location, city
-your_loc = st.text_input("Which city do you want the microalgae culture located? ")
+your_loc = st.text_input("Which city do you want the microalgae culture to be located? ")
 
 options = ["All months", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 month_select = st.selectbox(
