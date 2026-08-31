@@ -651,10 +651,10 @@ if options.index(month_select) == 0:
     ["Biomass Concentration at the end of the day"] + [f"{val:.3f}" for val in best_X]
   ]
   st.table(table_data)
-  col1, col2, col3 = st.columns(3, vertical_alignment="top")
-  with col3:
+  col1, col2 = st.columns(2, vertical_alignment="top")
+  with col2:
     st.write(
-      f"*Weather data by *"
+      f"*Weather data by*"
       f"[Open-Meteo.com]({url_openmeteo})"
       )
 else:
@@ -698,10 +698,10 @@ else:
   raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
   best_X, best_transparency = calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
   url_openmeteo = "https://open-meteo.com/"
-  col1, col2, col3 = st.columns(3, vertical_alignment="top")
-  with col3:
+  col1, col2 = st.columns(2, vertical_alignment="top")
+  with col2:
     st.write(
-      f"*Weather data by *"
+      f"*Weather data by*"
       f"[Open-Meteo.com]({url_openmeteo})"
       )
 
