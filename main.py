@@ -149,8 +149,8 @@ url_openmeteo = "https://open-meteo.com/"
 st.write(
     f"The average day is calculated for a specific month or the entire year by recovering "
     f"hourly weather data (from "
-    f"[Open-Meteo]({url_openmeteo}) "
-    f"for the location and averaging it."
+    f"[Open-Meteo]({url_openmeteo})"
+    f") for the location and averaging it."
 )
 
 url_temp_model = "https://doi.org/10.1002/bit.27617"
@@ -651,7 +651,11 @@ if options.index(month_select) == 0:
     ["Biomass Concentration at the end of the day"] + [f"{val:.3f}" for val in best_X]
   ]
   st.table(table_data)
-
+  with st.align('left'):
+    st.write(
+      f"*Weather data by *"
+      f"[Open-Meteo.com]({url_openmeteo})"
+      )
 else:
   month = options.index(month_select)
   # Calculate the number of days for the selected month and year
@@ -692,5 +696,10 @@ else:
   st.pyplot(fig)
   raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
   best_X, best_transparency = calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
-
+  url_openmeteo = "https://open-meteo.com/"
+  with st.align('left'):
+    st.write(
+      f"*Weather data by *"
+      f"[Open-Meteo.com]({url_openmeteo})"
+      )
 
