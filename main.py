@@ -142,7 +142,9 @@ st.write("To do that, the App recovers the hourly weather data for the given loc
 url = "https://doi.org/10.1002/bit.27617"
 st.write("For a given STPV transparency, the temperature of the culture is estimated using the model from [Rodríguez-Miranda et al., 2020] (%s)." % url)
 st.write("A biomass production model calibrated for *Chlorella protothecoides* UTEX29 is then used to estimate the final biomass concentration for the average day.")
-st.write("
+st.write("This model includes a Beer-Lambert-based light absorption model and a growth model (including the influence of both light and temperature, the light respiration but no dark respiration, yet).")
+st.write("The biomass concentration at the beginning of the day, the microalgae culture depth and other parameters of the model can be changed in the sidebar on the left")
+
 
 
 #Sidebar for model parameters values
