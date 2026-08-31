@@ -127,7 +127,16 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
 
 
 # Title
-st.title("Microalgae Transparency Model, v0.01")
+st.title("Microalgae Transparency Model, v1.0")
+#Description
+st.space("small")
+st.write("*This App has been built with Streamlit 1.62.0 and coded in Python 3.12.11 with Spyder*")
+st.space("small")
+st.write("Alexander Huynh¹ ², Florian Delrue¹")
+st.write("¹ MicroAlgae Processes Platform, CEA, CEA Tech Région Sud - Provence-Alpes Côte d’Azur, F-13108 Saint Paul lez Durance, France.")
+st.write("² Université de Toulouse, Toulouse INP, CNRS, Laboratoire de Génie Chimique (LGC), Toulouse, France.")
+st.space("small")
+st.write("This App estimates the optimal transparency of semi-transparent photovoltaic panels (STPV) covering microalgae culture for a given location and a given average day")
 
 
 #Sidebar for model parameters values
