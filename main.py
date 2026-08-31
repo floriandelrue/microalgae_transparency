@@ -140,6 +140,15 @@ st.write(
     "This app estimates the **optimal transparency** of **semi-transparent photovoltaic (STPV) panels** "
     "covering microalgae cultures for a given location and an average day."
 )
+st.write(
+    "The principle of **semi-transparent photovoltaic (STPV) panels** over microalgae cultures is to **maximize light utilization**. "
+    "Under high light intensities, microalgae can experience **photoinhibition**, while STPV panels can generate electricity to "
+    "power the energy demands of the culture system."
+)
+st.write(
+  "More information can be found in the associated article. "
+  "*Link to the paper to come soon...*"
+)
 url_geopy = "https://geopy.readthedocs.io/en/stable/"
 st.write(
     f"The user gives the name of a city and the longitude and latitude are recovered using "
@@ -178,6 +187,7 @@ st.write(
     "You can adjust the following parameters in the sidebar: "
     "initial biomass concentration, microalgae culture depth, number of layers, and other model settings."
 )
+
 
 
 #Sidebar for model parameters values
@@ -654,7 +664,7 @@ if options.index(month_select) == 0:
   col1, col2 = st.columns(2, vertical_alignment="top")
   with col2:
     st.write(
-      f"*Weather data by*"
+      f"*Weather data by* "
       f"[Open-Meteo.com]({url_openmeteo})"
       )
 else:
@@ -701,7 +711,7 @@ else:
   col1, col2 = st.columns(2, vertical_alignment="top")
   with col2:
     st.write(
-      f"*Weather data by*"
+      f"*Weather data by* "
       f"[Open-Meteo.com]({url_openmeteo})"
       )
 
