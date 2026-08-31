@@ -140,16 +140,23 @@ st.write(
     "This app estimates the **optimal transparency** of **semi-transparent photovoltaic (STPV) panels** "
     "covering microalgae cultures for a given location and an average day."
 )
-
+url_geopy = "https://geopy.readthedocs.io/en/stable/"
 st.write(
-    "The average day is calculated for a specific month or the entire year by recovering "
-    "hourly weather data for the location and averaging it."
+    f"The user gives the name of a city and the longitude and latitude are recovered using "
+    f"[GeoPy 2.5.0]({url_geopy})."
+    )
+url_openmeteo = "https://open-meteo.com/"
+st.write(
+    f"The average day is calculated for a specific month or the entire year by recovering "
+    f"hourly weather data (from "
+    f"[Open-Meteo]({url_openmeteo}) "
+    f"for the location and averaging it."
 )
 
-url = "https://doi.org/10.1002/bit.27617"
+url_temp_model = "https://doi.org/10.1002/bit.27617"
 st.write(
     f"For a given STPV transparency, the culture temperature is estimated using the model from "
-    f"[Rodríguez-Miranda et al., 2020]({url})."
+    f"[Rodríguez-Miranda et al., 2020]({url_temp_model})."
 )
 
 st.write(
