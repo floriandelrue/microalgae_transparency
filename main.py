@@ -127,7 +127,7 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
 
 
 # Title
-st.title("Microalgae Transparency Model, v1.0")
+st.title("Microalgae Transparency Model")
 #Description
 st.space("small")
 st.write("*This App has been built with Streamlit 1.62.0 and coded in Python 3.12.11 with Spyder*")
@@ -136,7 +136,13 @@ st.write("Alexander Huynh¹ ², Florian Delrue¹")
 st.write("¹ MicroAlgae Processes Platform, CEA, CEA Tech Région Sud - Provence-Alpes Côte d’Azur, F-13108 Saint Paul lez Durance, France.")
 st.write("² Université de Toulouse, Toulouse INP, CNRS, Laboratoire de Génie Chimique (LGC), Toulouse, France.")
 st.space("small")
-st.write("This App estimates the optimal transparency of semi-transparent photovoltaic panels (STPV) covering microalgae culture for a given location and a given average day")
+st.write("This App estimates the optimal transparency of semi-transparent photovoltaic panels (STPV) covering microalgae culture for a given location and a given average day.")
+st.write("The average day is calculated for a given month or the whole year.")
+st.write("To do that, the App recovers the hourly weather data for the given location and average them.")
+url = "https://doi.org/10.1002/bit.27617"
+st.write("For a given STPV transparency, the temperature of the culture is estimated using the model from [Rodríguez-Miranda et al., 2020] (%s)." % url)
+st.write("A biomass production model calibrated for *Chlorella protothecoides* UTEX29 is then used to estimate the final biomass concentration for the average day.")
+st.write("
 
 
 #Sidebar for model parameters values
