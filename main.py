@@ -130,7 +130,7 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
 st.title("Microalgae Transparency Model")
 #Description
 st.space("small")
-st.write("*This App has been built with Streamlit 1.62.0 and coded in Python 3.12.11 with Spyder 6.1.3.*")
+st.write("*This App has been built with Streamlit 1.62.0 and coded in Python 3.12.11 with Spyder 6.1.3. Maïa (Mistral-based AI agent, adapted and hosted on CEA's servers) and Claude were used for code verification and duplication.*")
 st.space("small")
 st.write("Alexander Huynh¹ ², Florian Delrue¹")
 st.write("¹ MicroAlgae Processes Platform, CEA, CEA Tech Région Sud - Provence-Alpes Côte d’Azur, F-13108 Saint Paul lez Durance, France.")
@@ -186,9 +186,6 @@ st.write(
 st.write(
     "You can adjust the following parameters in the sidebar: "
     "initial biomass concentration, microalgae culture depth, number of layers, and other model settings."
-)
-st.write(
-  "*DISCLAIMER: Maïa (Mistral-based AI agent, adapted and hosted on CEA's servers) and Claude were used for code verification and duplication.*"
 )
 
 
