@@ -187,7 +187,9 @@ st.write(
     "You can adjust the following parameters in the sidebar: "
     "initial biomass concentration, microalgae culture depth, number of layers, and other model settings."
 )
-
+st.write(
+  "*DISCLAIMER: Maïa (Mistral-based AI agent, adapted and hosted on CEA's servers) and Claude were used for code verification and duplication.*"
+)
 
 
 #Sidebar for model parameters values
@@ -434,7 +436,7 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.latex(r'''R(T,I)=\left(R_{P} + R_{P,T}\cdot T+R_{P,I}\cdot I  \right)\cdot P_{max}+R_{0}''')
     st.latex(r''' \scriptsize R(T,I) \text{: Biomass respiration for a temperature T and a light intensity I, in } kg/m^{3}/h ''')
     
-    st.latex(r''' \scriptsize R_{P} \text{: Respiration Sensitivity to Productivity}  ''')
+    st.latex(r''' \scriptsize R_{P} \text{: Respiration Sensitivity to Productivity, no unit}  ''')
     new_C = st.number_input("", value=st.session_state.C, format="%0.2e")  
     st.latex(r''' \scriptsize R_{P,T} \text{: Respiration Sensitivity to Productivity-Temperature Interaction, in } /°C ''')
     new_kT = st.number_input("", value=st.session_state.kT, format="%0.2e")
