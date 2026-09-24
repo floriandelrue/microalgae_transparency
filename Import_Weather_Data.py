@@ -16,7 +16,7 @@ from geopy.exc import GeocoderTimedOut, GeocoderServiceError, GeocoderUnavailabl
 
 @st.cache_data(show_spinner="Locating city...")
 def import_location_data(your_loc):
-    app = Nominatim(user_agent="tutorial", timeout=10)
+    app = Nominatim(user_agent="microalgae_transparency_app", timeout=10)
 
     try:
         result = app.geocode(your_loc)
