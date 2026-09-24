@@ -513,7 +513,7 @@ f(T) &= 0 \text{ for } T > T_{max}
     new_B_conv = st.number_input("", value=st.session_state.B_conv)
     st.latex(r'''Q_{conduction} = \frac{1}{\frac{x_{liner} }{K_{liner} }+\frac{x_{soil} }{K_{soil} }} \cdot A_{soil} \cdot \left( T_{soil} - T \right)''')
     st.latex(r''' \scriptsize x_{liner} \text{: Thickness of the liner layer ( High-Density PolyEthylene, HDPE), in } m ''')
-    new_x_liner = st.number_input("", value=st.session_state.x_liner)
+    new_x_liner = st.number_input("", value=st.session_state.x_liner, format="%0.3f")
     st.latex(r''' \scriptsize K_{soil} \text{: Heat Transfert Coefficient of the HDPE Layer in contact with the ground, in } W/m/°C ''')
     new_K_liner = st.number_input("", value=st.session_state.K_liner)
     st.latex(r''' \scriptsize x_{soil} \text{: Depth of the temperature probe, assumption from open-meteo.com data, in } m ''')
