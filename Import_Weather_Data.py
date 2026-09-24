@@ -62,4 +62,4 @@ def import_weather_data_function(latitude, longitude, start_date, end_date):
         )}
         
         
-        return hourly_temperature_2m, hourly_relative_humidity_2m, hourly_dew_point_2m, hourly_wind_speed_10m, hourly_diffuse_radiation , hourly_direct_radiation
+        return hourly_temperature_2m, hourly_relative_humidity_2m, hourly_dew_point_2m, hourly_wind_speed_10m, hourly_diffuse_radiation , hourly_direct_radiation, hourly_soil_temperature_0_to_7cm
