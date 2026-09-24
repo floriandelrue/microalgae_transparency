@@ -61,11 +61,11 @@ def Culture_Temperature_function(dt, nb_hours, raceway_area, depth, hourly_globa
         return A_conv+B_conv*wind_speed
     #Heat flow by conduction
                                           
-    def Q_conduction(raceway_area, T_soil, T_culture):
+    def Q_conduction(x_liner, K_liner, x_soil, K_soil, raceway_area, T_soil, T_culture):
         R_total = x_liner/K_liner + x_soil/K_soil #total resistance of the heat transfer for the soil and the liner
         return raceway_area * (T_soil - T_culture) / R_total
     #Function that estimates the variation of temperature dT_culture
-    def dT_culture_func(T_culture,I_avg, RH, a, raceway_area, d, C_p, rho,T_amb, T_dew, time_solar, A_conv, B_conv, wind_speed, T_soil):
+    def dT_culture_func(T_culture,I_avg, RH, a, raceway_area, d, C_p, rho,T_amb, T_dew, time_solar, A_conv, B_conv, x_liner, K_liner, x_soil, K_soil, wind_speed, T_soil):
         Q_irradiance_value=Q_irradiance(I_avg, a, raceway_area)
         
         T_sky_value = T_sky(T_amb, T_dew, time_solar)
@@ -79,7 +79,7 @@ def Culture_Temperature_function(dt, nb_hours, raceway_area, depth, hourly_globa
         
         h_conv_value = h_conv(A_conv, B_conv, wind_speed)
         Q_convection_value = Q_convection(h_conv_value,raceway_area, T_amb, T_culture)
-        Q_conduction_value = Q_conduction(raceway_area, T_soil, T_culture)
+        Q_conduction_value = Q_conduction(x_liner, K_liner, x_soil, K_soil, raceway_area, T_soil, T_culture)
         dT_culture = (Q_irradiance_value + Q_radiation_value + Q_evaporation_value + Q_convection_value+Q_conduction_value)/(d*raceway_area*C_p*rho)
         return dT_culture
     
@@ -94,7 +94,9 @@ def Culture_Temperature_function(dt, nb_hours, raceway_area, depth, hourly_globa
     
     for i in range(int(3600/dt*nb_hours)):
         dT_culture[i] = dT_culture_func(T_culture[i],hourly_global_radiation[int(i*dt/3600)], hourly_relative_humidity_2m[int(i*dt/3600)], 
-                                        culture_absorptivity, raceway_area, depth, C_p, rho,hourly_temperature_2m[int(i*dt/3600)], hourly_dew_point_2m[int(i*dt/3600)], int(i%(24*3600/dt))/3600, A_conv, B_conv, hourly_wind_speed_10m[int(i*dt/3600)], T_soil[int(i*dt/3600)])
+                                        culture_absorptivity, raceway_area, depth, C_p, rho,hourly_temperature_2m[int(i*dt/3600)], 
+                                        hourly_dew_point_2m[int(i*dt/3600)], int(i%(24*3600/dt))/3600, A_conv, B_conv, 
+                                        x_liner, K_liner, x_soil, K_soil, hourly_wind_speed_10m[int(i*dt/3600)], T_soil[int(i*dt/3600)])
         if Temperature_Control == True:
             if T_culture[i] + dT_culture[i]/(3600/dt*24) < T_limit:
                 T_culture[i+1] = T_limit
