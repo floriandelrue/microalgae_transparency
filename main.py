@@ -645,10 +645,20 @@ if options.index(month_select) == 0:
   # Import the latitude and longitude of the location
   try:
     latitude, longitude = import_location_data(your_loc)
-  except RuntimeError:
+  except GeocoderRateLimited as e:
+    wait = getattr(e, "retry_after", None)
+    if wait:
+        st.error(f"Too many location requests right now. Please wait about {int(wait)} seconds and try again.")
+    else:
+        st.error("Too many location requests right now. Please wait a minute and try again.")
+    if st.button("Retry"):
+        st.cache_data.clear()
+        st.rerun()
+    st.stop()
+  except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError):
     st.error("The location service didn't respond. This is usually temporary.")
     if st.button("Retry"):
-        st.cache_data.clear()   # otherwise a failed call could get cached too
+        st.cache_data.clear()
         st.rerun()
     st.stop()
 
