@@ -10,7 +10,9 @@ import numpy as np
 import requests_cache
 from retry_requests import retry
 
+import streamlit as st
 from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut, GeocoderServiceError, GeocoderUnavailable
 
 def import_location_data(your_loc):
     # Instantiate a new Nominatim client
