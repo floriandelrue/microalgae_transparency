@@ -248,7 +248,7 @@ def update_params(
     B_evap = new_B_evap
     A_conv = new_A_conv
     B_conv = new_B_conv
-    K_liner = new_K_liner,
+    K_liner = new_K_liner
     x_liner = new_x_liner
     K_soil = new_K_soil
     x_soil = new_x_soil
