@@ -38,8 +38,9 @@ B_evap=4.67e-12
 A_conv =4.78
 B_conv =6.83
 
+#Parameters for the conduction heat flow
+K_liner = 0.43     # W/m/K, for High Density PolyEthylene, HDPE
+x_liner = 0.002     # m (2 mm)
 
-#T under which the culture is heated when the heating is ON
-T_limit = 30.0#°C
-Temperature_Control = False
-
+K_soil = 1.0        # W/m/K -- average for the soil
+x_soil = 0.035       # m (3.5 cm, midpoint of Open-Meteo's 0-7cm layer)
