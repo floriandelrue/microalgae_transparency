@@ -31,7 +31,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
         T_culture = Culture_Temperature_function(
             3600, nb_hours, raceway_area, depth,
-            transparency[i] * I_W_extended, weather_data_extended[1],
+            transparency * I_W_extended, weather_data_extended[1],
             weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
             culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
             )
