@@ -97,13 +97,6 @@ def Culture_Temperature_function(dt, nb_hours, raceway_area, depth, hourly_globa
                                         culture_absorptivity, raceway_area, depth, C_p, rho,hourly_temperature_2m[int(i*dt/3600)], 
                                         hourly_dew_point_2m[int(i*dt/3600)], int(i%(24*3600/dt))/3600, A_conv, B_conv, 
                                         x_liner, K_liner, x_soil, K_soil, hourly_wind_speed_10m[int(i*dt/3600)], T_soil[int(i*dt/3600)])
-        if Temperature_Control == True:
-            if T_culture[i] + dT_culture[i]/(3600/dt*24) < T_limit:
-                T_culture[i+1] = T_limit
 
-            else:
-                T_culture[i+1] = T_culture[i] + dT_culture[i]/(3600/dt*24)
-
-        else:
-            T_culture[i+1] = T_culture[i] + dT_culture[i]/(3600/dt*24)
+        T_culture[i+1] = T_culture[i] + dT_culture[i]/(3600/dt*24)
     return T_culture
