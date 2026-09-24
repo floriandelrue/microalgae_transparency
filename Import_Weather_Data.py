@@ -12,7 +12,7 @@ from retry_requests import retry
 
 import streamlit as st
 from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut, GeocoderServiceError, GeocoderUnavailable
+from geopy.exc import GeocoderTimedOut, GeocoderUnavailable, GeocoderRateLimited, GeocoderServiceError
 
 @st.cache_data(show_spinner="Locating city...")
 def import_location_data(your_loc):
