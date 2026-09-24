@@ -661,10 +661,6 @@ if options.index(month_select) == 0:
         st.cache_data.clear()
         st.rerun()
     st.stop()
-
-  if latitude is None:
-    st.warning(f"Could not find a location matching '{your_loc}'. Please check the spelling.")
-    st.stop()
   
   # Import the extended weather data (start - 15 days) in order to initialize the temperature model
   weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
