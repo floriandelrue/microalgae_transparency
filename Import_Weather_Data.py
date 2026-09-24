@@ -14,36 +14,22 @@ import streamlit as st
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError, GeocoderUnavailable
 
+@st.cache_data(show_spinner="Locating city...")
 def import_location_data(your_loc):
     app = Nominatim(user_agent="tutorial", timeout=10)
 
     try:
         result = app.geocode(your_loc)
-    except (GeocoderTimedOut, GeocoderUnavailable):
-        st.error(
-            "The location service didn't respond in time. This is usually temporary."
-        )
-        if st.button("Retry"):
-            st.rerun()
-        st.stop()
-    except GeocoderServiceError:
-        st.error(
-            "The location service is currently rate-limiting requests. Please wait a "
-            "minute and try again."
-        )
-        if st.button("Retry"):
-            st.rerun()
-        st.stop()
+    except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError) as e:
+        # Cached functions can't call st.stop()/st.error() usefully inside them —
+        # raise instead, and handle the message where it's called.
+        raise RuntimeError(str(e))
 
     if result is None:
-        st.warning(f"Could not find a location matching '{your_loc}'. Please check the spelling and try again.")
-        st.stop()
+        return None, None
 
     location = result.raw
-    latitude = location.get('lat')
-    longitude = location.get('lon')
-
-    return latitude, longitude
+    return location.get('lat'), location.get('lon')
 
 def import_weather_data_function(latitude, longitude, start_date, end_date):
         # Setup the Open-Meteo API client with cache and retry on error
