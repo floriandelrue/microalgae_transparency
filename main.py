@@ -21,18 +21,18 @@ def calculate_hourly_averages(data):
 #Function to calculate the optimum PV panel transparency
 
 
-def calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer):
+def calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer):
     X_end = np.zeros(21)
   
-    I_W_extended = 2.15 * (weather_data_extended[4] + weather_data_extended[5])
+    I_W_extended = (weather_data_extended[4] + weather_data_extended[5])
     diff_object = end_date_object - start_date_object
     nb_hours = diff_object.total_seconds() / 3600
   
     for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
-        T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
-            3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
-            I_W_extended, weather_data_extended[1],
-            weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],
+        T_culture = Culture_Temperature_function(
+            3600, nb_hours, raceway_area, depth,
+            transparency[i] * I_W_extended, weather_data_extended[1],
+            weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
             culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
             )
         T_culture_avg = calculate_hourly_averages(T_culture[360:])
@@ -50,9 +50,9 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
         for i in range(20):
             transparency[i] = np.argmax(X_end) / 20 - 0.09 + i * 0.01
             T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
-                3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
-                I_W_extended, weather_data_extended[1],
-                weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],
+                3600, nb_hours, raceway_area, depth,
+                transparency[i]*I_W_extended, weather_data_extended[1],
+                weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
                 culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
                 )
             T_culture_avg = calculate_hourly_averages(T_culture[360:])
@@ -78,18 +78,18 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     st.pyplot(fig2)
     return best_X, best_transparency
 
-def calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg, Temperature_Control, T_limit, raceway_area, depth, weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max, kT, kI, C, K, nb_layer):
+def calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg, raceway_area, depth, weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max, kT, kI, C, K, nb_layer):
   X_end = np.zeros(21)
 
-  I_W_extended = 2.15 * (weather_data_extended[4] + weather_data_extended[5])
+  I_W_extended = (weather_data_extended[4] + weather_data_extended[5])
   diff_object = end_date_object - start_date_object
   nb_hours = diff_object.total_seconds() / 3600
 
   for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
     T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
-        3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
-        I_W_extended, weather_data_extended[1],
-        weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],
+        3600, nb_hours, raceway_area, depth,
+        transparency*I_W_extended, weather_data_extended[1],
+        weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],weather_data_extended[6],
         culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
     )
     T_culture_avg = calculate_hourly_averages(T_culture[360:])
@@ -105,9 +105,9 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
     for i in range(20):
       transparency[i] = np.argmax(X_end) / 20 - 0.09 + i * 0.01
       T_culture, Cumulative_Minimal_Energy_Consumption = Culture_Temperature_function(
-          3600, nb_hours, Temperature_Control, T_limit, raceway_area, depth,
-          I_W_extended, weather_data_extended[1],
-          weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],
+          3600, nb_hours, raceway_area, depth,
+          transparency[i]*I_W_extended, weather_data_extended[1],
+          weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],weather_data_extended[6],
           culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv
       )
       T_culture_avg = calculate_hourly_averages(T_culture[360:])
@@ -200,13 +200,13 @@ st.write(
 #    new_alpha, new_I_opt, new_kT, new_kI, new_K, new_C, new_biomass_loss_night_temp2,
 #    new_biomass_loss_night_temp, new_biomass_loss_night_cst, new_culture_absorptivity,
 #    new_culture_depth, new_culture_dz, new_nb_layer, new_C_p, new_rho, new_sigma,
-#    new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv
+#    new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv, new_K_liner, new_x_liner, new_K_soil, new_x_soil
 #):
 def update_params(
     new_Ea, new_depth, new_X_initial, new_T_min, new_T_opt, new_T_max, new_P_max,
     new_alpha, new_I_opt, new_kT, new_kI, new_K, new_C, new_culture_absorptivity,
     new_nb_layer, new_C_p, new_rho, new_sigma,
-    new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv
+    new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv, new_K_liner, new_x_liner, new_K_soil, new_x_soil
 ):
     #global Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C, \
     #    biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst, \
@@ -214,7 +214,7 @@ def update_params(
     #    e_w, A_evap, B_evap, A_conv, B_conv
     global Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C, \
         culture_absorptivity, nb_layer, C_p, rho, sigma, \
-        e_w, A_evap, B_evap, A_conv, B_conv
+        e_w, A_evap, B_evap, A_conv, B_conv, K_liner, x_liner, K_soil, x_soil
     Ea = new_Ea
     depth = new_depth
     X_initial = new_X_initial
@@ -241,6 +241,10 @@ def update_params(
     B_evap = new_B_evap
     A_conv = new_A_conv
     B_conv = new_B_conv
+    K_liner = new_K_liner,
+    x_liner = new_x_liner
+    K_soil = new_K_soil
+    x_soil = new_x_soil
     global z
     z = np.linspace(0, depth, num=100)
     z = z.reshape(-1, 1)
@@ -259,11 +263,11 @@ def reset_params():
     #)
     global Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C, \
         culture_absorptivity, nb_layer, C_p, rho, sigma, \
-        e_w, A_evap, B_evap, A_conv, B_conv
+        e_w, A_evap, B_evap, A_conv, B_conv, K_liner, x_liner, K_soil, x_soil
     from Parameter_Values import (
         Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
         z, culture_absorptivity, nb_layer, C_p, rho, sigma,
-        e_w, A_evap, B_evap, A_conv, B_conv)
+        e_w, A_evap, B_evap, A_conv, B_conv, K_liner, x_liner, K_soil, x_soil)
     
     global z
     z = np.linspace(0, depth, num=100)
@@ -323,7 +327,14 @@ if 'A_conv' not in st.session_state:
 if 'B_conv' not in st.session_state:
     st.session_state.B_conv = B_conv
 
-
+if 'K_liner' not in st.session_state:
+    st.session_state.K_liner = K_liner
+if 'x_liner' not in st.session_state:
+    st.session_state.x_liner = x_liner
+if 'K_soil' not in st.session_state:
+    st.session_state.K_soil = K_soil
+if 'x_soil' not in st.session_state:
+    st.session_state.x_soil = x_soil
 
 # Sidebar for changing parameters
 with st.sidebar.form("parameter_form"):
@@ -546,6 +557,10 @@ f(T) &= 0 \text{ for } T > T_{max}
         st.session_state.B_evap = B_evap
         st.session_state.A_conv = A_conv
         st.session_state.B_conv = B_conv
+        st.session_state.K_liner = K_liner
+        st.session_state.x_liner = x_liner
+        st.session_state.K_soil = K_soil
+        st.session_state.x_soil = x_soil
         st.success("Parameters updated!")
 
 # Reset button
@@ -577,22 +592,11 @@ if st.button("Reset to Parameters Values to Default"):
     st.session_state.B_evap = B_evap
     st.session_state.A_conv = A_conv
     st.session_state.B_conv = B_conv
+    st.session_state.K_liner = K_liner
+    st.session_state.x_liner = x_liner
+    st.session_state.K_soil = K_soil
+    st.session_state.x_soil = x_soil
     st.success("Parameters reset to default!")
-
-# Write the parameters values sued by the model
-#st.write("Current Parameters:", {
-#    "Ea": st.session_state.Ea, "depth": st.session_state.depth, "X_initial": st.session_state.X_initial,
-#    "T_min": st.session_state.T_min, "T_opt": st.session_state.T_opt, "T_max": st.session_state.T_max,
-#    "P_max": st.session_state.P_max, "alpha": st.session_state.alpha, "I_opt": st.session_state.I_opt,
-#    "kT": st.session_state.kT, "kI": st.session_state.kI, "K": st.session_state.K, "C": st.session_state.C,
-#    #"biomass_loss_night_temp2": st.session_state.biomass_loss_night_temp2,
-#    #"biomass_loss_night_temp": st.session_state.biomass_loss_night_temp,
-#    #"biomass_loss_night_cst": st.session_state.biomass_loss_night_cst,
-#    "culture_absorptivity": st.session_state.culture_absorptivity,
-#    "nb_layer": st.session_state.nb_layer, "C_p": st.session_state.C_p, "rho": st.session_state.rho,
-#    "sigma": st.session_state.sigma, "e_w": st.session_state.e_w, "A_evap": st.session_state.A_evap,
-#    "B_evap": st.session_state.B_evap, "A_conv": st.session_state.A_conv, "B_conv": st.session_state.B_conv
-#})
 
 
 
@@ -634,7 +638,7 @@ if options.index(month_select) == 0:
   PAR_avg = np.zeros((13,24))
   PAR_avg[0,:] = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
-  best_X[0], best_transparency[0] = calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg[0,:], Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
+  best_X[0], best_transparency[0] = calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg[0,:], raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
 
   hours = 0
   for month in range(1,13):
@@ -652,7 +656,7 @@ if options.index(month_select) == 0:
     end_date_month_object = datetime.strptime(end_date_month, '%Y-%m-%d')
     
     PAR_avg[month,:]= calculate_hourly_averages(2.15 * (weather_data_month[4] + weather_data_month[5]))
-    best_X[month], best_transparency[month] = calculate_optimum_transparency_without_graph(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month,:], Temperature_Control, T_limit, raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
+    best_X[month], best_transparency[month] = calculate_optimum_transparency_without_graph(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month,:], raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
   table_data = [
     [""] + ["All Year", "January", "February", "March", "April", "May", "June",
              "July", "August", "September", "October", "November", "December"],
@@ -705,7 +709,7 @@ else:
   # Graph display
   st.pyplot(fig)
   raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
-  best_X, best_transparency = calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, Temperature_Control, T_limit, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
+  best_X, best_transparency = calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
   url_openmeteo = "https://open-meteo.com/"
   col1, col2 = st.columns(2, vertical_alignment="top")
   with col2:
