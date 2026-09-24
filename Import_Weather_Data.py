@@ -38,19 +38,20 @@ def import_weather_data_function(latitude, longitude, start_date, end_date):
         	"longitude": longitude,
         	"start_date": start_date,
         	"end_date": end_date,
-        	"hourly": ["temperature_2m", "relative_humidity_2m", "dew_point_2m", "wind_speed_10m", "diffuse_radiation", "direct_radiation"],
+        	"hourly": ["temperature_2m", "soil_temperature_0_to_7cm", "relative_humidity_2m", "dew_point_2m", "wind_speed_10m", "diffuse_radiation", "direct_radiation"],
         	"timezone": "auto"
         }
         responses = openmeteo.weather_api(url, params=params)
         response = responses[0]
         # Process hourly data. The order of variables needs to be the same as requested.
         hourly = response.Hourly()
-        hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy()
-        hourly_relative_humidity_2m = hourly.Variables(1).ValuesAsNumpy()
-        hourly_dew_point_2m = hourly.Variables(2).ValuesAsNumpy()
-        hourly_wind_speed_10m = hourly.Variables(3).ValuesAsNumpy()
-        hourly_diffuse_radiation = hourly.Variables(4).ValuesAsNumpy() #W/m2
-        hourly_direct_radiation = hourly.Variables(5).ValuesAsNumpy() #W/m2
+        hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy() #°C
+        hourly_soil_temperature_0_to_7cm = hourly.Variables(1).ValuesAsNumpy() #°C
+        hourly_relative_humidity_2m = hourly.Variables(2).ValuesAsNumpy() #%
+        hourly_dew_point_2m = hourly.Variables(3).ValuesAsNumpy() #°C
+        hourly_wind_speed_10m = hourly.Variables(4).ValuesAsNumpy() #m/s
+        hourly_diffuse_radiation = hourly.Variables(5).ValuesAsNumpy() #W/m2
+        hourly_direct_radiation = hourly.Variables(6).ValuesAsNumpy() #W/m2
     
     
         hourly_data = {"date": pd.date_range(
