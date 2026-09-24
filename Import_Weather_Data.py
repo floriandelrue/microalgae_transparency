@@ -17,13 +17,7 @@ from geopy.exc import GeocoderTimedOut, GeocoderServiceError, GeocoderUnavailabl
 @st.cache_data(show_spinner="Locating city...")
 def import_location_data(your_loc):
     app = Nominatim(user_agent="microalgae_transparency_app", timeout=10)
-
-    try:
-        result = app.geocode(your_loc)
-    except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError) as e:
-        # Cached functions can't call st.stop()/st.error() usefully inside them —
-        # raise instead, and handle the message where it's called.
-        raise RuntimeError(str(e))
+    result = app.geocode(your_loc)  # no try/except here — let it raise naturally
 
     if result is None:
         return None, None
