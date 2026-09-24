@@ -507,13 +507,22 @@ f(T) &= 0 \text{ for } T > T_{max}
     new_A_conv = st.number_input("", value=st.session_state.A_conv)
     st.latex(r''' \scriptsize B_{conv} \text{: Convection Coefficient estimated experimentally, in } W /cdot s/m/°C ''')
     new_B_conv = st.number_input("", value=st.session_state.B_conv)
-    st.latex(r'''Q_{conduction} = h_{soil} \cdot A_{soil} \cdot \left( T_{soil} - T \right)''')
-    st.latex(r''' \scriptsize h_{soil} \text{: Heat Transfert Coefficient of the Reactor Layer in contact with the ground, in } W/m^{2}/°C ''')
-    st.latex(r''' \scriptsize A_{soil} \text{: Surface of the Reactor Layer in contact with the ground, in } m^{2} ''')
+    st.latex(r'''Q_{conduction} = \frac{1}{\frac{x_{liner} }{K_{liner} }+\frac{x_{soil} }{K_{soil} }} \cdot A_{soil} \cdot \left( T_{soil} - T \right)''')
+    st.latex(r''' \scriptsize x_{liner} \text{: Thickness of the liner layer ( High-Density PolyEthylene, HDPE), in } m ''')
+    new_x_liner = st.number_input("", value=st.session_state.x_liner)
+    st.latex(r''' \scriptsize K_{soil} \text{: Heat Transfert Coefficient of the HDPE Layer in contact with the ground, in } W/m/°C ''')
+    new_K_liner = st.number_input("", value=st.session_state.K_liner)
+    st.latex(r''' \scriptsize x_{soil} \text{: Depth of the temperature probe, assumption from open-meteo.com data, in } m ''')
+    new_x_soil = st.number_input("", value=st.session_state.x_soil)
+    st.latex(r''' \scriptsize K_{soil} \text{: Heat Transfert Coefficient of the soil, average, in } W/m/°C ''')
+    new_K_soil = st.number_input("", value=st.session_state.K_soil)
+    
+    
+    st.latex(r''' \scriptsize A_{soil} \text{: Surface of the Reactor Layer in contact with the ground, equivalent to the surface of the reactor, in } m^{2} ''')
+    
     
     with st.container(key="second_part"):
       st.latex(r''' \scriptsize T_{soil} \text{: Temperature of the Soil, in } °C ''')
-      st.latex(r''' Q_{conduction} \text{ was neglected}''')
       st.text("Then, the Culture Temperature T was computed as follow:")
       st.latex(r'''\frac{d T}{dt} = \frac{Q_{irradiance} + Q_{radiation} + Q_{evaporation} + Q_{convection}}{h \cdot A \cdot C_{p} \cdot \rho}''')
       # Submit button
