@@ -6,8 +6,8 @@
 
 import numpy as np
 
-def Culture_Temperature_function(dt, nb_hours, Temperature_Control, T_limit, raceway_area, depth, hourly_global_radiation, hourly_relative_humidity_2m, hourly_temperature_2m, \
-                                 hourly_dew_point_2m, hourly_wind_speed_10m, culture_absorptivity, nb_layer, C_p, rho, sigma, \
+def Culture_Temperature_function(dt, nb_hours, raceway_area, depth, hourly_global_radiation, hourly_relative_humidity_2m, hourly_temperature_2m, \
+                                 hourly_dew_point_2m, hourly_wind_speed_10m, T_soil, culture_absorptivity, nb_layer, C_p, rho, sigma, \
                                         e_w, A_evap, B_evap, A_conv, B_conv):
     
         
@@ -59,10 +59,13 @@ def Culture_Temperature_function(dt, nb_hours, Temperature_Control, T_limit, rac
     #convection transfer coefficient obtained experimentally
     def h_conv(A_conv, B_conv, wind_speed):
         return A_conv+B_conv*wind_speed
-    #Heat flow by conduction neglicted
-    
+    #Heat flow by conduction
+                                          
+    def Q_conduction(raceway_area, T_soil, T_culture):
+        R_total = x_liner/K_liner + x_soil/K_soil #total resistance of the heat transfer for the soil and the liner
+        return raceway_area * (T_soil - T_culture) / R_total
     #Function that estimates the variation of temperature dT_culture
-    def dT_culture_func(T_culture,I_avg, RH, a, raceway_area, d, C_p, rho,T_amb, T_dew, time_solar, A_conv, B_conv, wind_speed):
+    def dT_culture_func(T_culture,I_avg, RH, a, raceway_area, d, C_p, rho,T_amb, T_dew, time_solar, A_conv, B_conv, wind_speed, T_soil):
         Q_irradiance_value=Q_irradiance(I_avg, a, raceway_area)
         
         T_sky_value = T_sky(T_amb, T_dew, time_solar)
@@ -76,8 +79,8 @@ def Culture_Temperature_function(dt, nb_hours, Temperature_Control, T_limit, rac
         
         h_conv_value = h_conv(A_conv, B_conv, wind_speed)
         Q_convection_value = Q_convection(h_conv_value,raceway_area, T_amb, T_culture)
-        
-        dT_culture = (Q_irradiance_value + Q_radiation_value + Q_evaporation_value + Q_convection_value)/(d*raceway_area*C_p*rho)
+        Q_conduction_value = Q_conduction(raceway_area, T_soil, T_culture)
+        dT_culture = (Q_irradiance_value + Q_radiation_value + Q_evaporation_value + Q_convection_value+Q_conduction_value)/(d*raceway_area*C_p*rho)
         return dT_culture
     
     #Initialization
@@ -85,14 +88,9 @@ def Culture_Temperature_function(dt, nb_hours, Temperature_Control, T_limit, rac
     T_culture = np.zeros(int(3600/dt*nb_hours)+1)
     
     dT_culture = np.zeros(int(3600/dt*nb_hours)+1)
-    Cumulative_Minimal_Energy_Consumption = np.zeros(int(3600/dt*nb_hours))
-    if Temperature_Control == True:
-        T_culture[0] = T_limit
-        Cumulative_Minimal_Energy_Consumption[0] = (T_limit-hourly_temperature_2m[0])/(3600/dt*24)*(depth*raceway_area*C_p*rho)*(1/3.6e06)
-    else: 
-        T_culture[0] = hourly_temperature_2m[0]
-        Cumulative_Minimal_Energy_Consumption[0] = 0
-    Minimal_Energy_Consumption = 0
+ 
+    T_culture[0] = hourly_temperature_2m[0]
+
     
     for i in range(int(3600/dt*nb_hours)):
         dT_culture[i] = dT_culture_func(T_culture[i],hourly_global_radiation[int(i*dt/3600)], hourly_relative_humidity_2m[int(i*dt/3600)], 
@@ -100,11 +98,10 @@ def Culture_Temperature_function(dt, nb_hours, Temperature_Control, T_limit, rac
         if Temperature_Control == True:
             if T_culture[i] + dT_culture[i]/(3600/dt*24) < T_limit:
                 T_culture[i+1] = T_limit
-                Minimal_Energy_Consumption -= dT_culture[i]/(3600/dt*24)*(depth*raceway_area*C_p*rho)*(1/3.6e06)
-                Cumulative_Minimal_Energy_Consumption[i] = Minimal_Energy_Consumption + Cumulative_Minimal_Energy_Consumption[i-1] 
+
             else:
                 T_culture[i+1] = T_culture[i] + dT_culture[i]/(3600/dt*24)
-                Cumulative_Minimal_Energy_Consumption[i] = Cumulative_Minimal_Energy_Consumption[i-1] 
+
         else:
             T_culture[i+1] = T_culture[i] + dT_culture[i]/(3600/dt*24)
-    return T_culture, Cumulative_Minimal_Energy_Consumption[-1]
+    return T_culture
