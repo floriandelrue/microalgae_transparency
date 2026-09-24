@@ -15,21 +15,24 @@ from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError, GeocoderUnavailable
 
 def import_location_data(your_loc):
-    app = Nominatim(user_agent="tutorial", timeout=10)  # give it more time before giving up
+    app = Nominatim(user_agent="tutorial", timeout=10)
 
     try:
         result = app.geocode(your_loc)
     except (GeocoderTimedOut, GeocoderUnavailable):
         st.error(
-            "The location service didn't respond in time. This is usually temporary — "
-            "please try again in a moment."
+            "The location service didn't respond in time. This is usually temporary."
         )
+        if st.button("Retry"):
+            st.rerun()
         st.stop()
     except GeocoderServiceError:
         st.error(
             "The location service is currently rate-limiting requests. Please wait a "
             "minute and try again."
         )
+        if st.button("Retry"):
+            st.rerun()
         st.stop()
 
     if result is None:
