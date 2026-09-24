@@ -16,14 +16,25 @@ from geopy.exc import GeocoderTimedOut, GeocoderUnavailable, GeocoderRateLimited
 
 @st.cache_data(show_spinner="Locating city...")
 def import_location_data(your_loc):
-    app = Nominatim(user_agent="microalgae_transparency_app", timeout=10)
-    result = app.geocode(your_loc)  # no try/except here — let it raise naturally
-
-    if result is None:
-        return None, None
-
-    location = result.raw
-    return location.get('lat'), location.get('lon')
+    """Geocode a city name, showing a friendly message and retry button on failure."""
+    try:
+        return import_location_data(your_loc)
+    except GeocoderRateLimited as e:
+        wait = getattr(e, "retry_after", None)
+        if wait:
+            st.error(f"Too many location requests right now. Please wait about {int(wait)} seconds and try again.")
+        else:
+            st.error("Too many location requests right now. Please wait a minute and try again.")
+        if st.button("Retry"):
+            st.cache_data.clear()
+            st.rerun()
+        st.stop()
+    except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError):
+        st.error("The location service didn't respond. This is usually temporary.")
+        if st.button("Retry"):
+            st.cache_data.clear()
+            st.rerun()
+        st.stop()
 
 def import_weather_data_function(latitude, longitude, start_date, end_date):
         # Setup the Open-Meteo API client with cache and retry on error
