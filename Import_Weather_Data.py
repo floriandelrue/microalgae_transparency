@@ -16,6 +16,16 @@ from geopy.exc import GeocoderTimedOut, GeocoderUnavailable, GeocoderRateLimited
 
 @st.cache_data(show_spinner="Locating city...")
 def import_location_data(your_loc):
+    app = Nominatim(user_agent="microalgae_transparency_app", timeout=10)
+    result = app.geocode(your_loc)  # no try/except here — let it raise naturally
+
+    if result is None:
+        return None, None
+
+    location = result.raw
+    return location.get('lat'), location.get('lon')
+    
+def get_location_safe(your_loc):
     """Geocode a city name, showing a friendly message and retry button on failure."""
     try:
         return import_location_data(your_loc)
