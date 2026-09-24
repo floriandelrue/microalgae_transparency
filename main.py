@@ -643,7 +643,18 @@ if options.index(month_select) == 0:
   # Format the new datetime object back into a string
   start_date_extended = start_date_extended_object.strftime('%Y-%m-%d')
   # Import the latitude and longitude of the location
-  latitude, longitude = import_location_data(your_loc)
+  try:
+    latitude, longitude = import_location_data(your_loc)
+  except RuntimeError:
+    st.error("The location service didn't respond. This is usually temporary.")
+    if st.button("Retry"):
+        st.cache_data.clear()   # otherwise a failed call could get cached too
+        st.rerun()
+    st.stop()
+
+  if latitude is None:
+    st.warning(f"Could not find a location matching '{your_loc}'. Please check the spelling.")
+    st.stop()
   
   # Import the extended weather data (start - 15 days) in order to initialize the temperature model
   weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
