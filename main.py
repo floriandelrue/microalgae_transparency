@@ -644,7 +644,7 @@ if options.index(month_select) == 0:
   start_date_extended = start_date_extended_object.strftime('%Y-%m-%d')
   # Import the latitude and longitude of the location
   
-  latitude, longitude = import_location_data(your_loc)
+  latitude, longitude = get_location_safe(your_loc)
   
   # Import the extended weather data (start - 15 days) in order to initialize the temperature model
   weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
@@ -704,7 +704,7 @@ else:
   start_date_extended = start_date_extended_object.strftime('%Y-%m-%d')
   
 # Import the latitude and longitude of the location
-  latitude, longitude = import_location_data(your_loc)
+  latitude, longitude = get_location_safe(your_loc)
   
 # Import the extended weather data (start - 15 days) in order to initialize the temperature model
   weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
