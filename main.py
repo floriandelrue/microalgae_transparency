@@ -32,7 +32,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
         T_culture = Culture_Temperature_function(
             3600, nb_hours, raceway_area, depth,
             transparency * I_W_extended, weather_data_extended[1],
-            weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
+            weather_data_extended[0], weather_data_extended[2], weather_data_extended[3]/3.6, weather_data_extended[6],
             culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
             x_liner, K_liner, x_soil, K_soil
             )
@@ -53,7 +53,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
             T_culture = Culture_Temperature_function(
                 3600, nb_hours, raceway_area, depth,
                 transparency[i]*I_W_extended, weather_data_extended[1],
-                weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
+                weather_data_extended[0], weather_data_extended[2], weather_data_extended[3]/3.6, weather_data_extended[6],
                 culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
                 x_liner, K_liner, x_soil, K_soil
                 )
@@ -94,7 +94,7 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
     T_culture = Culture_Temperature_function(
         3600, nb_hours, raceway_area, depth,
         transparency*I_W_extended, weather_data_extended[1],
-        weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],weather_data_extended[6],
+        weather_data_extended[0], weather_data_extended[2], weather_data_extended[3]/3.6,weather_data_extended[6],
         culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
       x_liner, K_liner, x_soil, K_soil
     )
@@ -113,7 +113,7 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
       T_culture = Culture_Temperature_function(
           3600, nb_hours, raceway_area, depth,
           transparency[i]*I_W_extended, weather_data_extended[1],
-          weather_data_extended[0], weather_data_extended[2], weather_data_extended[3],weather_data_extended[6],
+          weather_data_extended[0], weather_data_extended[2], weather_data_extended[3]/3.6,weather_data_extended[6],
           culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
           x_liner, K_liner, x_soil, K_soil
       )
