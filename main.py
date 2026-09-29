@@ -653,7 +653,7 @@ if options.index(month_select) == 0:
   best_X = np.zeros(13)
   best_transparency = np.zeros(13)
   PAR_avg = np.zeros((13,24))
-  PAR_avg[0,:] = calculate_hourly_averages(4.6 * (weather_data[4] + weather_data[5]))
+  PAR_avg[0,:] = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
   best_X[0], best_transparency[0] = calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg[0,:], raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
 
@@ -672,7 +672,7 @@ if options.index(month_select) == 0:
     start_date_month_object = datetime.strptime(start_date_month, '%Y-%m-%d')
     end_date_month_object = datetime.strptime(end_date_month, '%Y-%m-%d')
     
-    PAR_avg[month,:]= calculate_hourly_averages(4.6 * (weather_data_month[4] + weather_data_month[5]))
+    PAR_avg[month,:]= calculate_hourly_averages(2.15 * (weather_data_month[4] + weather_data_month[5]))
     best_X[month], best_transparency[month] = calculate_optimum_transparency_without_graph(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month,:], raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
   table_data = [
     [""] + ["All Year", "January", "February", "March", "April", "May", "June",
@@ -712,7 +712,7 @@ else:
   weather_data = [sublist[360:] for sublist in weather_data_extended]
 
   temperature_avg = calculate_hourly_averages(weather_data[0])
-  PAR_avg = calculate_hourly_averages(4.6 * (weather_data[4] + weather_data[5]))
+  PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   #Matplotlib figure
   fig, (ax, ax1) = plt.subplots(1,2, figsize=(15,5))
   ax.plot(range(24), temperature_avg)
