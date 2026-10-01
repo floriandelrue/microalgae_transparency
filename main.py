@@ -715,7 +715,7 @@ if options.index(month_select) == 0:
              "July", "August", "September", "October", "November", "December"],
     ["Optimal Transparency (-)"] + [f"{val:.2f}" for val in best_transparency],
     ["Biomass Concentration at the End of the Day (g/L)"] + [f"{val:.3f}" for val in best_X],
-    ["Average Temperature of the Culture (°C)"] + [f"{val:.3f}" for val in Avg_Temp]
+    ["Average Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Avg_Temp]
   ]
   st.table(table_data)
   col1, col2 = st.columns(2, vertical_alignment="top")
