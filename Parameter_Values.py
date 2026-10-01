@@ -20,7 +20,7 @@ culture_absorptivity = 0.7#-
 
 
 #specific heat capacity of the culture
-C_p = 4.184 #J·kg−1·°C−1
+C_p = 4184 #J·kg−1·°C−1
 #density of the culture
 rho = 1000.0 #kg·m−3
 
