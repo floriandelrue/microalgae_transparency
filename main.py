@@ -595,7 +595,7 @@ f(T) &= 0 \text{ for } T > T_{max}
         update_params(new_Ea, new_depth, new_X_initial, new_T_min, new_T_opt, new_T_max, new_P_max,
             new_alpha, new_I_opt, new_kT, new_kI, new_K, new_C, new_culture_absorptivity,
             new_nb_layer, new_C_p, new_rho, new_sigma,
-            new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv, K_liner, x_liner, K_soil, x_soil)
+            new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv, new_K_liner, new_x_liner, new_K_soil, new_x_soil)
       
         st.session_state.Ea = Ea
         st.session_state.depth = depth
