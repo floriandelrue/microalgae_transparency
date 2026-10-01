@@ -141,12 +141,30 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
       if X_new[i] > best_X:
         best_transparency = transparency[i]
         best_X = X_new[i]
+        T_culture = Culture_Temperature_function(
+          3600, nb_hours, raceway_area, depth,
+          transparency[i]*I_W_extended, weather_data_extended[1],
+          weather_data_extended[0], weather_data_extended[2], weather_data_extended[3]/3.6,weather_data_extended[6],
+          culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
+          x_liner, K_liner, x_soil, K_soil
+        )
+        T_culture_avg = calculate_hourly_averages(T_culture[360:])
+        avg_temp = np.mean(T_culture_avg)
 
   else:
     best_transparency = 1.0
     best_X = max(X_end)
-
-  return best_X, best_transparency
+    T_culture = Culture_Temperature_function(
+          3600, nb_hours, raceway_area, depth,
+          1.0*I_W_extended, weather_data_extended[1],
+          weather_data_extended[0], weather_data_extended[2], weather_data_extended[3]/3.6,weather_data_extended[6],
+          culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
+          x_liner, K_liner, x_soil, K_soil
+        )
+    T_culture_avg = calculate_hourly_averages(T_culture[360:])
+    avg_temp = np.mean(T_culture_avg)
+    
+  return best_X, best_transparency, avg_temp
 
 
 
@@ -669,10 +687,11 @@ if options.index(month_select) == 0:
   weather_data = [sublist[360:] for sublist in weather_data_extended]
   best_X = np.zeros(13)
   best_transparency = np.zeros(13)
+  Avg_Temp = np.zeros(13)
   PAR_avg = np.zeros((13,24))
   PAR_avg[0,:] = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
-  best_X[0], best_transparency[0] = calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg[0,:], raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
+  best_X[0], best_transparency[0], Avg_Temp[0] = calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg[0,:], raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
 
   hours = 0
   for month in range(1,13):
@@ -690,12 +709,13 @@ if options.index(month_select) == 0:
     end_date_month_object = datetime.strptime(end_date_month, '%Y-%m-%d')
     
     PAR_avg[month,:]= calculate_hourly_averages(2.15 * (weather_data_month[4] + weather_data_month[5]))
-    best_X[month], best_transparency[month] = calculate_optimum_transparency_without_graph(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month,:], raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
+    best_X[month], best_transparency[month], Avg_Temp[month] = calculate_optimum_transparency_without_graph(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month,:], raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
   table_data = [
     [""] + ["All Year", "January", "February", "March", "April", "May", "June",
              "July", "August", "September", "October", "November", "December"],
-    ["Optimal Transparency"] + [f"{val:.2f}" for val in best_transparency],
-    ["Biomass Concentration at the end of the day"] + [f"{val:.3f}" for val in best_X]
+    ["Optimal Transparency (-)"] + [f"{val:.2f}" for val in best_transparency],
+    ["Biomass Concentration at the End of the Day (g/L)"] + [f"{val:.3f}" for val in best_X]
+    ["Average Temperature of the Culture (°C)"] + [f"{val:.3f}" for val in Avg_Temp]
   ]
   st.table(table_data)
   col1, col2 = st.columns(2, vertical_alignment="top")
