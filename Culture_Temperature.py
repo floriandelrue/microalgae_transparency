@@ -28,7 +28,7 @@ def Culture_Temperature_function(dt, nb_hours, raceway_area, depth, hourly_globa
     #T_sky is the temperature of the sky in K
     #T_amb is the ambient temperature in °C
     def T_sky(T_amb,T_dew,time_solar):
-        return (273.15+T_amb)*(0.711+0.0056*T_dew-0.000073*T_dew**2 + 0.13*np.cos(15*time_solar))**0.25
+        return (273.15+T_amb)*(0.711+0.0056*T_dew-0.000073*T_dew**2 + 0.13*np.cos(np.radians(15*time_solar))**0.25
     #Latent heat of evaporation
     def latent_heat_evaporation(T_culture):
         return (2494-2.2*T_culture)*1000
@@ -39,7 +39,7 @@ def Culture_Temperature_function(dt, nb_hours, raceway_area, depth, hourly_globa
 
     #vapour pressure at ambient temperature in kPa
     def vapour_pressure_ambient(T_amb):
-        return 0.61078*np.exp(12.27*T_amb/(T_amb+273.15))
+        return 610.78*np.exp(12.27*T_amb/(T_amb+273.15))
 
     #evaporation rate
     #RH relative humidity in %
@@ -95,7 +95,7 @@ def Culture_Temperature_function(dt, nb_hours, raceway_area, depth, hourly_globa
     for i in range(int(3600/dt*nb_hours)):
         dT_culture[i] = dT_culture_func(T_culture[i],hourly_global_radiation[int(i*dt/3600)], hourly_relative_humidity_2m[int(i*dt/3600)], 
                                         culture_absorptivity, raceway_area, depth, C_p, rho,hourly_temperature_2m[int(i*dt/3600)], 
-                                        hourly_dew_point_2m[int(i*dt/3600)], int(i%(24*3600/dt))/3600, A_conv, B_conv, 
+                                        hourly_dew_point_2m[int(i*dt/3600)], (i*dt/3600) % 24, A_conv, B_conv, 
                                         x_liner, K_liner, x_soil, K_soil, hourly_wind_speed_10m[int(i*dt/3600)], T_soil[int(i*dt/3600)])
 
         T_culture[i+1] = T_culture[i] + dT_culture[i]/(3600/dt*24)
