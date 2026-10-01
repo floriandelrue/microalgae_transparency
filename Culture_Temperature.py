@@ -39,7 +39,7 @@ def Culture_Temperature_function(dt, nb_hours, raceway_area, depth, hourly_globa
 
     #vapour pressure at ambient temperature in kPa
     def vapour_pressure_ambient(T_amb):
-        return 610.78*np.exp(12.27*T_amb/(T_amb+273.15))
+        return 610.78*np.exp(17.27*T_amb/(T_amb+237.3))
 
     #evaporation rate
     #RH relative humidity in %
