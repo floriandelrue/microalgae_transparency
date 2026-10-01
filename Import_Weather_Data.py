@@ -59,7 +59,8 @@ def import_weather_data_function(latitude, longitude, start_date, end_date):
         	"start_date": start_date,
         	"end_date": end_date,
         	"hourly": ["temperature_2m", "soil_temperature_0_to_7cm", "relative_humidity_2m", "dew_point_2m", "wind_speed_10m", "diffuse_radiation", "direct_radiation"],
-        	"timezone": "auto"
+        	"wind_speed_unit": "ms",
+            "timezone": "auto"
         }
         responses = openmeteo.weather_api(url, params=params)
         response = responses[0]
