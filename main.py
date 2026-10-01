@@ -30,7 +30,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
   
     for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
         T_culture = Culture_Temperature_function(
-            3600, nb_hours, raceway_area, depth,
+            600, nb_hours, raceway_area, depth,
             transparency * I_W_extended, weather_data_extended[1],
             weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
             culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
@@ -44,7 +44,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     X_new = np.zeros(20)
     best_X = 0
     T_culture = Culture_Temperature_function(
-                3600, nb_hours, raceway_area, depth,
+                600, nb_hours, raceway_area, depth,
                 np.argmax(X_end) / 20 * I_W_extended, weather_data_extended[1],
                 weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
                 culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
@@ -60,7 +60,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
         for i in range(20):
             transparency[i] = np.argmax(X_end) / 20 - 0.09 + i * 0.01
             T_culture = Culture_Temperature_function(
-                3600, nb_hours, raceway_area, depth,
+                600, nb_hours, raceway_area, depth,
                 transparency[i]*I_W_extended, weather_data_extended[1],
                 weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
                 culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
@@ -79,7 +79,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
         best_transparency = 1.0
         best_X = max(X_end)
         T_culture = Culture_Temperature_function(
-                3600, nb_hours, raceway_area, depth,
+                600, nb_hours, raceway_area, depth,
                 I_W_extended, weather_data_extended[1],
                 weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
                 culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
@@ -108,7 +108,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
       ax3.set_xlabel("PV panel transparency (-)")
       st.pyplot(fig3)
     T_culture = Culture_Temperature_function(
-                3600, nb_hours, raceway_area, depth,
+                600, nb_hours, raceway_area, depth,
                 I_W_extended, weather_data_extended[1],
                 weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
                 culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
