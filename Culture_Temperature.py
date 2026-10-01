@@ -92,11 +92,19 @@ def Culture_Temperature_function(dt, nb_hours, raceway_area, depth, hourly_globa
     T_culture[0] = hourly_temperature_2m[0]
 
     
-    for i in range(int(3600/dt*nb_hours)):
-        dT_culture[i] = dT_culture_func(T_culture[i],hourly_global_radiation[int(i*dt/3600)], hourly_relative_humidity_2m[int(i*dt/3600)], 
-                                        culture_absorptivity, raceway_area, depth, C_p, rho,hourly_temperature_2m[int(i*dt/3600)], 
-                                        hourly_dew_point_2m[int(i*dt/3600)], (i*dt/3600) % 24, A_conv, B_conv, 
-                                        x_liner, K_liner, x_soil, K_soil, hourly_wind_speed_10m[int(i*dt/3600)], T_soil[int(i*dt/3600)])
+    steps_per_hour = int(3600/dt)
+    n_steps = steps_per_hour * int(nb_hours)
+    T_culture = np.zeros(n_steps + 1)
+    T_culture[0] = hourly_temperature_2m[0]
 
-        T_culture[i+1] = T_culture[i] + dT_culture[i]*dt
-    return T_culture
+    for i in range(n_steps):
+      h = i // steps_per_hour                 # index of the hourly weather row
+      time_solar = (i*dt/3600) % 24
+      dT = dT_culture_func(T_culture[i], hourly_global_radiation[h], hourly_relative_humidity_2m[h],
+                         culture_absorptivity, raceway_area, depth, C_p, rho,
+                         hourly_temperature_2m[h], hourly_dew_point_2m[h], time_solar,
+                         A_conv, B_conv, x_liner, K_liner, x_soil, K_soil,
+                         hourly_wind_speed_10m[h], T_soil[h])
+      T_culture[i+1] = T_culture[i] + dT*dt   # dT in K/s
+
+    return T_culture[::steps_per_hour] 
