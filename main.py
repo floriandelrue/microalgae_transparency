@@ -78,7 +78,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
                 )
         T_culture_profile = calculate_hourly_averages(T_culture[360:])
 
-    fig2, ax2 = plt.subplots(1,2, figsize=(15,5))
+    fig2, ax2 = plt.subplots())
     ax2.plot(range(24), T_culture_profile)
     ax2.text(1.0, 1.1 * np.mean(T_culture_profile), 'Average Culture Temperature (°C)')
     ax2.text(2.0, 1.0 * np.mean(T_culture_profile), f'{np.mean(T_culture_profile):.1f} °C', fontweight='bold', fontsize=15)
@@ -88,7 +88,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     st.pyplot(fig2)
     
   
-    fig3, ax3 = plt.subplots(1,2, figsize=(15,5))
+    fig3, ax3 = plt.subplots()
     ax3.plot(np.linspace(0, 1, num=21), X_end)
     ax3.vlines(best_transparency, np.min(ax2.get_ylim()), best_X, colors='r', linestyle = 'dashed')
     ax3.text(0.6 * best_transparency, 0.85 * best_X, 'Best transparency')
