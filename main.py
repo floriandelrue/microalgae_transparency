@@ -78,22 +78,27 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
                 )
         T_culture_profile = calculate_hourly_averages(T_culture[360:])
 
-    fig, (ax2, ax3) = plt.subplots(1,2, figsize=(15,5))
-    ax2.plot(np.linspace(0, 1, num=21), X_end)
-    ax2.vlines(best_transparency, np.min(ax2.get_ylim()), best_X, colors='r', linestyle = 'dashed')
-    ax2.text(0.6 * best_transparency, 0.85 * best_X, 'Best transparency')
-    ax2.text(0.7 * best_transparency, 0.8 * best_X, f'{best_transparency:.3f}', fontweight='bold', fontsize=15)
-    ax2.text(0.5 * best_transparency, 0.7 * best_X, 'Best biomass concentration')
-    ax2.text(0.65 * best_transparency, 0.65 * best_X, f'{best_X:.3f} g/L', fontweight='bold', fontsize=15)
-    ax3.plot(range(24), T_culture_profile)
-    ax3.text(1.0, 1.1 * np.mean(T_culture_profile), 'Average Culture Temperature (°C)')
-    ax3.text(2.0, 1.0 * np.mean(T_culture_profile), f'{np.mean(T_culture_profile):.1f} °C', fontweight='bold', fontsize=15)
-  
-    ax2.title(f"Biomass concentration at the end of a typical day (g/l) of {calendar.month_name[month]} of {year} for {your_loc}, starting at {X_initial} g/L")
-    ax3.title("Culture Temperature (°C)")
-    ax2.xlabel("PV panel transparency (-)")
+    fig2, ax2 = plt.subplots(1,2, figsize=(15,5))
+    ax2.plot(range(24), T_culture_profile)
+    ax2.text(1.0, 1.1 * np.mean(T_culture_profile), 'Average Culture Temperature (°C)')
+    ax2.text(2.0, 1.0 * np.mean(T_culture_profile), f'{np.mean(T_culture_profile):.1f} °C', fontweight='bold', fontsize=15)
+    ax2.title("Culture Temperature (°C)")
+    
     fig2.show()
     st.pyplot(fig2)
+    
+  
+    fig3, ax3 = plt.subplots(1,2, figsize=(15,5))
+    ax3.plot(np.linspace(0, 1, num=21), X_end)
+    ax3.vlines(best_transparency, np.min(ax2.get_ylim()), best_X, colors='r', linestyle = 'dashed')
+    ax3.text(0.6 * best_transparency, 0.85 * best_X, 'Best transparency')
+    ax3.text(0.7 * best_transparency, 0.8 * best_X, f'{best_transparency:.3f}', fontweight='bold', fontsize=15)
+    ax3.text(0.5 * best_transparency, 0.7 * best_X, 'Best biomass concentration')
+    ax3.text(0.65 * best_transparency, 0.65 * best_X, f'{best_X:.3f} g/L', fontweight='bold', fontsize=15)
+    fig3.title(f"Biomass concentration at the end of a typical day (g/l) of {calendar.month_name[month]} of {year} for {your_loc}, starting at {X_initial} g/L")
+    ax3.xlabel("PV panel transparency (-)")
+    fig3.show()
+    st.pyplot(fig3)
     return best_X, best_transparency
 
 def calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg, raceway_area, depth, weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max, kT, kI, C, K, nb_layer):
