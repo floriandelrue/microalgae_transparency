@@ -64,22 +64,35 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
             if X_new[i] > best_X:
                 best_transparency = transparency[i]
                 best_X = X_new[i]
+                T_culture_profile = T_culture_avg
 
     else:
         best_transparency = 1.0
         best_X = max(X_end)
+        T_culture = Culture_Temperature_function(
+                3600, nb_hours, raceway_area, depth,
+                I_W_extended, weather_data_extended[1],
+                weather_data_extended[0], weather_data_extended[2], weather_data_extended[3]/3.6, weather_data_extended[6],
+                culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
+                x_liner, K_liner, x_soil, K_soil
+                )
+          T_culture_profile = calculate_hourly_averages(T_culture[360:])
 
-    fig2, ax2 = plt.subplots()
+    fig, (ax2, ax3) = plt.subplots(1,2, figsize=(15,5))
     ax2.plot(np.linspace(0, 1, num=21), X_end)
     ax2.vlines(best_transparency, np.min(ax2.get_ylim()), best_X, colors='r', linestyle = 'dashed')
     ax2.text(0.6 * best_transparency, 0.85 * best_X, 'Best transparency')
     ax2.text(0.7 * best_transparency, 0.8 * best_X, f'{best_transparency:.3f}', fontweight='bold', fontsize=15)
     ax2.text(0.5 * best_transparency, 0.7 * best_X, 'Best biomass concentration')
     ax2.text(0.65 * best_transparency, 0.65 * best_X, f'{best_X:.3f} g/L', fontweight='bold', fontsize=15)
+    ax3.plot(range(24), T_culture_profile)
+    ax3.text(1.0, 1.1 * np.mean(T_culture_profile), 'Average Culture Temperature (°C)')
+    ax3.text(2.0, 1.0 * np.mean(T_culture_profile), f'{np.mean(T_culture_profile):.1f} °C', fontweight='bold', fontsize=15)
   
-    plt.title(f"Biomass concentration at the end of a typical day (g/l) of {calendar.month_name[month]} of {year} for {your_loc}, starting at {X_initial} g/L")
-    plt.xlabel("PV panel transparency (-)")
-    plt.show()
+    ax2.title(f"Biomass concentration at the end of a typical day (g/l) of {calendar.month_name[month]} of {year} for {your_loc}, starting at {X_initial} g/L")
+    ax3.title("Culture Temperature (°C)")
+    ax2.xlabel("PV panel transparency (-)")
+    fig2.show()
     st.pyplot(fig2)
     return best_X, best_transparency
 
