@@ -82,8 +82,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     with container1:
       fig2, ax2 = plt.subplots()
       ax2.plot(range(24), T_culture_profile)
-      ax2.text(1.0, 1.1 * np.mean(T_culture_profile), 'Average Culture Temperature (°C)')
-      ax2.text(2.0, 1.0 * np.mean(T_culture_profile), f'{np.mean(T_culture_profile):.1f} °C', fontweight='bold', fontsize=15)
+      ax2.text(1.0, 1.0 * np.mean(T_culture_profile), f'Average Culture Temperature =  {np.mean(T_culture_profile):.1f} °C')
       plt.title("Culture Temperature (°C)")
       st.pyplot(fig2)
 
@@ -91,7 +90,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     with container2:
       fig3, ax3 = plt.subplots()
       ax3.plot(np.linspace(0, 1, num=21), X_end)
-      ax3.vlines(best_transparency, np.min(ax2.get_ylim()), best_X, colors='r', linestyle='dashed')
+      ax3.vlines(best_transparency, np.min(ax3.get_ylim()), best_X, colors='r', linestyle='dashed')
       ax3.text(0.6 * best_transparency, 0.85 * best_X, 'Best transparency')
       ax3.text(0.7 * best_transparency, 0.8 * best_X, f'{best_transparency:.3f}', fontweight='bold', fontsize=15)
       ax3.text(0.5 * best_transparency, 0.7 * best_X, 'Best biomass concentration')
