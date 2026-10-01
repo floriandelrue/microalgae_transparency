@@ -76,7 +76,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
                 culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
                 x_liner, K_liner, x_soil, K_soil
                 )
-          T_culture_profile = calculate_hourly_averages(T_culture[360:])
+        T_culture_profile = calculate_hourly_averages(T_culture[360:])
 
     fig, (ax2, ax3) = plt.subplots(1,2, figsize=(15,5))
     ax2.plot(np.linspace(0, 1, num=21), X_end)
