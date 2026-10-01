@@ -26,7 +26,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
   
     I_W_extended = (weather_data_extended[4] + weather_data_extended[5])
     
-    nb_hours = len(weather_data_extended)
+    nb_hours = len(weather_data_extended[0])
   
     for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
         T_culture = Culture_Temperature_function(
@@ -133,7 +133,7 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
 
   I_W_extended = (weather_data_extended[4] + weather_data_extended[5])
   
-  nb_hours = len(weather_data_extended)
+  nb_hours = len(weather_data_extended[0])
 
   for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
     T_culture = Culture_Temperature_function(
