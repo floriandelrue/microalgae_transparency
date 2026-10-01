@@ -69,7 +69,7 @@ def import_weather_data_function(latitude, longitude, start_date, end_date):
         hourly_soil_temperature_0_to_7cm = hourly.Variables(1).ValuesAsNumpy() #°C
         hourly_relative_humidity_2m = hourly.Variables(2).ValuesAsNumpy() #%
         hourly_dew_point_2m = hourly.Variables(3).ValuesAsNumpy() #°C
-        hourly_wind_speed_10m = hourly.Variables(4).ValuesAsNumpy() #m/s
+        hourly_wind_speed_10m = hourly.Variables(4).ValuesAsNumpy() #km/h
         hourly_diffuse_radiation = hourly.Variables(5).ValuesAsNumpy() #W/m2
         hourly_direct_radiation = hourly.Variables(6).ValuesAsNumpy() #W/m2
     
