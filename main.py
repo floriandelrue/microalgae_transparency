@@ -106,12 +106,14 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
                 x_liner, K_liner, x_soil, K_soil
                 )
     T_culture_profile_fullT = calculate_hourly_averages(T_culture[360:])
+    
+    container3 = st.container()
     with container3:
-      fig2, ax2 = plt.subplots()
-      ax2.plot(range(24), T_culture_profile_fullT)
-      ax2.text(1.0, 1.0 * np.mean(T_culture_profile_fullT), f'Average Culture Temperature for Full Transparency =  {np.mean(T_culture_profile_fullT):.1f} °C')
+      fig4, ax4 = plt.subplots()
+      ax4.plot(range(24), T_culture_profile_fullT)
+      ax4.text(1.0, 1.0 * np.mean(T_culture_profile_fullT), f'Average Culture Temperature for Full Transparency =  {np.mean(T_culture_profile_fullT):.1f} °C')
       plt.title("Culture Temperature (°C)")
-      st.pyplot(fig2)
+      st.pyplot(fig4)
 
 
   
