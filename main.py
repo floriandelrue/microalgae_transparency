@@ -96,7 +96,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     ax3.text(0.5 * best_transparency, 0.7 * best_X, 'Best biomass concentration')
     ax3.text(0.65 * best_transparency, 0.65 * best_X, f'{best_X:.3f} g/L', fontweight='bold', fontsize=15)
     plt.title(f"Biomass concentration at the end of a typical day (g/l) of {calendar.month_name[month]} of {year} for {your_loc}, starting at {X_initial} g/L")
-    ax3.xlabel("PV panel transparency (-)")
+    ax3.set_xlabel("PV panel transparency (-)")
     plt.show()
     st.pyplot(fig3)
     return best_X, best_transparency
