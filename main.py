@@ -43,6 +43,15 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
 
     X_new = np.zeros(20)
     best_X = 0
+    T_culture = Culture_Temperature_function(
+                600, nb_hours, raceway_area, depth,
+                np.argmax(X_end) / 20*I_W_extended, weather_data_extended[1],
+                weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
+                culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
+                x_liner, K_liner, x_soil, K_soil
+                )
+    T_culture_profile = calculate_hourly_averages(T_culture[360:-1])
+    
     if np.argmax(X_end) != 20:
         X_end_new = np.zeros(20)
         transparency = np.zeros(20)
