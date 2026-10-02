@@ -86,7 +86,14 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
                 x_liner, K_liner, x_soil, K_soil
                 )
         T_culture_profile = calculate_hourly_averages(T_culture[360:-1])
-
+    T_culture = Culture_Temperature_function(
+                3600, nb_hours, raceway_area, depth,
+                I_W_extended, weather_data_extended[1],
+                weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
+                culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
+                x_liner, K_liner, x_soil, K_soil
+                )
+    T_culture_profile_fullT = calculate_hourly_averages(T_culture[360:-1])
     st.header("Optimal Operationnal Conditions of the Microalgae Culture")
     st.text("With the Transparency of the STPV that Optimizes Biomass Productivity)")
     col1, col2 = st.columns(2)
@@ -122,14 +129,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     plt.title(f"Biomass concentration at the end of a typical day (g/l) of {calendar.month_name[month]} of {year} for {your_loc}, starting at {X_initial} g/L")
     ax3.set_xlabel("PV panel transparency (-)")
     st.pyplot(fig3)
-    T_culture = Culture_Temperature_function(
-                3600, nb_hours, raceway_area, depth,
-                I_W_extended, weather_data_extended[1],
-                weather_data_extended[0], weather_data_extended[2], weather_data_extended[3], weather_data_extended[6],
-                culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
-                x_liner, K_liner, x_soil, K_soil
-                )
-    T_culture_profile_fullT = calculate_hourly_averages(T_culture[360:-1])
+    
     
     
     #fig4, ax4 = plt.subplots()
