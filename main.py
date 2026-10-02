@@ -99,9 +99,9 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     with col2:
       fig5, ax5 = plt.subplots()
       ax5.plot(range(24), best_transparency*PAR_avg)
-      ax2.text(1.0, 1.0 * np.mean(best_transparency*PAR_avg), f'Max PAR  =  {np.max(best_transparency*PAR_avg):.0f} µmol/m2/s')
-      ax2.text(1.0,"Light Intensity under the STPV (µmol/m2/s)")
-      st.pyplot(fig2)
+      ax5.text(1.0, 1.0 * np.mean(best_transparency*PAR_avg), f'Max PAR  =  {np.max(best_transparency*PAR_avg):.0f} µmol/m2/s')
+      plt.title("Light Intensity under the STPV (µmol/m2/s)")
+      st.pyplot(fig5)
     
     fig3, ax3 = plt.subplots()
     ax3.plot(np.linspace(0, 1, num=21), X_end)
@@ -790,12 +790,12 @@ else:
   #Matplotlib figure
   fig, (ax, ax1) = plt.subplots(1,2, figsize=(15,5))
   ax.plot(range(24), temperature_avg)
-  ax.set_ylabel("Average Hourly Temperature (°C)")
+  ax.set_ylabel("Average Hourly Air Temperature (°C)")
   ax.set_xlabel("Hour of the day")
   ax1.plot(range(24), PAR_avg)
   ax1.set_ylabel("Average Hourly Light Intensity PAR ($µmol/m^2/s$)")
   ax1.set_xlabel("Hour of the day")
-  fig.suptitle(f"Average Hourly Temperatures (left) and light intensity (right) for {month_select} of {year} for {your_loc}")
+  fig.suptitle(f"Average Hourly Air Temperatures (left) and Light Intensity (right) for {month_select} of {year} for {your_loc}")
   
   # Graph display
   st.pyplot(fig)
