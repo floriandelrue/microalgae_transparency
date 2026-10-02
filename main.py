@@ -717,6 +717,8 @@ if options.index(month_select) == 0:
   best_X = np.zeros(13)
   best_transparency = np.zeros(13)
   Avg_Temp = np.zeros(13)
+  Max_Temp = np.zeros(13)
+  Min_Temp = np.zeros(13)
   PAR_avg = np.zeros((13,24))
   PAR_avg[0,:] = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
@@ -747,6 +749,7 @@ if options.index(month_select) == 0:
     ["Average Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Avg_Temp],
     ["Maximum Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Max_Temp],
     ["Minimum Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Min_Temp],
+    ["Maximum Light Intensity under the STPV (µmol/m2/s)"] + [f"{np.max(PAR_avg[i,:]):.0f}" for i in range(13)],
   ]
   st.table(table_data)
   col1, col2 = st.columns(2, vertical_alignment="top")
