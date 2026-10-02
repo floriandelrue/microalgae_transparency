@@ -87,6 +87,8 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
                 )
         T_culture_profile = calculate_hourly_averages(T_culture[360:-1])
 
+    st.header("Optimal Operationnal Conditions of the Microalgae Culture")
+    st.text("With the Transparencyof the STPV that Optimizes Biomass Productivity)")
     col1, col2 = st.columns(2)
     with col1:
       fig2, ax2 = plt.subplots()
@@ -103,6 +105,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
       plt.title("Light Intensity under the STPV (µmol/m2/s)")
       st.pyplot(fig5)
     
+    st.header("Transparency of the STPV that optimizes Biomass Productivity")
     fig3, ax3 = plt.subplots()
     ax3.plot(np.linspace(0, 1, num=21), X_end)
     ax3.vlines(best_transparency, np.min(ax3.get_ylim()), best_X, colors='r', linestyle='dashed')
@@ -575,7 +578,7 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.latex(r''' h_{evap} = A_{evap} + B_{evap} \cdot W_{s}''')
     st.latex(r''' \scriptsize A_{evap} \text{: Evaporation Coefficient estimated experimentally, in } m/s/Pa ''')
     new_A_evap = st.number_input("", value=st.session_state.A_evap, format="%0.2e")
-    st.latex(r''' \scriptsize A_{evap} \text{: Evaporation Coefficient estimated experimentally, in } /Pa ''')
+    st.latex(r''' \scriptsize B_{evap} \text{: Evaporation Coefficient estimated experimentally, in } /Pa ''')
     new_B_evap = st.number_input("", value=st.session_state.B_evap, format="%0.2e")
     st.latex(r''' \scriptsize W_{s} \text{: Wind Speed, in } m/s ''')
     st.latex(r''' Q_{convection} = h_{conv} \cdot A \cdot \left(T_{air} - T  \right)''')
@@ -787,7 +790,8 @@ else:
 
   temperature_avg = calculate_hourly_averages(weather_data[0])
   PAR_avg = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
-  #Matplotlib figure
+  #Matplotlib figures
+  st.header("Weather Data (from open-meteo.com)")
   fig, (ax, ax1) = plt.subplots(1,2, figsize=(15,5))
   ax.plot(range(24), temperature_avg)
   ax.set_ylabel("Average Hourly Air Temperature (°C)")
