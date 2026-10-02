@@ -96,12 +96,16 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
       ax2.text(1.0, 1.0 * np.mean(T_culture_profile), f'Average Culture Temperature =  {np.mean(T_culture_profile):.1f} °C')
       ax2.text(1.0, 0.96 * np.mean(T_culture_profile), f'Maximum Culture Temperature =  {np.max(T_culture_profile):.1f} °C')
       ax2.text(1.0, 0.92 * np.mean(T_culture_profile), f'Minimum Culture Temperature =  {np.min(T_culture_profile):.1f} °C')
+      ax2.set_xlabel("Hour of the day")
       plt.title("Culture Temperature (°C)")
       st.pyplot(fig2)
     with col2:
       fig5, ax5 = plt.subplots()
-      ax5.plot(range(24), best_transparency*PAR_avg)
+      ax5.plot(range(24), PAR_avg, color = "darkblue", label = "Incident Light")
+      ax5.plot(range(24), best_transparency*PAR_avg, color = "darkred", label = "Light Transmitted by the STPV")
       ax5.text(1.0, 0.95 * np.max(best_transparency*PAR_avg), f'Sum PAR  =  {np.sum(best_transparency*PAR_avg):.0f} µmol*h/m2/s')
+      ax5.set_xlabel("Hour of the day")
+      plt.legend()
       plt.title("Light Intensity under the STPV (µmol/m2/s)")
       st.pyplot(fig5)
     
