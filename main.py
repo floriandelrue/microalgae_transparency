@@ -92,6 +92,8 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
       fig2, ax2 = plt.subplots()
       ax2.plot(range(24), T_culture_profile)
       ax2.text(1.0, 1.0 * np.mean(T_culture_profile), f'Average Culture Temperature =  {np.mean(T_culture_profile):.1f} °C')
+      ax2.text(1.0, 0.96 * np.mean(T_culture_profile), f'Maximum Culture Temperature =  {np.max(T_culture_profile):.1f} °C')
+      ax2.text(1.0, 0.92 * np.mean(T_culture_profile), f'Minimum Culture Temperature =  {np.min(T_culture_profile):.1f} °C')
       plt.title("Culture Temperature (°C)")
       st.pyplot(fig2)
 
