@@ -99,7 +99,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     with col2:
       fig5, ax5 = plt.subplots()
       ax5.plot(range(24), best_transparency*PAR_avg)
-      ax5.text(1.0, 1.0 * np.mean(best_transparency*PAR_avg), f'Max PAR  =  {np.max(best_transparency*PAR_avg):.0f} µmol/m2/s')
+      ax5.text(1.0, 0.95 * np.max(best_transparency*PAR_avg), f'Max PAR  =  {np.max(best_transparency*PAR_avg):.0f} µmol/m2/s')
       plt.title("Light Intensity under the STPV (µmol/m2/s)")
       st.pyplot(fig5)
     
@@ -123,11 +123,11 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     T_culture_profile_fullT = calculate_hourly_averages(T_culture[360:-1])
     
     
-    fig4, ax4 = plt.subplots()
-    ax4.plot(range(24), T_culture_profile_fullT)
-    ax4.text(1.0, 1.0 * np.mean(T_culture_profile_fullT), f'Average Culture Temperature for Full Transparency =  {np.mean(T_culture_profile_fullT):.1f} °C')
-    plt.title("Culture Temperature (°C)")
-    st.pyplot(fig4)
+    #fig4, ax4 = plt.subplots()
+    #ax4.plot(range(24), T_culture_profile_fullT)
+    #ax4.text(1.0, 1.0 * np.mean(T_culture_profile_fullT), f'Average Culture Temperature for Full Transparency =  {np.mean(T_culture_profile_fullT):.1f} °C')
+    #plt.title("Culture Temperature (°C)")
+    #st.pyplot(fig4)
 
 
   
