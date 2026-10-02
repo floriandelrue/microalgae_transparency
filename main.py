@@ -178,6 +178,8 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
         )
         T_culture_avg = calculate_hourly_averages(T_culture[360:-1])
         avg_temp = np.mean(T_culture_avg)
+        max_temp = np.max(T_culture_avg)
+        min_temp = np.min(T_culture_avg)
 
   else:
     best_transparency = 1.0
@@ -191,8 +193,9 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
         )
     T_culture_avg = calculate_hourly_averages(T_culture[360:-1])
     avg_temp = np.mean(T_culture_avg)
-    
-  return best_X, best_transparency, avg_temp
+    max_temp = np.max(T_culture_avg)
+    min_temp = np.min(T_culture_avg)
+  return best_X, best_transparency, avg_temp, max_temp, min_temp
 
 
 
@@ -715,7 +718,7 @@ if options.index(month_select) == 0:
   PAR_avg = np.zeros((13,24))
   PAR_avg[0,:] = calculate_hourly_averages(2.15 * (weather_data[4] + weather_data[5]))
   raceway_area = 10000  # m2 1ha // No impact on the temperature of the culture, but on the energy consumed, for further improvements
-  best_X[0], best_transparency[0], Avg_Temp[0] = calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg[0,:], raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
+  best_X[0], best_transparency[0], Avg_Temp[0], Max_Temp[0], Min_Temp[0] = calculate_optimum_transparency_without_graph(your_loc, start_date_object, end_date_object, PAR_avg[0,:], raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
 
   hours = 0
   for month in range(1,13):
@@ -733,13 +736,15 @@ if options.index(month_select) == 0:
     end_date_month_object = datetime.strptime(end_date_month, '%Y-%m-%d')
     
     PAR_avg[month,:]= calculate_hourly_averages(2.15 * (weather_data_month[4] + weather_data_month[5]))
-    best_X[month], best_transparency[month], Avg_Temp[month] = calculate_optimum_transparency_without_graph(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month,:], raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
+    best_X[month], best_transparency[month], Avg_Temp[month], Max_Temp[month], Min_Temp[month] = calculate_optimum_transparency_without_graph(your_loc, start_date_month_object, end_date_month_object, PAR_avg[month,:], raceway_area, depth,weather_data_month, weather_data_month_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer)
   table_data = [
     [""] + ["All Year", "January", "February", "March", "April", "May", "June",
              "July", "August", "September", "October", "November", "December"],
     ["Optimal Transparency (-)"] + [f"{val:.2f}" for val in best_transparency],
     ["Biomass Concentration at the End of the Day (g/L)"] + [f"{val:.3f}" for val in best_X],
-    ["Average Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Avg_Temp]
+    ["Average Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Avg_Temp],
+    ["Maximum Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Max_Temp],
+    ["Minimum Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Min_Temp],
   ]
   st.table(table_data)
   col1, col2 = st.columns(2, vertical_alignment="top")
