@@ -749,7 +749,7 @@ if options.index(month_select) == 0:
     ["Average Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Avg_Temp],
     ["Maximum Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Max_Temp],
     ["Minimum Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Min_Temp],
-    ["Maximum Light Intensity under the STPV (µmol/m2/s)"] + [f"{np.max(PAR_avg[i,:]):.0f}" for i in range(13)],
+    ["Maximum Light Intensity under the STPV (µmol/m2/s)"] + [f"{np.max(best_transparency[month]*PAR_avg[month,:]):.0f}" for month in range(13)],
   ]
   st.table(table_data)
   col1, col2 = st.columns(2, vertical_alignment="top")
