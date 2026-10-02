@@ -756,7 +756,7 @@ if options.index(month_select) == 0:
   table_data = [
     [""] + ["All Year", "January", "February", "March", "April", "May", "June",
              "July", "August", "September", "October", "November", "December"],
-    ["Optimal Transparency (-)"] + [f"{val:.2f}" for val in best_transparency],
+    ["Optimal Transparency (-)"] + [f"{val:.3f}" for val in best_transparency],
     ["Biomass Concentration at the End of the Day (g/L)"] + [f"{val:.3f}" for val in best_X],
     ["Average Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Avg_Temp],
     ["Maximum Temperature of the Culture (°C)"] + [f"{val:.1f}" for val in Max_Temp],
