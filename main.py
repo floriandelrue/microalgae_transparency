@@ -99,8 +99,8 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     with col2:
       fig5, ax5 = plt.subplots()
       ax5.plot(range(24), best_transparency*PAR_avg)
-      ax2.text(1.0, 1.0 * np.mean(best_transparency*PAR_avg), f'Max PAR  =  {np.max(Tbest_transparency*PAR_avg):.0f} µmol/m2/s')
-      ax2.text(1.0,Light Intensity under the STPV (µmol/m2/s)")
+      ax2.text(1.0, 1.0 * np.mean(best_transparency*PAR_avg), f'Max PAR  =  {np.max(best_transparency*PAR_avg):.0f} µmol/m2/s')
+      ax2.text(1.0,"Light Intensity under the STPV (µmol/m2/s)")
       st.pyplot(fig2)
     
     fig3, ax3 = plt.subplots()
