@@ -83,28 +83,31 @@ def Culture_Temperature_function(dt, nb_hours, raceway_area, depth, hourly_globa
         dT_culture = (Q_irradiance_value + Q_radiation_value + Q_evaporation_value + Q_convection_value+Q_conduction_value)/(d*raceway_area*C_p*rho)
         return dT_culture
     
-    #Initialization
-    #temperature of the culture in °C
-    T_culture = np.zeros(int(3600/dt*nb_hours)+1)
-    
-    dT_culture = np.zeros(int(3600/dt*nb_hours)+1)
- 
-    T_culture[0] = hourly_temperature_2m[0]
+    # --- Initialization ---
+    n_sub = 10                           # sub-steps per hour (dt_sub = 360 s)
+    dt_sub = 3600.0 / n_sub
+    nb_h = int(nb_hours)
 
-    
-    steps_per_hour = int(3600/dt)
-    n_steps = steps_per_hour * int(nb_hours)
-    T_culture = np.zeros(n_steps + 1)
-    T_culture[0] = hourly_temperature_2m[0]
+    T_hourly = np.zeros(nb_h + 1)
+    T_hourly[0] = hourly_temperature_2m[0]
+    T = T_hourly[0]
 
-    for i in range(n_steps):
-      h = i // steps_per_hour                 # index of the hourly weather row
-      time_solar = (i*dt/3600) % 24
-      dT = dT_culture_func(T_culture[i], hourly_global_radiation[h], hourly_relative_humidity_2m[h],
-                         culture_absorptivity, raceway_area, depth, C_p, rho,
-                         hourly_temperature_2m[h], hourly_dew_point_2m[h], time_solar,
-                         A_conv, B_conv, x_liner, K_liner, x_soil, K_soil,
-                         hourly_wind_speed_10m[h], T_soil[h])
-      T_culture[i+1] = T_culture[i] + dT*dt   # dT in K/s
+    h_cond = 1.0 / (x_liner / K_liner + x_soil / K_soil)   # W/m²/K
+    C_area = depth * C_p * rho                              # J/m²/K
 
-    return T_culture[::steps_per_hour] 
+    for hh in range(nb_h):
+        h_c = h_conv(A_conv, B_conv, hourly_wind_speed_10m[hh])
+        for k in range(n_sub):
+            time_solar = (hh + k / n_sub) % 24
+            f = dT_culture_func(T, hourly_global_radiation[hh], hourly_relative_humidity_2m[hh],
+                                culture_absorptivity, raceway_area, depth, C_p, rho,
+                                hourly_temperature_2m[hh], hourly_dew_point_2m[hh], time_solar,
+                                A_conv, B_conv, x_liner, K_liner, x_soil, K_soil,
+                                hourly_wind_speed_10m[hh], T_soil[hh])           # K/s
+            # linearised loss coefficient (radiation + convection + conduction)
+            h_lin = 4 * sigma * e_w * (T + 273.15) ** 3 + h_c + h_cond
+            # linearly implicit (Rosenbrock-Euler) update
+            T = T + dt_sub * f / (1.0 + dt_sub * h_lin / C_area)
+        T_hourly[hh + 1] = T
+
+    return T_hourly
