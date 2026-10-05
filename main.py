@@ -94,6 +94,9 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
                 x_liner, K_liner, x_soil, K_soil
                 )
     T_culture_profile_fullT = calculate_hourly_averages(T_culture[360:-1])
+    X_fullT = calculate_biomass_production(
+                X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_profile_fullT, kT, kI, C, K, depth, t1.0, nb_layer
+                )
     st.header("Optimal Operationnal Conditions of the Microalgae Culture")
     st.text("With the Transparency of the STPV that Optimizes Biomass Productivity)")
     col1, col2 = st.columns(2)
@@ -125,7 +128,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
     ax3.text(0.6 * best_transparency, 0.85 * best_X, 'Best transparency')
     ax3.text(0.7 * best_transparency, 0.8 * best_X, f'{best_transparency:.3f}', fontweight='bold', fontsize=15)
     ax3.text(0.5 * best_transparency, 0.7 * best_X, 'Best biomass concentration')
-    ax3.text(0.65 * best_transparency, 0.65 * best_X, f'{best_X:.3f} g/L', fontweight='bold', fontsize=15)
+    ax3.text(0.5 * best_transparency, 0.65 * best_X, f'{best_X:.3f} g/L ({X_fullT:.3f} g/L for T =1.0)', fontweight='bold', fontsize=15)
     plt.title(f"Biomass concentration at the end of a typical day (g/l) of {calendar.month_name[month]} of {year} for {your_loc}, starting at {X_initial} g/L")
     ax3.set_xlabel("PV panel transparency (-)")
     st.pyplot(fig3)
