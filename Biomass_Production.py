@@ -24,7 +24,17 @@ def light_respiration(kT, kI, C, K, Temp, I, prod):
 def biomass_loss_night(biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst, Temp, dt):
     return np.exp(-(biomass_loss_night_temp2 * Temp**2 + biomass_loss_night_temp * Temp + biomass_loss_night_cst) * dt / 3600)
 
-
+def depth_avg_net(I0, X, Temp_i, phi_temp, depth, n=200, tau_cut=15):
+    tau_max = Ea * X * depth
+    tau = np.linspace(0, min(tau_max, tau_cut), n)
+    z = tau / (Ea * X)                       # physical depth of each sample
+    I_loc = I0 * np.exp(-tau)
+    gross = P_max * Phi_I(P_max, alpha, I_opt, I_loc) * phi_temp
+    net_loc = gross * (1 - (C + kT*Temp_i + kI*I_loc)) - K
+    z_lit = z[-1]
+    lit = np.trapezoid(net_loc, z)           # np.trapz on NumPy < 2
+    dark = -K * (depth - z_lit)              # remaining depth, no light
+    return (lit + dark) / depth
 
 def calculate_biomass_production(X_initial, P_max, alpha, I_opt, I, T_min, T_opt, T_max, Temp, kT, kI, C, K, depth, transparency, nb_layer):
     z = np.linspace(0, depth, num=nb_layer)
@@ -43,23 +53,23 @@ def calculate_biomass_production(X_initial, P_max, alpha, I_opt, I, T_min, T_opt
             X_prev = X[i-1]
         
         
-        I_local = BL(Ea,I[i] * transparency, X_prev, z)
-        phi_I = Phi_I(P_max, alpha, I_opt, I_local)
-        if I[i] >0:
-            gross = P_max * phi_I * phi_temp 
-            resp = gross * (C + kT*Temp[i] + kI*I_local) + K
-            net = np.sum(gross - resp) / len(z)
-            prod[i] = np.sum(gross)/len(z)
-            respi[i] =  np.sum(resp)/len(z)
+       # I_local = BL(Ea,I[i] * transparency, X_prev, z)
+       # phi_I = Phi_I(P_max, alpha, I_opt, I_local)
+       # if I[i] >0:
+       #     gross = P_max * phi_I * phi_temp 
+       #     resp = gross * (C + kT*Temp[i] + kI*I_local) + K
+       #     net = np.sum(gross - resp) / len(z)
+       #     prod[i] = np.sum(gross)/len(z)
+       #     respi[i] =  np.sum(resp)/len(z)
             
-        else:
-            gross = np.zeros_like(I_local)
-            resp = np.zeros_like(I_local)
-            net = 0
-            prod[i] = 0
-            respi[i] = 0
+       # else:
+       #     gross = np.zeros_like(I_local)
+       #     resp = np.zeros_like(I_local)
+       #     net = 0
+       #     prod[i] = 0
+       #     respi[i] = 0
         # net = np.maximum(np.sum(gross - resp) / len(z), 0)
-        
+        net = depth_avg_net(I[i]*transparency, X_prev, Temp[i], phi_temp, depth)
         X[i] = X_prev * (1 + net)
 
     return X[-1]
