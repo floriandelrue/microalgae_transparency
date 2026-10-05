@@ -95,7 +95,7 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
                 )
     T_culture_profile_fullT = calculate_hourly_averages(T_culture[360:-1])
     X_fullT = calculate_biomass_production(
-                X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_profile_fullT, kT, kI, C, K, depth, t1.0, nb_layer
+                X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_profile_fullT, kT, kI, C, K, depth, 1.0, nb_layer
                 )
     st.header("Optimal Operationnal Conditions of the Microalgae Culture")
     st.text("With the Transparency of the STPV that Optimizes Biomass Productivity)")
