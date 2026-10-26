@@ -5,7 +5,7 @@ import numpy as np
 Ea, depth, X_initial = 148.5, 0.1, 0.1
 nb_layer = 100
 T_min, T_opt, T_max = 0.0, 29.6, 45.6
-P_max, alpha, I_opt = 0.100, 0.000438, 279
+P_max, alpha, I_opt = 0.100, 0.00438, 279
 kT, kI, K, C = 0.00724, 0.000078, 0.000372, -0.0822
 
 biomass_loss_night_temp2 = 4.679e-05 / (24)
