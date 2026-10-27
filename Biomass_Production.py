@@ -31,7 +31,7 @@ def depth_avg_net(I0, X, Temp_i, phi_temp, depth, n=200, tau_cut=15):
     dark = -K * (depth - z_lit)              # remaining depth, no light
     return (lit + dark) / depth
 
-def calculate_biomass_production(X_initial, P_max, alpha, I_opt, I, T_min, T_opt, T_max, Temp, kT, kI, C, K, depth, transparency, nb_layer):
+def calculate_biomass_production(X_initial, P_max, alpha, I_opt, I, T_min, T_opt, T_max, Temp, kT, kI, C, K, depth, transparency, nb_layer, Ea):
     z = np.linspace(0, depth, num=nb_layer)
     n_hours = len(I)
     X = np.zeros(n_hours)
