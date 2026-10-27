@@ -1,3 +1,5 @@
+import numpy as np
+
 def Phi_temp(T_min, T_opt, T_max, Temp):
     num = (Temp - T_max) * ((Temp - T_min) ** 2)
     den = (T_opt - T_min) * (
