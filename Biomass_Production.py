@@ -21,7 +21,7 @@ def light_respiration(kT, kI, C, K, Temp, I, prod):
 def biomass_loss_night(biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst, Temp, dt):
     return np.exp(-(biomass_loss_night_temp2 * Temp**2 + biomass_loss_night_temp * Temp + biomass_loss_night_cst) * dt / 3600)
 
-def depth_avg_net(I0, X, Temp_i, phi_temp, depth, n=200, tau_cut=15):
+def depth_avg_net(Ea, I0, X, Temp_i, phi_temp, depth, n=200, tau_cut=15):
     tau_max = Ea * X * depth
     tau = np.linspace(0, min(tau_max, tau_cut), n)
     z = tau / (Ea * X)                       # physical depth of each sample
@@ -66,7 +66,7 @@ def calculate_biomass_production(X_initial, P_max, alpha, I_opt, I, T_min, T_opt
        #     prod[i] = 0
        #     respi[i] = 0
         # net = np.maximum(np.sum(gross - resp) / len(z), 0)
-        net = depth_avg_net(I[i]*transparency, X_prev, Temp[i], phi_temp, depth)
+        net = depth_avg_net(Ea, I[i]*transparency, X_prev, Temp[i], phi_temp, depth)
         X[i] = X_prev * (1 + net)
 
     return X[-1]
