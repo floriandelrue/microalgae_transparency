@@ -354,22 +354,12 @@ def update_params(
 
 # Function to reset parameters to default values
 def reset_params():
-    #global Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C, \
-    #    biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst, \
-    #    culture_absorptivity, culture_depth, culture_dz, nb_layer, C_p, rho, sigma, \
-    #    e_w, A_evap, B_evap, A_conv, B_conv
-    #from Parameter_Values import (
-    #    Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
-    #    biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst, z,
-    #    culture_absorptivity, culture_depth, culture_dz, nb_layer, C_p, rho, sigma,
-    #    e_w, A_evap, B_evap, A_conv, B_conv
-    #)
     global Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C, \
         culture_absorptivity, nb_layer, C_p, rho, sigma, \
         e_w, A_evap, B_evap, A_conv, B_conv, K_liner, x_liner, K_soil, x_soil
     from Parameter_Values import (
         Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
-        z, culture_absorptivity, nb_layer, C_p, rho, sigma,
+        culture_absorptivity, nb_layer, C_p, rho, sigma,
         e_w, A_evap, B_evap, A_conv, B_conv, K_liner, x_liner, K_soil, x_soil)
     
     global z
