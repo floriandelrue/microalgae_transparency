@@ -8,7 +8,27 @@ from Biomass_Production import *
 from Parameter_Values import *
 import matplotlib.pyplot as plt
 
+# >>> CHANGE 1 (part A): import the defaults module under an alias, so that the defaults can be
+# >>> read at any time (initialisation AND reset) independently of the globals that get overwritten.
+import Parameter_Values as PV
+
 year = 2025
+
+# >>> CHANGE 2: cache the weather / geolocation calls.
+# >>> The weather data does not depend on the model parameters, so when the user clicks
+# >>> "Update Parameters" the (slow) network calls are served from the cache and only the model is recomputed.
+# >>> Caveat: if get_location_safe() or import_weather_data_function() display Streamlit elements
+# >>> (st.error, st.warning...), cache_data replays them on a cache hit; if they call st.stop()
+# >>> or return None on failure, that result would be cached too (clear it with the "C" key / menu > Clear cache).
+@st.cache_data(show_spinner="Fetching location...")
+def get_location_cached(loc):
+    return get_location_safe(loc)
+
+@st.cache_data(show_spinner="Fetching weather data...")
+def import_weather_data_cached(lat, lon, start, end):
+    return import_weather_data_function(lat, lon, start, end)
+
+
 # Function to calculate the hourly average
 def calculate_hourly_averages(data):
   if data is None:
@@ -21,14 +41,15 @@ def calculate_hourly_averages(data):
 #Function to calculate the optimum PV panel transparency
 
 
-def calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max,  kT, kI, C, K, nb_layer):
+def calculate_optimum_transparency(your_loc, start_date_object, end_date_object, month, year, PAR_avg, raceway_area, depth,weather_data, weather_data_extended, X_initial, P_max, alpha, I_opt, T_min, T_opt, T_max, kT, kI, C, K, nb_layer):
     X_end = np.zeros(21)
   
     I_W_extended = (weather_data_extended[4] + weather_data_extended[5])
     
     nb_hours = len(weather_data_extended[0])
   
-    for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
+    # >>> CHANGE 3: range(22) -> range(21) (the transparency grid has exactly 21 points; zip stopped at 21 anyway)
+    for i, transparency in zip(range(21), np.linspace(0, 1, num=21)):
         T_culture = Culture_Temperature_function(
             3600, nb_hours, raceway_area, depth,
             transparency * I_W_extended, weather_data_extended[1],
@@ -43,6 +64,9 @@ def calculate_optimum_transparency(your_loc, start_date_object, end_date_object,
 
     X_new = np.zeros(20)
     best_X = 0
+    # >>> CHANGE 4: np.argmax(X_end) / 20 converts the grid index into a transparency value.
+    # >>> This is only valid because the grid is np.linspace(0, 1, num=21) (step = 1/20 = 0.05).
+    # >>> If the grid size changes, this "20" (here and below) must change too.
     T_culture = Culture_Temperature_function(
                 3600, nb_hours, raceway_area, depth,
                 np.argmax(X_end) / 20 * I_W_extended, weather_data_extended[1],
@@ -154,7 +178,8 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
   
   nb_hours = len(weather_data_extended[0])
 
-  for i, transparency in zip(range(22), np.linspace(0, 1, num=21)):
+  # >>> CHANGE 3 (same as above): range(22) -> range(21)
+  for i, transparency in zip(range(21), np.linspace(0, 1, num=21)):
     T_culture = Culture_Temperature_function(
         3600, nb_hours, raceway_area, depth,
         transparency*I_W_extended, weather_data_extended[1],
@@ -167,6 +192,7 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
         X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg, kT, kI, C, K, depth, transparency, nb_layer
     )
 
+  # >>> CHANGE 4 (same as above): "/ 20" is only valid for the 21-point grid np.linspace(0, 1, num=21)
   if np.argmax(X_end) != 20:
     X_new = np.zeros(20)
     transparency = np.zeros(20)
@@ -221,7 +247,9 @@ def calculate_optimum_transparency_without_graph(your_loc, start_date_object, en
           culture_absorptivity, nb_layer, C_p, rho, sigma, e_w, A_evap, B_evap, A_conv, B_conv,
           x_liner, K_liner, x_soil, K_soil
         )
-  T_culture_avg_fullT = calculate_hourly_averages(T_culture[360:-1])
+  # >>> CHANGE 5 (bug fix): the full-transparency profile must come from T_culture_fullT,
+  # >>> not from T_culture (which holds the last run of the optimisation loop, not the T = 1.0 case).
+  T_culture_avg_fullT = calculate_hourly_averages(T_culture_fullT[360:-1])
   X_fullT = calculate_biomass_production(
           X_initial, P_max, alpha, I_opt, PAR_avg, T_min, T_opt, T_max, T_culture_avg_fullT , kT, kI, C, K, depth, 1.0, nb_layer
       )
@@ -295,139 +323,34 @@ st.write(
 #Sidebar for model parameters values
 
 
+# >>> CHANGE 1 (part B): ROOT CAUSE FIX.
+# >>> Streamlit re-executes the whole script on every interaction, and "from Parameter_Values import *"
+# >>> resets every parameter to its default at the top of each run. The old update_params() only changed
+# >>> the globals for the single run in which the button was clicked, so the model never kept the new values.
+# >>> Now st.session_state is the single source of truth:
+# >>>   1) initialise it once with the defaults,
+# >>>   2) copy it into the module-level variables on EVERY run (so the calculations always use it).
+# >>> This replaces update_params(), reset_params() and the long "if 'X' not in st.session_state" blocks.
+PARAM_NAMES = [
+    "Ea", "depth", "X_initial", "T_min", "T_opt", "T_max", "P_max",
+    "alpha", "I_opt", "kT", "kI", "K", "C", "culture_absorptivity",
+    "nb_layer", "C_p", "rho", "sigma", "e_w", "A_evap", "B_evap",
+    "A_conv", "B_conv", "K_liner", "x_liner", "K_soil", "x_soil",
+]
 
+# 1) Initialise session state with the defaults (only the first time)
+for _name in PARAM_NAMES:
+    if _name not in st.session_state:
+        st.session_state[_name] = getattr(PV, _name)
 
-# Function to update parameters
-#def update_params(
-#    new_Ea, new_depth, new_X_initial, new_T_min, new_T_opt, new_T_max, new_P_max,
-#    new_alpha, new_I_opt, new_kT, new_kI, new_K, new_C, new_biomass_loss_night_temp2,
-#    new_biomass_loss_night_temp, new_biomass_loss_night_cst, new_culture_absorptivity,
-#    new_culture_depth, new_culture_dz, new_nb_layer, new_C_p, new_rho, new_sigma,
-#    new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv, new_K_liner, new_x_liner, new_K_soil, new_x_soil
-#):
-def update_params(
-    new_Ea, new_depth, new_X_initial, new_T_min, new_T_opt, new_T_max, new_P_max,
-    new_alpha, new_I_opt, new_kT, new_kI, new_K, new_C, new_culture_absorptivity,
-    new_nb_layer, new_C_p, new_rho, new_sigma,
-    new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv, new_K_liner, new_x_liner, new_K_soil, new_x_soil
-):
-    #global Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C, \
-    #    biomass_loss_night_temp2, biomass_loss_night_temp, biomass_loss_night_cst, \
-    #    culture_absorptivity, culture_depth, culture_dz, nb_layer, C_p, rho, sigma, \
-    #    e_w, A_evap, B_evap, A_conv, B_conv
-    global Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C, \
-        culture_absorptivity, nb_layer, C_p, rho, sigma, \
-        e_w, A_evap, B_evap, A_conv, B_conv, K_liner, x_liner, K_soil, x_soil
-    Ea = new_Ea
-    depth = new_depth
-    X_initial = new_X_initial
-    T_min = new_T_min
-    T_opt = new_T_opt
-    T_max = new_T_max
-    P_max = new_P_max
-    alpha = new_alpha
-    I_opt = new_I_opt
-    kT = new_kT
-    kI = new_kI
-    K = new_K
-    C = new_C
-    #biomass_loss_night_temp2 = new_biomass_loss_night_temp2
-    #biomass_loss_night_temp = new_biomass_loss_night_temp
-    #biomass_loss_night_cst = new_biomass_loss_night_cst
-    culture_absorptivity = new_culture_absorptivity
-    nb_layer = new_nb_layer
-    C_p = new_C_p
-    rho = new_rho
-    sigma = new_sigma
-    e_w = new_e_w
-    A_evap = new_A_evap
-    B_evap = new_B_evap
-    A_conv = new_A_conv
-    B_conv = new_B_conv
-    K_liner = new_K_liner
-    x_liner = new_x_liner
-    K_soil = new_K_soil
-    x_soil = new_x_soil
-    global z
-    z = np.linspace(0, depth, num=100)
-    z = z.reshape(-1, 1)
+# 2) Overwrite the module-level variables with the session-state values, on every run
+for _name in PARAM_NAMES:
+    globals()[_name] = st.session_state[_name]
 
-# Function to reset parameters to default values
-def reset_params():
-    global Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C, \
-        culture_absorptivity, nb_layer, C_p, rho, sigma, \
-        e_w, A_evap, B_evap, A_conv, B_conv, K_liner, x_liner, K_soil, x_soil
-    from Parameter_Values import (
-        Ea, depth, X_initial, T_min, T_opt, T_max, P_max, alpha, I_opt, kT, kI, K, C,
-        culture_absorptivity, nb_layer, C_p, rho, sigma,
-        e_w, A_evap, B_evap, A_conv, B_conv, K_liner, x_liner, K_soil, x_soil)
-    
-    global z
-    z = np.linspace(0, depth, num=100)
-    z = z.reshape(-1, 1)
+# Depth grid (it was previously built inside update_params / reset_params; now rebuilt on every run from the current depth)
+z = np.linspace(0, depth, num=100)
+z = z.reshape(-1, 1)
 
-# Initialize session state
-if 'Ea' not in st.session_state:
-    st.session_state.Ea = Ea
-if 'depth' not in st.session_state:
-    st.session_state.depth = depth
-if 'X_initial' not in st.session_state:
-    st.session_state.X_initial = X_initial
-if 'T_min' not in st.session_state:
-    st.session_state.T_min = T_min
-if 'T_opt' not in st.session_state:
-    st.session_state.T_opt = T_opt
-if 'T_max' not in st.session_state:
-    st.session_state.T_max = T_max
-if 'P_max' not in st.session_state:
-    st.session_state.P_max = P_max
-if 'alpha' not in st.session_state:
-    st.session_state.alpha = alpha
-if 'I_opt' not in st.session_state:
-    st.session_state.I_opt = I_opt
-if 'kT' not in st.session_state:
-    st.session_state.kT = kT
-if 'kI' not in st.session_state:
-    st.session_state.kI = kI
-if 'K' not in st.session_state:
-    st.session_state.K = K
-if 'C' not in st.session_state:
-    st.session_state.C = C
-#if 'biomass_loss_night_temp2' not in st.session_state:
-#    st.session_state.biomass_loss_night_temp2 = biomass_loss_night_temp2
-#if 'biomass_loss_night_temp' not in st.session_state:
-#    st.session_state.biomass_loss_night_temp = biomass_loss_night_temp
-#if 'biomass_loss_night_cst' not in st.session_state:
-#    st.session_state.biomass_loss_night_cst = biomass_loss_night_cst
-if 'culture_absorptivity' not in st.session_state:
-    st.session_state.culture_absorptivity = culture_absorptivity
-if 'nb_layer' not in st.session_state:
-    st.session_state.nb_layer = nb_layer
-if 'C_p' not in st.session_state:
-    st.session_state.C_p = C_p
-if 'rho' not in st.session_state:
-    st.session_state.rho = rho
-if 'sigma' not in st.session_state:
-    st.session_state.sigma = sigma
-if 'e_w' not in st.session_state:
-    st.session_state.e_w = e_w
-if 'A_evap' not in st.session_state:
-    st.session_state.A_evap = A_evap
-if 'B_evap' not in st.session_state:
-    st.session_state.B_evap = B_evap
-if 'A_conv' not in st.session_state:
-    st.session_state.A_conv = A_conv
-if 'B_conv' not in st.session_state:
-    st.session_state.B_conv = B_conv
-
-if 'K_liner' not in st.session_state:
-    st.session_state.K_liner = K_liner
-if 'x_liner' not in st.session_state:
-    st.session_state.x_liner = x_liner
-if 'K_soil' not in st.session_state:
-    st.session_state.K_soil = K_soil
-if 'x_soil' not in st.session_state:
-    st.session_state.x_soil = x_soil
 
 # Sidebar for changing parameters
 with st.sidebar.form("parameter_form"):
@@ -623,78 +546,55 @@ f(T) &= 0 \text{ for } T > T_{max}
     
 
     if submitted:
-
-        update_params(new_Ea, new_depth, new_X_initial, new_T_min, new_T_opt, new_T_max, new_P_max,
-            new_alpha, new_I_opt, new_kT, new_kI, new_K, new_C, new_culture_absorptivity,
-            new_nb_layer, new_C_p, new_rho, new_sigma,
-            new_e_w, new_A_evap, new_B_evap, new_A_conv, new_B_conv, new_K_liner, new_x_liner, new_K_soil, new_x_soil)
-      
-        st.session_state.Ea = Ea
-        st.session_state.depth = depth
-        st.session_state.X_initial = X_initial
-        st.session_state.T_min = T_min
-        st.session_state.T_opt = T_opt
-        st.session_state.T_max = T_max
-        st.session_state.P_max = P_max
-        st.session_state.alpha = alpha
-        st.session_state.I_opt = I_opt
-        st.session_state.kT = kT
-        st.session_state.kI = kI
-        st.session_state.K = K
-        st.session_state.C = C
-        #st.session_state.biomass_loss_night_temp2 = biomass_loss_night_temp2
-        #st.session_state.biomass_loss_night_temp = biomass_loss_night_temp
-        #st.session_state.biomass_loss_night_cst = biomass_loss_night_cst
-        st.session_state.culture_absorptivity = culture_absorptivity
-        st.session_state.nb_layer = nb_layer
-        st.session_state.C_p = C_p
-        st.session_state.rho = rho
-        st.session_state.sigma = sigma
-        st.session_state.e_w = e_w
-        st.session_state.A_evap = A_evap
-        st.session_state.B_evap = B_evap
-        st.session_state.A_conv = A_conv
-        st.session_state.B_conv = B_conv
-        st.session_state.K_liner = K_liner
-        st.session_state.x_liner = x_liner
-        st.session_state.K_soil = K_soil
-        st.session_state.x_soil = x_soil
-        st.success("Parameters updated!")
+        # >>> CHANGE 1 (part C): the form now only writes the new values into st.session_state.
+        # >>> (update_params() with its "global" statements has been removed: the module-level variables
+        # >>> are re-created from session state at the top of the next run, see PARAM_NAMES above.)
+        st.session_state.Ea = new_Ea
+        st.session_state.depth = new_depth
+        st.session_state.X_initial = new_X_initial
+        st.session_state.T_min = new_T_min
+        st.session_state.T_opt = new_T_opt
+        st.session_state.T_max = new_T_max
+        st.session_state.P_max = new_P_max
+        st.session_state.alpha = new_alpha
+        st.session_state.I_opt = new_I_opt
+        st.session_state.kT = new_kT
+        st.session_state.kI = new_kI
+        st.session_state.K = new_K
+        st.session_state.C = new_C
+        #st.session_state.biomass_loss_night_temp2 = new_biomass_loss_night_temp2
+        #st.session_state.biomass_loss_night_temp = new_biomass_loss_night_temp
+        #st.session_state.biomass_loss_night_cst = new_biomass_loss_night_cst
+        st.session_state.culture_absorptivity = new_culture_absorptivity
+        st.session_state.nb_layer = new_nb_layer
+        st.session_state.C_p = new_C_p
+        st.session_state.rho = new_rho
+        st.session_state.sigma = new_sigma
+        st.session_state.e_w = new_e_w
+        st.session_state.A_evap = new_A_evap
+        st.session_state.B_evap = new_B_evap
+        st.session_state.A_conv = new_A_conv
+        st.session_state.B_conv = new_B_conv
+        st.session_state.K_liner = new_K_liner
+        st.session_state.x_liner = new_x_liner
+        st.session_state.K_soil = new_K_soil
+        st.session_state.x_soil = new_x_soil
+        # st.success() would disappear with the rerun below, so st.toast() is used instead
+        st.toast("Parameters updated!")
+        # Rerun immediately so that the whole script (results included) uses the new values
+        st.rerun()
 
 # Reset button
 if st.button("Reset to Parameters Values to Default"):
-    reset_params()
-    st.session_state.Ea = Ea
-    st.session_state.depth = depth
-    st.session_state.X_initial = X_initial
-    st.session_state.T_min = T_min
-    st.session_state.T_opt = T_opt
-    st.session_state.T_max = T_max
-    st.session_state.P_max = P_max
-    st.session_state.alpha = alpha
-    st.session_state.I_opt = I_opt
-    st.session_state.kT = kT
-    st.session_state.kI = kI
-    st.session_state.K = K
-    st.session_state.C = C
-    #st.session_state.biomass_loss_night_temp2 = biomass_loss_night_temp2
-    #st.session_state.biomass_loss_night_temp = biomass_loss_night_temp
-    #st.session_state.biomass_loss_night_cst = biomass_loss_night_cst
-    st.session_state.culture_absorptivity = culture_absorptivity
-    st.session_state.nb_layer = nb_layer
-    st.session_state.C_p = C_p
-    st.session_state.rho = rho
-    st.session_state.sigma = sigma
-    st.session_state.e_w = e_w
-    st.session_state.A_evap = A_evap
-    st.session_state.B_evap = B_evap
-    st.session_state.A_conv = A_conv
-    st.session_state.B_conv = B_conv
-    st.session_state.K_liner = K_liner
-    st.session_state.x_liner = x_liner
-    st.session_state.K_soil = K_soil
-    st.session_state.x_soil = x_soil
-    st.success("Parameters reset to default!")
+    # >>> CHANGE 1 (part D): reset_params() only modified globals that were overwritten at the next run.
+    # >>> The defaults are now written into session state, then the script is rerun.
+    for _name in PARAM_NAMES:
+        st.session_state[_name] = getattr(PV, _name)
+    st.toast("Parameters reset to default!")
+    st.rerun()
+    # Note: the number_input widgets have no explicit key, so Streamlit re-creates them when their
+    # "value" changes; if a sidebar field still shows a value typed but never submitted, reload the page
+    # or give each widget a key and reset that key as well.
 
 
 
@@ -726,10 +626,12 @@ if options.index(month_select) == 0:
   start_date_extended = start_date_extended_object.strftime('%Y-%m-%d')
   # Import the latitude and longitude of the location
   
-  latitude, longitude = get_location_safe(your_loc)
+  # >>> CHANGE 2: cached version of get_location_safe
+  latitude, longitude = get_location_cached(your_loc)
   
   # Import the extended weather data (start - 15 days) in order to initialize the temperature model
-  weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
+  # >>> CHANGE 2: cached version of import_weather_data_function
+  weather_data_extended = import_weather_data_cached(latitude, longitude, start_date_extended, end_date)
   # Limit the weather data to the actual month (without the additionnal 15 days)
   weather_data = [sublist[360:] for sublist in weather_data_extended]
   best_X = np.zeros(13)
@@ -746,7 +648,7 @@ if options.index(month_select) == 0:
   hours = 0
   for month in range(1,13):
     num_hours_month = calendar.monthrange(year, month)[1] * 24
-    weather_data_month = [var[hours:hours+num_hours_month] for var in weather_data]
+    # >>> CHANGE 6: removed the duplicated "weather_data_month = ..." line that was repeated here
     weather_data_month = [var[hours:hours+num_hours_month] for var in weather_data]
     weather_data_month_extended = [var[hours : hours+num_hours_month+360] for var in weather_data_extended]
     hours = hours + num_hours_month
@@ -795,10 +697,12 @@ else:
   start_date_extended = start_date_extended_object.strftime('%Y-%m-%d')
   
 # Import the latitude and longitude of the location
-  latitude, longitude = get_location_safe(your_loc)
+  # >>> CHANGE 2: cached version of get_location_safe
+  latitude, longitude = get_location_cached(your_loc)
   
 # Import the extended weather data (start - 15 days) in order to initialize the temperature model
-  weather_data_extended = import_weather_data_function(latitude, longitude, start_date_extended, end_date)
+  # >>> CHANGE 2: cached version of import_weather_data_function
+  weather_data_extended = import_weather_data_cached(latitude, longitude, start_date_extended, end_date)
 # Limit the weather data to the actual month (without the additionnal 15 days)
   weather_data = [sublist[360:] for sublist in weather_data_extended]
 
@@ -826,4 +730,3 @@ else:
       f"*Weather data by* "
       f"[Open-Meteo.com]({url_openmeteo})"
       )
-
