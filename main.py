@@ -508,7 +508,7 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.latex(r'''\text{4°) }Q_{evaporation} = A \cdot E_{p} \cdot \rho \cdot h_{fg}''')
     st.latex(r''' \scriptsize E_{p} \text{: Evaporation Rate, in } m/s ''')
     st.latex(r'''E_{p} = \left( \frac{RH \cdot p'_{a}}{100}-p'_{a} \right) \cdot h_{evap}''')
-    st.latex(r''' \scriptsize RH \text{: Relative Humidity, in } % ''')
+    st.latex(r''' \scriptsize RH \text{: Relative Humidity, in } \% ''')
     st.latex(r''' \scriptsize p'_{a} \text{: Vapor Pression of the Air at Air Temperature, in } Pa ''')
     st.latex(r'''p'_{a} = 610.78 \cdot exp\left( \frac{12.27 \cdot T_{air}}{T_{air}+237.3} \right)''')
     st.latex(r''' \scriptsize h_{evap} \text{: Evaporation Exchange Coefficient, in } m/s/Pa ''')
@@ -525,12 +525,12 @@ f(T) &= 0 \text{ for } T > T_{max}
     st.latex(r''' h_{conv} = A_{conv} + B_{conv} \cdot W_{s}''')
     st.latex(r''' \scriptsize A_{conv} \text{: Convection Coefficient estimated experimentally, in } W/m^{2}/°C ''')
     new_A_conv = st.number_input("", value=st.session_state.A_conv)
-    st.latex(r''' \scriptsize B_{conv} \text{: Convection Coefficient estimated experimentally, in } W /cdot s/m/°C ''')
+    st.latex(r''' \scriptsize B_{conv} \text{: Convection Coefficient estimated experimentally, in } W \cdot s/m/°C ''')
     new_B_conv = st.number_input("", value=st.session_state.B_conv)
-    st.latex(r'''\text{6°) } Q_{conduction} = \frac{1}{\frac{x_{liner} }{K_{liner} }+\frac{x_{soil} }{K_{soil} }} \cdot A_{soil} \cdot \left( T_{soil} - T \right)''')
+    st.latex(r'''\text{6°) } Q_{conduction} = \frac{1}{\frac{x_{liner} }{K_{liner} }+\frac{x_{soil} }{K_{soil} }} \cdot A \cdot \left( T_{soil} - T \right)''')
     st.latex(r''' \scriptsize x_{liner} \text{: Thickness of the liner layer ( High-Density PolyEthylene, HDPE), in } m ''')
     new_x_liner = st.number_input("", value=st.session_state.x_liner, format="%0.3f")
-    st.latex(r''' \scriptsize K_{soil} \text{: Heat Transfert Coefficient of the HDPE Layer in contact with the ground, in } W/m/°C ''')
+    st.latex(r''' \scriptsize K_{liner} \text{: Heat Transfer Coefficient of the HDPE Layer in contact with the ground, in } W/m/°C ''')
     new_K_liner = st.number_input("", value=st.session_state.K_liner)
     st.latex(r''' \scriptsize x_{soil} \text{: Depth of the temperature probe, assumption from open-meteo.com data, in } m ''')
     new_x_soil = st.number_input("", value=st.session_state.x_soil)
@@ -544,7 +544,7 @@ f(T) &= 0 \text{ for } T > T_{max}
     with st.container(key="second_part"):
       st.latex(r''' \scriptsize T_{soil} \text{: Temperature of the Soil, in } °C ''')
       st.text("Then, the Culture Temperature T was computed as follow:")
-      st.latex(r'''\frac{d T}{dt} = \frac{Q_{irradiance} + Q_{radiation} + Q_{evaporation} + Q_{convection}}{h \cdot A \cdot C_{p} \cdot \rho}''')
+      st.latex(r'''\frac{d T}{dt} = \frac{Q_{irradiance} + Q_{radiation} + Q_{evaporation} + Q_{convection} + Q_{conduction}}{h \cdot A \cdot C_{p} \cdot \rho}''')
       # Submit button
       submitted = st.form_submit_button("Update Parameters")
     
